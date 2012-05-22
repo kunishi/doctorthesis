@@ -1,0 +1,68 @@
+%#!latex main
+
+%\documentclass[12pt,b5paper,titlepage,draft]{book}
+%\usepackage{epic,eepic,eclepsf,latexsym,math2}
+\documentclass[12pt,a4paper,titlepage,draft]{book}
+\usepackage{epic,eepic,eclepsf,latexsym,math2,tombow}
+
+% paper size parameters
+\setlength{\oddsidemargin}{-0.04cm}
+\setlength{\evensidemargin}{-0.54cm}
+\setlength{\topmargin}{-0.2cm}
+%\setlength{\headheight}{1pc}
+%\setlength{\topskip}{2pc}
+%\setlength{\footskip}{2pc}
+% for B5
+\setlength{\textheight}{18cm}
+\setlength{\textwidth}{13cm}
+%% for A4
+%\setlength{\textheight}{54pc}
+%\setlength{\textwidth}{39pc}
+
+%% comment out these lines when using tombow.sty.
+\setlength{\pageheight}{250mm}
+\setlength{\pagewidth}{176mm}
+\setlength{\pagetopmargin}{-0.5in}
+\setlength{\pagesidemargin}{-0.45in}
+
+\hyphenation{da-ta-base re-usa-ble co-a-li-tion Ja-pa-nese Yo-shi-ka-wa}
+
+\newcommand{\activityobj}{{Activity Objects}}
+\newcommand{\workflowbase}{WorkFlowBase}
+\newcommand{\operator}[1]{{\sf #1}}
+\newcommand{\chariff}{\mathop{\rm iff}\nolimits}
+\newcommand{\charop}{\mathop{\rm op}\nolimits}
+
+\renewcommand{\bibname}{References}
+\renewcommand{\baselinestretch}{1.25}
+
+\author{Takeo Kunishima}
+\title{Studies on Flexible Workflow Model\\with Database Technologies}
+\date{December 1996}
+
+% for draft.  If you want to print out final version, be care the next
+% line is commented out
+%\includeonly{constraints}
+
+\begin{document}
+
+\include{cover}
+\include{abst}
+\include{ack}
+%\cleardoublepage
+\include{contents}
+
+\include{intro}
+\include{pre}
+\include{wfbase}
+\include{constraints}
+\include{dbop}
+\include{6}
+\include{arch}
+\include{related}
+\include{concl}
+
+\include{bib}
+\include{publ}
+
+\end{document}

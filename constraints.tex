@@ -1,0 +1,539 @@
+%#!latex main
+
+\chapter{Extensions on Workflow Base}
+\label{chap:ext}
+
+%\section{Motivations}
+%\label{sec:ext:intro}
+
+In Chapter \ref{chap:wfbase}, a workflow is modeled as a set of activity
+objects, each of which consists from its inputs and outputs, the
+responsible agents, and subworks.  This simple modeling is useful to
+give formal and powerful frameworks into WFMSs.
+
+On the other hand, real office works are more complex than this modeling.
+First they might have feedback loops in most cases; that is, when the
+results of some works in workflows do not satisfied the previously defined
+requirements, the works or a sequence of the works will be redone until
+the requirements are satisfied.  However, the workflow model in Chapter
+\ref{chap:wfbase} cannot support feedback flows.
+
+Second weakness of the workflow model in Chapter \ref{chap:wfbase} is
+about the constraints of office works.  There are several constraints
+about the resources of the organizations, such as deadlines, funds,
+materials, persons, etc.  These constraints affect the workflow
+structures and the instantiation process of workflows.  These affections
+are occurred dynamically even in the execution phase of workflows.
+Moreover, the constraints interfere each other.  For example, the agent
+responsible with some work is also responsible with its subworks whose
+responsible agents are not defined.
+
+In this Chapter, we discuss some extensions to workflow base to deal
+with more complex office works.  First we show the way to realize
+loopback flows into workflow base, using ECA rules, in Section
+\ref{sec:loopback}.  In Section \ref{sec:timeConstraints} and Section
+\ref{sec:resourceConstraints} extensions for dealing with \emph{time
+constraints} and \emph{resource constraints} are discussed,
+respectively.  In Section \ref{sec:timeConstraints}, after introducing
+\emph{time plugin} for extending activity objects with time attributes,
+we discuss interferences between time constraints and flows in workflow
+base, scheduling problem on workflow base, and time adjustment.  In
+Section \ref{sec:resourceConstraints}, two resource constraints,
+resource sum equality and resource sum inequality are introduced, and
+the way for resource reallocation which is done when the resource
+constraints are violated is discussed.  And finally, we show in Section
+\ref{sec:flowbylock} dynamic horizontal flows caused by exclusive lock
+mechanism.
+
+\section{Loopback Flows}
+\label{sec:loopback}
+
+In order to deal with feedback flows of workflows, we must provide
+conditional flow control mechanisms.  Some conditions for occurring
+feedback are evaluated at the source node of feedback flows, and
+feedback is occurred when and only when the conditions are satisfied.
+If the conditions are not satisfied, feedback is not occurred and
+ordinary flows are activated.  In this sense, flow branch mechanism should be
+provided at the source node.  
+
+%At the sink node of loopback flows, on the other hand, 
+
+We use {\em Event-Condition-Action (ECA) rules} \cite{mccarthy:sigmod89}
+to realize feedback flows in WFB\@.  ECA rule is a basic concept of {\em
+active database systems}, DBMSs that allows users to specify actions to
+be taken automatically when certain conditions arise.  An ECA rule has
+three attributes: {\em event}, {\em condition}, and {\em action}.
+Intuitively, semantics of the rule is simple: when the event occurs,
+evaluate the condition; and if the condition is satisfied, execute the
+action.
+
+For two activity objects $a_1, a_2 \in W. a_1
+\stackrel{+}{\Longrightarrow} a_2$ where $W$ is a WFT, a {\em feedback
+horizontal flow} from $a_2$ to $a_1$ is defined as a special horizontal
+flow such as:
+\[
+ E, a_2 \Longrightarrow a_1
+\]
+where $E$ is a set of \emph{feedback events}.  Intuitively, this flow
+means that the outputs of $a_2$ are sent to $a_1$ when and only when all 
+the feedback events in $E$ is occurred.  
+Similarly, for activity objects $a_1, \cdots
+a_n, a \in W. \{a_1, \cdots, a_n\} \stackrel{+}{\Longrightarrow} a$, a
+feedback horizontal flow from $a$ to $\{a_1, \cdots, a_n\}$ is defined as:
+\[
+ E, a \Longrightarrow \{a_1, \cdots, a_n\}.
+\]
+Note that we do not deal with feedback vertical flows in this thesis.
+From the definitions in Chapter \ref{chap:wfbase}, vertical flows are
+defined from the inclusion relationships among activity objects.  Hence
+feedback vertical flows, i.e. loop of the partial orderings defined on
+inclusion relationships, are beyond from the conventional set theory.
+
+The semantics of feedback horizontal flow is defined using ECA rules:
+\begin{center}
+$\begin{array}{rl}
+ \mbox{If}\ E, a_2 \Longrightarrow a_1, & \mbox{then}\ a_1 
+  \Leftarrow E(a_2).\\
+ \mbox{If}\ E, a \Longrightarrow \{a_1, \cdots, a_n\}, & 
+  \mbox{then}\ a_1 \Leftarrow E(a), \cdots, a_n \Leftarrow E(a).\\
+\end{array}$
+\end{center}
+The left hand side of $\Leftarrow$ is an action; while the right hand
+side of $\Leftarrow$ includes a set of events as well as a set of
+conditions.  $E(a)$ means a set of events, with message objects passed
+into the sink activity object of the feedback horizontal flow.  When the
+event set $E$ is occurred, the rules that include $E$ in its right hand
+side are activated, then the activity object in its left hand side is
+activated.  Remark that any production rules without event part is not
+activated in this case.  This means that any ordinary horizontal flows
+are activated when a feedback horizontal flows is activated, and vice
+versa.
+
+The rules corresponding with feedback horizontal flows are stored in
+P-box of the WFT, as same as ordinary horizontal flows.  No extension is 
+needed into the semantics of the production system of P-box.
+
+In order to implement facilities to evaluate some conditions when $E$ is
+occurred, it is very simple: just put conditions $c_1, \cdots, c_m$ into 
+the left hand side of a feedback horizontal flows, as follows:
+\[
+ E, c_1, \cdots, c_m, a_2 \Longrightarrow a_1.
+\]
+This flow defines the ECA rule
+\[
+ a_1 \Leftarrow E(a_2), c_1, \cdots, c_n.
+\]
+Intuitively the semantics of this rule corresponds to that of the
+ordinary ECA rules: When the events $E$ are occurred, the conditions
+$c_1, \cdots, c_n$ are evaluated; all conditions are evaluated as true,
+then the activity object $a_1$ is activated.  This extension enables
+multiple branch of flows, as follows:
+\[
+ \begin{array}{l}
+  E, c_1, a_2 \Longrightarrow a\\
+  E, c_2, a_2 \Longrightarrow a'\\
+ \end{array}
+\]
+The first flow occurs when $c_1$ is true, while the second flow occurs
+when $c_2$ is true.  That is, flows will branch by the evaluation
+results of the conditions $c_1$ and $c_2$.
+
+\section{Time Constraints}
+\label{sec:timeConstraints}
+
+In general, several constraints about time can be considered on
+workflows such as:
+\begin{itemize}
+\setlength{\itemsep}{0mm}
+\setlength{\parskip}{0mm}
+ \item \emph{startline constraints}.  When the process can be started
+     from.
+ \item \emph{deadline constraints}.  When the process must be finished
+     by.
+ \item \emph{duration constraints}.  Constraints about time duration
+     among processes.
+ \item \emph{prediction constraints}.  Constraints about estimation time 
+     of the process.
+\end{itemize}
+
+We show some examples of each constraint:
+\begin{itemize}
+ \item startline constraints.
+
+       Consider again the workflow example in Figure \ref{f:review}.
+       Review report format is distributed to
+       the reviewers by ftp, but the preparation of ftp service was not
+       in time for dispatch of submitted papers.  In such a case, the
+       reviewers must wait for writing review reports until ftp service
+       is available.
+
+       \begin{sloppypar}
+	In this example, startline constraint plays an role of implicit
+       	flows.  The workflow in Figure \ref{f:review} does not explicitly
+       	describe review report sheets as message objects through vertical
+       	flows from ``dispatch-1'' to ``dispatch-2'', or from
+       ``dispatch-2'' to ``review''.
+       \end{sloppypar}
+ \item deadline constraints.
+
+       In Figure \ref{f:review}, as deadline of the process ``send'' is
+       fixed at the stage of call-for-papers, each unit of work in the
+       workflow has a deadline determining backwardly from the deadline
+       of ``send''.
+ \item duration constraints.
+
+       ``Receive'' process in Figure \ref{f:review} must be started at
+       least one day after, for example, from receiving a submitted
+       paper.
+
+       In some cases, processes in workflow must be executed
+       simultaneously.  For example, ``send-review-letters'' process in
+       Figure \ref{f:review} must be started at the same time for all
+       authors of the submitted papers.  This kind of simultaneity can
+       be considered as a duration constraint of no duration.
+ \item prediction constraints.
+
+       When a reviewer receives submitted papers, he estimates the time
+       to be required for the reviews, and then decides whether to
+       undertake reviewing.  If he decides to undertake reviewing but he
+       is too busy to review all papers by himself, he may redistribute
+       the papers to those who are working under him.  In such a case,
+       he estimates how long each staff takes to review a paper.
+\end{itemize}
+
+In order to deal with these constraints, we propose \emph{time
+constraints} on workflow-base.  
+
+\subsection{Time Plugin}
+\label{sec:timeplugin}
+First, \emph{time plugin} for an activity object $plug_T$ is defined 
+as follows:
+\[
+ plug_T \mydefi (s, e, d, p)
+\]
+where $s$ is the time $a$ must be started; $e$ is the time $a$ must be
+finished by; $d$ is the duration period which $a$ must be done; $p$ is
+the prediction period of $a$.  
+An activity object can be \emph{plugged in} with time plugin $plug_T$
+such as:
+\[
+ a_T =(I, O, P, S, s, e, d, p)
+\]
+where $a = (I, O, P, S)$ is an activity object.  A WFT consisting from
+activity objects with time plugin is called a \emph{WFT with time
+plugin}.
+
+To execute $a_T$ successfully, $a_T$ must satisfy these two inequalities:
+\begin{enumerate}
+ \item $e-s \geq d$ (\emph{duration inequality}).  Because $a_T$ must
+       be executed in the time period $d$, $a_T$ cannot satisfy either
+       $s$ or $e$ if $a_T$ does not satisfy this inequality.
+ \item $d \geq p$ (\emph{estimation inequality}).  As $a_T$ must be
+       executed in the time period $d$, the estimate time of $a_T$ must
+       be less than $d$.
+\end{enumerate}
+
+To apply WFTs with time plugin to real works, they are instantiated in
+the similar way with instantiation of WFTs without time plugin in
+Section \ref{sec:workflowinstance}.  Consider a domain $\mathcal{T}$ of
+time and a domain $\mathcal{D}$ of time period, with partial orderings
+$\sqsubseteq_\mathcal{T}, \sqsubseteq_\mathcal{D}$, respectively.  For
+an activity object with time plugin $a_T = (I, O, P, S, s, e, d, p)$, we
+consider assignment $\theta$ of $s$ to $s'$, $e$ to $e'$, $d$ to $d'$,
+and $p$ to $p'$, where  $s' \sqsubseteq_\mathcal{T} s, e'
+\sqsubseteq_\mathcal{T} e, d' \sqsubseteq_\mathcal{D} d, p'
+\sqsubseteq_\mathcal{D} p$, respectively, in addition to the ordinary
+assignment into activity objects.  Instantiation of $a_T$ is
+defined by an assignment $\theta$ to $a_T$, denoted as $a_T\theta$.  An
+assignment $\theta$ to a WFT with time plugin $W_T$ is defined as
+$W_T\theta = \{a_{T1}\theta, \cdots, a_{Tn}\theta\}$.  
+
+If no assignment of $s$ is included in $\theta$, it is assumed that an
+assignment $s/c$ is omitted, where $c$ is the current time on the agent
+$P'$.
+
+An assignment $\theta$ including either $e/e'$ or $d/d'$ is called
+a \emph{correct assignment on time plugin}.  In a correct assignment on
+time plugin, 
+\begin{itemize}
+ \item it is assumed that an assignment $e/s'+d'$ is omitted if $e/e'$
+       is not included;
+ \item it is assumed that an assignment $d/e'-s'$ is omitted if $d/d'$
+       is not included.
+\end{itemize}
+If $p/p'$ is not included in a correct assignment on time plugin, it is
+assumed that $p/d'$ is omitted.
+
+\subsection{Time Constraints over Flows}
+\label{sec:tcFlows}
+
+Time constraints of activity objects which connect by horizontal or
+vertical flows interfere each other.  In this section, relationships between
+time constraints and the flows in workflow base are discussed.
+
+First consider horizontal flows.  For activity objects with time plugin
+$a_1$ and $a_2$ that have a horizontal flow $a_1 \Longrightarrow a_2$,
+these inequalities must be satisfied:
+\begin{enumerate}
+\setlength{\itemsep}{0mm}
+\setlength{\parskip}{0mm}
+ \item $s_1 + p_1 \leq s_2$
+ \item $e_1 + p_2 \leq e_2$
+ \item $e_1 \leq s_2$
+\end{enumerate}
+Similarly, for a horizontal flow $\{a_1, \cdots, a_n\} \Longrightarrow
+a$, these inequalities must be satisfied:
+\begin{enumerate}
+\setlength{\itemsep}{0mm}
+\setlength{\parskip}{0mm}
+ \item $\max(s_1 + p_1, \cdots, s_n + p_n) \leq s_2$
+ \item $\max(e_1 + p, \cdots, e_n + p) \leq e$
+ \item $\max(e_1, \cdots, e_n) \leq s$
+\end{enumerate}
+These are obvious from the definition of horizontal flows.
+
+For a vertical flow $a \longrightarrow a_i$, these inequalities must be
+satisfied:
+\begin{enumerate}
+\setlength{\itemsep}{0mm}
+\setlength{\parskip}{0mm}
+ \item $s < s_i$
+ \item $e > e_i$
+ \item $d > d_i$
+ \item $p > p_i$
+\end{enumerate}
+Note that $p$ may not be larger than $\Sigma_{i=1}^n p_i$ because some
+of the sub activity objects may be executed concurrently.
+
+\subsection{Scheduling}
+\label{sec:scheduling}
+
+An agent generally has a number of to-do works at the same time.  In
+such a case, the agent must do scheduling among the works to put to-do
+priorities to them.  In this section, we discuss scheduling problems
+using the time constraints defined in the previous section.
+
+To simplify the discussions, we first consider scheduling between two
+activity objects.  Let
+\begin{eqnarray*}
+ a_1 & = & (I_1, O_1, P, \emptyset, s_1, e_1, d_1, p_1)\\
+ a_2 & = & (I_2, O_2, P, \emptyset, s_2, e_2, d_2, p_2)
+\end{eqnarray*}
+be activity objects with time plugin.  These two activity objects are
+both responsible by an agent $P$ because both have empty set of sub
+activity objects.  From the time constraints point of view, we can
+categorize relationships between $a_1$ and $a_2$ into two cases: $(s_1 \leq
+s_2) \wedge (e_1 \leq e_2)$ and $(s_1 \leq s_2) \wedge (e_2 \leq e_1)$.
+Scheduling of $a_1$ and $a_2$ is as follows:
+\begin{itemize}
+ \item In case of $(s_1 \leq s_2) \wedge (e_1 \leq e_2)$, 
+       \[
+	\begin{array}{ll}
+	 p_1, p_2 & \mbox{if}\ s_1 + p_1 + p_2 \leq e_2 \\
+	 \mbox{fail} & \mbox{if}\ s_1 + p_1 +p_2 > e_2 \\
+	\end{array}
+       \]
+ \item In case of $(s_1 < s_2) \wedge (e_2 < e_1)$,
+       \[
+        \begin{array}{ll}
+	 p_{11}, p_2, p_{12} & \mbox{if}\ e_2 \leq s_1 + p_1 + p_2 \leq e_1 \\
+	 & \mbox{and if}\ p_1\ \mbox{can be divided into subworks}\\
+	 p_1, p_2 & \mbox{if}\ s_1 + p_1 + p+2 \leq e_2\\
+	 \mbox{fail} & \mbox{if}\ s_1 + p_1 + p_2 > e_1\\
+	\end{array}
+       \]
+\end{itemize}
+``fail'' means that scheduling of these two activity objects is failed.
+In this case, the agent $P$ must negotiate with another agents to make
+the time constraints of the activity objects more loose.  We do not discuss
+the negotiation process in this thesis.
+
+Scheduling problem among more than three activity objects is much more
+difficult than that of two activity objects.  In actual, the problem is
+treated as an linear programming problem.  The detailed discussions from
+this point of view is beyond this thesis.  
+
+\subsection{Time Adjustment}
+\label{sec:timeadj}
+
+In the discussions above, we assume that all agents share one global
+clock.  However, this assumption is too strict under distributed
+environment: each agent in general have the different clock, and there
+are time lags among them.  In this section, we extend the time
+constraints on workflow base by loosening this assumption.
+
+First we extend time plugin as follows:
+\[
+ plug_T \mydefi (c, s, e, d, p)
+\]
+and an activity object with time plugin $a_T$ is extended as:
+\[
+ a_T \mydefi (I, O, P, S, c, s, e, d, p)
+\]
+where $c$ is the current time of the clock which $P$ has.
+
+Consider a situation that the agent $P$ dispatches $a_T$ to the
+agent $P'$.  In this case, $P'$ adjusts time plugin of $a_T$ as follows: 
+\[
+ s := s - a - t;\;  e := e - a - t;
+\]
+where $a = c - c'$; $t$ is the transmission time from $P$ to $P'$.
+
+\section{Resource Constraints}
+\label{sec:resourceConstraints}
+
+In this section, we give a workflow of publishing process as another
+example of workflow which have more severe constraints about resources
+than the reviewing process.
+
+Figure \ref{fig:publishwf} shows an illustrative example of publishing
+process of magazine\footnote{In Figure \ref{fig:publishwf}, horizontal
+flows and vertical flows are represented as thick arcs and thin arcs,
+respectively.}.  The process is defined as a sequence of two units:
+producing posters and producing magazine.  Each unit consists from some
+subprocesses.  In ``planning'' process, an outline of the printing
+matter such as its design, funds, total pages and contents in case of
+magazine, etc., is determined.  Then the requests of producing contents
+are sent to authors.  In case of producing magazine, all the contents
+are gathered for editing.  Finally, camera readies are sent to the
+printing house for printing.  We assume that posters and magazines use
+the same logo; hence a horizontal flow from ``poster printing'' to
+``magazine printing'' is put to this workflow because the logo is first
+designed in ``poster printing'' process, then sent to ``magazine
+printing'' process.
+
+\begin{figure}
+\begin{center}
+{\footnotesize
+ \setlength{\unitlength}{0.72mm}
+ \input{publwf}
+}
+\end{center}
+\caption{Workflow Example: Publishing Process}
+\label{fig:publishwf}
+\end{figure}
+
+There are many constraints about resources in the workflow in Figure
+\ref{fig:publishwf}.  For example, the sum of the costs for two printing 
+processes is determined beforehand; the number of total pages for the
+magazines is also determined in the ``planning'' process.  Agent
+determines the costs of the subprocesses, or the number of pages for
+each articles, with satisfying the resource constraints.  In the next
+section we formalize this kind of resource constraints about its sum.
+
+\subsection{Resource Sum Constraints}
+\label{sec:sumconstraint}
+
+Let $amount_R$ allocation amount of a resource $R$.  \emph{Resource
+plugin} $plug_R$ on a resource $R$ is defined as
+\[
+ plug_R \mydefi (amount_R).
+\]
+That is, $plug_R$ is a tuple with only one attribute.  For an activity
+object $a = (I, O, P, S)$, an \emph{activity object with resource
+plugin} $a_R$ is defined as 
+\[
+ a_R \mydefi (I, O, P, S, amount_R).
+\]
+For a WFT $W=\{a_1, \cdots, a_n\}$, a \emph{WFT with resource plugin}
+$W_R$ is defined as $W_R = \{{a_1}_R, \cdots, {a_n}_R\}$.
+
+All resource plugins and time plugin are compatible with each other.
+For example, an activity object with time plugin can be plugged in with
+a resource plugin, and vice versa.
+
+For a WFT with resource plugin $W_R = (I, O, P, S, amount_R)$, we define 
+the \emph{resource sum equality} on $R$ as:
+\[
+ \forall a \in W_R \wedge S \neq \emptyset.\ 
+ amount_R = \sum_{a' \in S} a'.amount_R
+\]
+Intuitively, this equality means that the sum of the resources for
+subprocesses must be equal to the allocation amount of the parent
+process.
+
+Note that some of the resources does not satisfy resource sum equality.
+Total costs in the workflow of Figure \ref{fig:publishwf} is an example
+because some costs must be used in ``poster printing'' process or
+``magazine printing'' themselves.  Hence we consider another
+resource constraints, called \emph{resource sum inequality}:
+\[
+ \forall a \in W_R \wedge S \neq \emptyset.\ 
+ amount_R \geq \sum_{a' \in S} a'.amount_R
+\]
+
+As all resources in subprocesses are what the parent process allocated
+for the subprocesses, resource sum inequality must be satisfied in all
+resources.  Resource sum equality and resource sum inequality are called 
+generally as \emph{resource constraints}.
+
+\subsection{Resource Reallocation}
+\label{sec:realloc}
+
+If one of the subprocesses can not satisfy the resource constraints
+determined by the agent of the parent process, the resource constraints
+of the parent process are also not satisfied.
+
+See again the example in Figure \ref{fig:publishwf}.  Consider a
+situation that an author writes his article of less pages than that of
+previously determined.  This causes constraint violation about total
+pages.  Hence the publisher must resolve the violation by some means: by
+requesting the author to write more pages, by requesting another author
+to write more pages, or by changing total pages of the magazine.
+
+If an activity object with resource plugin $a_R$ in WFT does not satisfy
+resource constraints, the agent of $a_R$ sends a message ``fail
+allocation in $R$'' to the agents who are responsible with activity
+objects which $a_R$ belongs.  When an agent receives the message ``fail
+allocation in $R$'', it tries to reallocate resource $R$ into sub
+activity objects.  If the reallocation succeeds, the agent sends the
+reallocation results to the sub activity objects.  If it fails, the
+agent sends ``fail allocation in $R$'' to parent activity objects again.
+We do not discuss about negotiations among agents during the
+reallocation process.
+
+\section{Horizontal Flows by Exclusive Locks}
+\label{sec:flowbylock}
+
+Under the situation that data is shared among agents in the same
+cooperative work, it is important to provide lock mechanisms for keeping
+integrities of data.  Lock mechanisms previously proposed can be
+classified into two categories: exclusive locks and shared locks.
+Exclusive locks permit only one user to access locked data; on the other
+hand, shared locks permit a number of users to access locked data while
+locking.  In workflow base, data sharing method is not included in its
+definitions, hence any lock mechanisms can be used.
+
+When exclusive locks are used for data sharing, time constraints among
+activity objects are newly created.  Consider an example that two
+activity objects $a_1$ and $a_2$ in the same WFT share a file $f$ using
+exclusive lock.  If $a_1$ uses $f$ with exclusive lock, $a_2$ must wait
+until the lock is released.  Therefore a time constraint $e_1 < s_2$ is
+newly created.
+
+This phenomenon can be treated in a uniform way on workflow base.  When
+$a_1$ begins to use $f$ with exclusive lock, a special message object
+``release notification'' is added into $O$ of $a_1$ and $I$ of $a_2$.
+When $a_1$ releases the lock, ``release notification'' is sent to the
+WFT from $a_1$, and $a_2$ catches it as an input.  Note that a
+horizontal flow $a_1 \Longrightarrow a_2$ is newly created when
+``release notification'' is added.  According to the discussions in
+Section \ref{sec:timeConstraints}, a time constraint $e_1 < s_2$ is also 
+created automatically.
+
+\section{Summary}
+\label{sec:ext:conclu}
+
+In this Chapter, we discussed four extensions to workflow base.  First
+we showed the way to realize loopback flows into workflow base, using
+ECA rules.  Next we discussed about two kinds of constraints, time
+constraints and resource constraints, and about various properties among
+them: interferences of these constraints with flows in workflows and
+their solutions; applications such as scheduling.  And finally, we showed
+that exclusive lock mechanism causes horizontal flows dynamically.
+
+In order to apply workflow base to real cooperative works, some
+extensions discussed in this chapter must be needed.  However, workflow
+base is so suitable for database technologies that extensions can be
+easily done using database technologies.  In other words, these
+extensions prove high affinities of workflow base with databases.

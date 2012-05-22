@@ -1,0 +1,406 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{MMWFF92}
+
+\bibitem[AAA{\etalchar{+}}96]{alonso:icde96}
+G.~Alonso, D.~Agrawal, A.~El Abbadi, M.~Kamath, R.~G\"{u}nth\"{o}r, and
+  C.~Mohan.
+\newblock Advanced transaction moldels in workflow contexts.
+\newblock In {\em Proceedings of the 12nd International Conference of Data
+  Engineering}, February 1996.
+
+\bibitem[AS94]{abbott:cscw94}
+Kenneth~R. Abbott and Sunil~K. Sarin.
+\newblock Experience with workflow management: Issues for the next generation.
+\newblock In {\em Proceedings of the Conference on Computer-Supported
+  Cooperative Work}, pages 113--120. ACM Press, October 1994.
+
+\bibitem[AS96]{alonso:nsf96}
+Gustavo Alonso and Hans-J\"{o}rg Schek.
+\newblock Research issues in large workflow management systems.
+\newblock In {\em Proceedings of NSF Workshop on Workflow and Process
+  Automation in Information Science}, pages 126--132, May 1996.
+
+\bibitem[AYT95]{helios95}
+Akira Aiba, Kazumasa Yokota, and Hiroshi Tsuda.
+\newblock Heterogeneous distributed cooperative problem solving system {Helios}
+  and its cooperation mechanisms.
+\newblock {\em International Journal of Cooperative Information Systems},
+  4(4):369--385, December 1995.
+
+\bibitem[BN95]{blumenthal:coocs95}
+Richard Blumenthal and Gary~J. Nutt.
+\newblock Supporting unstructured workflow activities in the {Bramble ICN}
+  system.
+\newblock In {\em Proceedings of ACM Conference on Organizational Computing
+  Systems}, pages 130--137, August 1995.
+
+\bibitem[BTKdlT93]{bogia:coocs93}
+Douglas~P. Bogia, William~J. Tolone, Simon~M. Kaplan, and Eric de~la
+  Tribouille.
+\newblock Supporting dynamic interdependencies among collaborative activities.
+\newblock In {\em Proceedings of ACM Conference on Organizational Computing
+  Systems}, pages 108--118, November 1993.
+
+\bibitem[CB88]{conklin:toois88}
+Jeff Conklin and Michael~L. Begeman.
+\newblock {gIBIS}: A hypertext tool for exploratory policy discussion.
+\newblock {\em ACM Transactions on Office Information Systems}, 6(4):303--331,
+  October 1988.
+
+\bibitem[CL84]{croft:toois84}
+W.~Bruce Croft and Lawrence~S. Lefkowitz.
+\newblock Task support in an office system.
+\newblock {\em ACM Transactions on Office Information Systems}, 2(3):197--212,
+  1984.
+
+\bibitem[CMB{\etalchar{+}}90]{crowley:cscw90}
+Terrence Crowley, Paul Milazzo, Ellie Baker, Harry Forsdick, and Raymond
+  Tomlinson.
+\newblock {MMConf}: An infrastructure for building shared multimedia
+  applications.
+\newblock In {\em Proceedings of the Conference on Computer-Supported
+  Cooperative Work}, October 1990.
+
+\bibitem[EGR91]{ellis:cacm91}
+Clarence Ellis, Simon Gibbs, and Gail Rein.
+\newblock Groupware: Some issues and experiences.
+\newblock {\em Communications of the ACM}, 34(1):38--58, January 1991.
+
+\bibitem[EKR95]{ellis:coocs95}
+Clarence Ellis, Karim Keddara, and Grzegorz Rozenberg.
+\newblock Dynamic change within workflow systems.
+\newblock In {\em Proceedings of ACM Conference on Organizational Computing
+  Systems}, pages 10--21, August 1995.
+
+\bibitem[EN80]{ellis:acmcs80}
+Clarence~A. Ellis and Gary~J. Nutt.
+\newblock Office information systems and computer science.
+\newblock {\em ACM Computing Surveys}, 12(1):27--60, March 1980.
+
+\bibitem[FGHW88]{flores:toois88}
+Fernando Flores, Michael Graves, Brad Hartfield, and Terry Winograd.
+\newblock Computer systems and the design of organizational interaction.
+\newblock {\em ACM Transactions on Office Information Systems}, 6(2):153--172,
+  April 1988.
+
+\bibitem[FKB95]{forst:jdps95}
+Alexander Forst, Eva K\"{u}hn, and Omran Bukhres.
+\newblock General purpose work flow languages.
+\newblock {\em Journal of Distributed and Parallel Databases}, 3(2):187--218,
+  April 1995.
+
+\bibitem[FS86]{foster:cscw86}
+Gregg Foster and Mark Stefik.
+\newblock {Cognoter}, theory and practice of a collaborative tool.
+\newblock In {\em Proceedings of the Conference on Computer-Supported
+  Cooperative Work}, pages 7--15, 1986.
+
+\bibitem[GH94]{georgakopoulos:ijicis94}
+D.~Georgakopoulos and M.~Hornick.
+\newblock A framework for enforceable specification of extended transaction
+  models and transactional workflows.
+\newblock {\em ~International Journal of Intelligent and Cooperative
+  Information Systems}, 3(3), September 1994.
+
+\bibitem[GHS95]{georgakopoulos:jdps95}
+Dimitrios Georgakopoulos, Mark Hornick, and Amit Sheth.
+\newblock An overview of workflow management: From process modeling to workflow
+  automation infrastructure.
+\newblock {\em Journal of Distributed and Parallel Dataabases}, 3(2):119--153,
+  April 1995.
+
+\bibitem[GS87]{greif:toois87}
+Irene Greif and Sunil Sarin.
+\newblock Data sharing in group work.
+\newblock {\em ACM Transactions on Office Information Systems}, 5(2):187--211,
+  April 1987.
+
+\bibitem[Har87]{harel:scp87}
+David Harel.
+\newblock Statecharts: A visual formalism for complex systems.
+\newblock {\em Science of Computer Programming}, 8:231--274, 1987.
+
+\bibitem[Hew86]{hewitt:toois86}
+Carl Hewitt.
+\newblock Offices are open systems.
+\newblock {\em ACM Transactions on Office Information Systems}, 4(3):271--287,
+  July 1986.
+
+\bibitem[HK89]{humphrey:icse89}
+Watts~S. Humphrey and Marc~I. Kellner.
+\newblock Software process modeling: Principles of entity process models.
+\newblock In {\em Proceedings of the 11th International Conference on Software
+  Engineering}, pages 331--342, 1989.
+
+\bibitem[HLN{\etalchar{+}}90]{harel:ieeese90}
+David Harel, Hagi Lachover, Amnon Naamad, Amir Pnuell, Michael Politi, Rivi
+  Sherman, Aharon Shtull-Trauring, and Mark Trakhtenbrot.
+\newblock {STATEMATE}: A working environment for the development of complex
+  reactive systems.
+\newblock {\em IEEE Transactions on Software Engineering}, 16(4):403--414,
+  April 1990.
+
+\bibitem[IHH96]{iiduka:tripsj96}
+Kyoko Iiduka, Hiroaki Higaki, and Yutaka Hirakawa.
+\newblock {TORES}: Task order evolution system.
+\newblock Technical Report GW18-6, IPSJ Special Interest Group on Groupware,
+  June 1996.
+\newblock in Japanese.
+
+\bibitem[INMS96]{isaka:tripsjgw96}
+Motoki Isaka, Hiroshi Nunokawa, Masatoshi Miyazaki, and Norio Shiratori.
+\newblock Metalevel description in workflow management system.
+\newblock Technical Report GW15-21, IPSJ Special Interest Group on Groupware,
+  January 1996.
+\newblock in Japanese.
+
+\bibitem[IO91]{ishii:jip91}
+Hiroshi Ishii and Masaaki Ohkubo.
+\newblock Message-driven groupware design based on an office procedure model,
+  {OM-1}.
+\newblock {\em Journal of Information Processing}, 14(2):184--191, 1991.
+
+\bibitem[Ish86]{ishii:tripsj86}
+Hiroshi Ishii.
+\newblock Office work specification by office model {OM-1}.
+\newblock Technical Report OS86-24, IPSJ Special Interest Group on Office
+  Systems, September 1986.
+
+\bibitem[JCR96]{jean:codas96}
+Dominique Jean, Andrzej Cichocki, and Marek Rusinkiewicz.
+\newblock A database environment for workflow specification and execution.
+\newblock In {\em Proceedings of International Symposium on Cooperative
+  Database Systems for Advanced Applications}, volume~2, pages 491--500, Kyoto,
+  December 1996.
+
+\bibitem[JLJL82]{johnson-lentz82:groupware}
+Peter Johnson-Lentz and Trudy Johnson-Lentz.
+\newblock {Groupware}: The process and impacts of design choices.
+\newblock In E.~B. Kerr and S.~R. Hiltz, editors, {\em Computer-Mediated
+  Commmunication Systems: Status and Evaluation}. Academic Press, 1982.
+
+\bibitem[JMR92]{jarke:ijicis92}
+Matthias Jarke, Carlos Maltzahn, and Thomas Rose.
+\newblock Sharing processes: Team coordination in design repositories.
+\newblock {\em International Journal of Intelligent and Cooperative Information
+  Systems}, 1(1):143--167, March 1992.
+
+\bibitem[KCM91]{kaplan:cocs91}
+Simon~M. Kaplan, Alan~M. Carroll, and Kenneth~J. MacGregor.
+\newblock Supporting collaborative processes with {ConversationBuilder}.
+\newblock In {\em Proceedings of ACM Conference on Organizational Computing
+  Systems}, pages 69--79, November 1991.
+
+\bibitem[KH89]{kellner:hawaiiconf89}
+Marc~I. Kellner and Gregory~A. Hansen.
+\newblock Software process modeling: A case study.
+\newblock In {\em Proceedings of the 22nd Annual Hawaii International
+  Conference on System Science}, volume~II, pages 175--188. IEEE, 1989.
+
+\bibitem[KK95]{kunishima:ipsjdbs95-07}
+Takeo Kunishima and Yahiko Kambayashi.
+\newblock Workflow model on a workflow management system {WorkFlowBase}.
+\newblock Technical Report DBS104-41, IPSJ Special Interest Group on Database
+  Systems, July 1995.
+\newblock in Japanese.
+
+\bibitem[KL89]{f-logic}
+M.~Kifer and G.~Lausen.
+\newblock {F-Logic} --- a higher order language for reasoning about objects,
+  inheritance, and schema.
+\newblock In {\em Proceedings of~ACM SIGMOD International Conference on
+  Management of Data}, pages 134--146, Portland, June 1989.
+
+\bibitem[KS95]{krishnakumar:jdps95}
+Narayanan Krishnakumar and Amit Sheth.
+\newblock Managing heterogeneous multi-system task to support enterprise-wide
+  operations.
+\newblock {\em Journal of Distributed and Parallel Databases}, 3(2):155--186,
+  April 1995.
+
+\bibitem[KY96]{kunishima:codas96}
+Takeo Kunishima and Kazumasa Yokota.
+\newblock Flexible workflow frameworks for supporting collaborative work.
+\newblock In {\em Proceedings of International Symposium on Cooperative
+  Database Systems for Advance Applications}, pages 412--419, Kyoto, December
+  1996. World Scientific.
+
+\bibitem[MA90]{matsumoto:asst90}
+Yoshihiro Matsumoto and Tsuneo Ajisaka.
+\newblock A data model in the software project database {KyotoDB}.
+\newblock {\em Advances in Software Science and Technology}, 2:103--121, 1990.
+
+\bibitem[Mah93]{mahling:coocs93}
+Dirk~E. Mahling.
+\newblock Enactment theory as a paradigm for enabling flexible workflows.
+\newblock In {\em Proceedings of ACM Conference on Organizational Computing
+  Systems}, pages 202--209, November 1993.
+
+\bibitem[MCC95]{mahling:ieeeexpert95}
+Dirk~E. Mahling, No\"{e}l Craven, and W.~Bruce Croft.
+\newblock From office automation to intelligent workflow systems.
+\newblock {\em IEEE Expert}, 10(3):41--47, June 1995.
+
+\bibitem[MD89]{mccarthy:sigmod89}
+Dennis~R. McCarthy and Umeshwar Dayal.
+\newblock The architecture of an active data base management system.
+\newblock In {\em Proceedings of~ACM SIGMOD International Conference on
+  Management of Data}, pages 215--224, June 1989.
+
+\bibitem[MGL{\etalchar{+}}87]{malone:toois87}
+Thomas~W. Malone, Kenneth~R. Grant, Kum-Yew Lai, Ramana Rao, and David~A.
+  Rosenblitt.
+\newblock Semi-structured messages are surprisingly useful for computer
+  supported cooperative work.
+\newblock {\em ACM Transactions on Office Information Systems}, 5(2):115--131,
+  April 1987.
+
+\bibitem[ML84]{mazer:toois84}
+Murray~S. Mazer and Frederick~H. Lochovsky.
+\newblock Logical routing specification in office information systems.
+\newblock {\em ACM Transactions on Office Information Systems}, 2(4):303--330,
+  October 1984.
+
+\bibitem[MMWFF92]{medina-mora:cscw92}
+Ra\'{u}l Medina-Mora, Terry Winograd, Rodrigo Flores, and Fernando Flores.
+\newblock The {Action Workflow} approach to workflow management technology.
+\newblock In {\em Proceedings of the Conference on Computer-Supported
+  Cooperative Work}, pages 281--288, November 1992.
+
+\bibitem[Ple95]{plexousakis:coocs95}
+Dimitris Plexousakis.
+\newblock Simulation and analysis of business processes using {GOLOG}.
+\newblock In {\em Proceedings of ACM Conference on Organizational Computing
+  Systems}, pages 311--322, August 1995.
+
+\bibitem[Rob96]{robinson:nsf96}
+William~N. Robinson.
+\newblock Goal-oriented workflow analysis and infrastructure.
+\newblock In {\em Proceedings of NSF Workshop on Workflow and Process
+  Automation in Information Science}, pages 31--37, May 1996.
+
+\bibitem[RS94]{rusinkiewicz:adbis94}
+Marek Rusinkiewicz and Amit Sheth.
+\newblock Transactional workflow management in distributed systems.
+\newblock In {\em Proceedings of International Workshop on Advances in
+  Databases and Informations Systems}, pages 18--33, May 1994.
+
+\bibitem[SAM91]{sarin:cocs91}
+Sunil~K. Sarin, Kenneth~R. Abbott, and Dennis~R. McCarthy.
+\newblock A process model and system for supporting collaborative work.
+\newblock In {\em Proceedings of ACM Conference on Organizational Computing
+  Systems}, pages 213--224, November 1991.
+
+\bibitem[SBF{\etalchar{+}}87]{stefik:toois87}
+M.~Stefik, D.~G. Bobrow, G.~Foster, S.~Lanning, and D.~Tartar.
+\newblock {WYSIWIS} revised: Early experiences with multiuser interfaces.
+\newblock {\em ACM Transactions on Office Information Systems}, 5(2):147--186,
+  April 1987.
+
+\bibitem[Sch96]{schal:book96}
+Thomas Sch\"{a}l.
+\newblock {\em Workflow Management Systems for Process Organisations}.
+\newblock Number 1096 in Lecture Notes in Computer Science. Springer-Verlag,
+  1996.
+
+\bibitem[SFB{\etalchar{+}}87]{stefik:cacm87}
+M.~Stefik, G.~Foster, D.~G. Bobrow, K.~Kahn, S.~Lanning, and L.~Suchman.
+\newblock Beyond the chalkboard: Computer support for collaboration and problem
+  solving in meetings.
+\newblock {\em Communications of the ACM}, 30(1):32--47, 1987.
+
+\bibitem[SMK90]{shepherd:cscw90}
+Allan Shepherd, Niels Mayer, and Allan Kuchinsky.
+\newblock {Strudel} --- an extensible electronic conversation toolkit.
+\newblock In {\em Proceedings of the Conference on Computer-Supported
+  Cooperative Work}, pages 93--104, October 1990.
+
+\bibitem[Suc83]{suchman:toois83}
+Lucy~A. Suchman.
+\newblock Office procedure as practical action: Models of work and system
+  design.
+\newblock {\em ACM Transactions on Office Information Systems}, 1(4):320--328,
+  1983.
+
+\bibitem[Swe93]{swenson:coocs93}
+Keith~D. Swenson.
+\newblock Visual support for reengineering work processes.
+\newblock In {\em Proceedings of ACM Conference on Organizational Computing
+  Systems}, pages 130--141, November 1993.
+
+\bibitem[TIAT95]{tarumi:tripsj95-6}
+Hiroyuki Tarumi, Yoshihide Ishiguro, Takayoshi Asakura, and Atsushi Tabuchi.
+\newblock Beyond workflow: A proposal of work web system.
+\newblock Technical Report GW12-10, IPSJ Special Interest Group on Groupware,
+  June 1995.
+\newblock in Japanese.
+
+\bibitem[TIT{\etalchar{+}}96]{tarumi:tripsj96-1}
+Hiroyuki Tarumi, Yoshihide Ishiguro, Atsushi Tabuchi, Kenji Yoshifu, Koji Kida,
+  and Takayoshi Asakura.
+\newblock An implementation of the {WorkWeb} system.
+\newblock Technical Report GW15-22, IPSJ Special Interest Group on Groupware,
+  January 1996.
+\newblock in Japanese.
+
+\bibitem[TLA91]{tueni:studiescscw91}
+Michel Tueni, Jianzhong Li, and James Ang.
+\newblock Knowledge-based office automation and {CSCW}.
+\newblock {\em Studies in Computer Supported Cooperative Work}, pages 183--194,
+  1991.
+
+\bibitem[TTY95]{tarumi:tipsj95}
+Hiroyuki Tarumi, Atsushi Tabuchi, and Kenji Yoshifu.
+\newblock Workflow implementation with rule-based e-mail.
+\newblock {\em Transactions of Information Processing Society of Japan},
+  36(6):1322--1331, June 1995.
+\newblock in Japanese.
+
+\bibitem[Ull88]{ullman:database88:1}
+Jeffrey~D. Ullman.
+\newblock {\em Priciples of Database and Knowledge-Base Systems}, volume~1.
+\newblock Computer Science Press, 1988.
+
+\bibitem[WF86]{winograd:book86}
+Terry Winograd and Fernando Flores.
+\newblock {\em Understanding Computers and Cognition}.
+\newblock Addison-Wesley Publishing Company Inc., 1986.
+
+\bibitem[wfC]{wfCoalition}
+{Workflow Management Coalition} homepage.
+\newblock http://www.aiai.ed.ac.uk/WfMC/.
+
+\bibitem[{Wor}96]{96:wfCoalitionTC1011}
+{Workflow Management Coalition}.
+\newblock Workflow management coalition terminology \& glossary, issue 2.0.
+\newblock available from
+  http:{\slash\slash}www.aiai.ed.ac.uk{\slash}WfMC{\slash}, June 1996.
+\newblock Document Number WFMC-TC-1011.
+
+\bibitem[YA94]{helios94}
+Kazumasa Yokota and Akira Aiba.
+\newblock A new framework of very large knowledge bases.
+\newblock In K.~Fuchi and T.~Yokoi, editors, {\em Knowledge Building and
+  Knowledge Sharing}, pages 192--199. Ohmsha and IOS Press, 1994.
+
+\bibitem[YKN96]{yokota:upmail96}
+Kazumasa Yokota, Takeo Kunishima, and Hideyuki Nakanishi.
+\newblock Hypothetical query processing for workflow management.
+\newblock In {\em Proceedings of the Seminar on Logical Databases and the
+  Meaning of Change}, pages 44--49, Dagstuhl, September 1996.
+\newblock UPMAIL Technical Report No. 129, Uppsala University.
+
+\bibitem[YKN97]{yokota:lnai97}
+Kazumasa Yokota, Takeo Kunishima, and Hideyuki Nakanishi.
+\newblock A framework of query processing for workflow management.
+\newblock {\em Lecture Notes in Artificial Intelligence}, 1997.
+\newblock to appear.
+
+\bibitem[YTT95]{yoshifu:tripsj95-1}
+Kenji Yoshifu, Atsushi Tabuchi, and Hiroyuki Tarumi.
+\newblock Co-action of a workflow system and a database.
+\newblock Technical Report GW9-23, IPSJ Special Interest Group on Groupware,
+  January 1995.
+\newblock in Japanese.
+
+\end{thebibliography}

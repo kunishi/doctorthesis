@@ -1,0 +1,235 @@
+%#!latex main
+
+\chapter{Comparisons with Related Researches}
+\label{chap:relatedworks}
+
+Many researches about workflow management systems have been done from
+the various aspects.  Moreover, there are also similar concepts as
+workflows in various research areas, such as groupware, process
+modeling, and software process engineering.  In this chapter, we pick up
+several related researches from various research areas, and compare them
+with our model especially from the workflow model point of view.
+
+\section{Groupware Approach}
+
+Automation of office work has been one of the hot topics in the research 
+area of groupware \cite{ellis:acmcs80}, and many similar concepts as
+workflow management systems had been proposed before the term
+``workflow'' are widely known.
+
+\subsection{OM-1}
+
+OM-1 \cite{ishii:tripsj86,ishii:jip91}, categorized as an {\em office
+procedure model}, represents knowledge of well-structured cooperative
+work both in control flow and in office structures, such as data
+structures and organization structures, using object-oriented modeling.
+Three objects --- data, activity, and agent --- are provided as basic
+office objects.  Office procedure is represented as a graph whose nodes
+are basic office objects.  Links between office objects represent
+various relationships between office objects, such as control flow,
+responsibility, belonging, and operations on data.  Four styles of
+connections for control flows are provided:  AND join, AND fork, XOR
+join, and XOR fork.  
+
+OM-1 has the ability to represent control flow and office structures in
+a uniform style.  However, this ability makes office procedures to be
+much complex.  Our workflow model manages control flows and office
+structures in a separate way but with relationships.  This makes
+workflows to be simple.  Moreover, our model has a formal execution
+model which OM-1 does not provide.
+
+\subsection{Action Workflow}
+
+Action Workflow \cite{medina-mora:cscw92} is a workflow model based on
+conversation act theory \cite{winograd:book86}.  It represents all
+cooperative works as an action workflow loop, a loop of four processes:
+proposal, agreement, performance, and satisfaction.  Each process in an
+action workflow loop can be an action workflow loop.  Hence an action
+workflow is organized hierarchically in general.  This paper also gives
+an architecture of workflow management systems based on action workflow
+model.  The Workflow Management Server, a core system of the workflow
+management system, manages both the definitions of workflows and the
+progress of workflows using databases.
+% STF (Standard Transaction Format) processors ?
+
+Action Workflow is a model suitable for ill-structured cooperative work.
+However, processes provided in Action Workflow are too primitive to
+represent well-structured cooperative work in a simple way.  Moreover,
+the execution semantics of the workflows in Action Workflow is not
+clear.  Data models of the workflows in the Workflow Management Server
+is not discussed.
+
+\subsection{Regatta}
+
+\begin{sloppypar}
+ The Regatta project, formed in 1991 to develop software to support
+ workgroups and to aid in reengineering work processes, proposes a model
+ for collaborative work and a graphical language to support this model 
+ \cite{swenson:coocs93}.   In this model, work process is modeled as a
+ network of tasks, each of which represents a task request, commitment,
+ or question.  Though this modeling concept is similar with Action
+ Workflow,  the model provides more functions than Action Workflow such
+ as dynamic modification of flows, incremental automation, etc.
+\end{sloppypar}
+
+The workflow model of the Regatta project has the similar concepts as
+WFT/WFI\@.  Before workflow instances are executed, they are created from
+workflow templates by assigning real-world entities into variables.  The
+features such as hierarchical workflows, dynamic changes, view functions
+as private to-do lists, etc., are also similar as those of our models.
+However, formal semantics is not given in these models.  Moreover, the
+view functions in these models are somewhat ad-hoc, not based on formal
+operations.
+
+\subsection{MEGUMI}
+
+Tarumi et at. proposed and developed a workflow management system based
+on MEGUMI, rule based e-mail system \cite{tarumi:tipsj95,%
+yoshifu:tripsj95-1}.  In this system, workflows are realized by the
+formed e-mail circulation with the rule-based control in MEGUMI\@.  Hence
+this system does not assume a central workflow server.  The rules
+realizing workflows are described as ECA rules by HyperScheme, a
+programming language extending Scheme.  They also discussed about
+databases for workflow management \cite{yoshifu:tripsj95-1}.
+
+Problem of the system is the capability of HyperScheme from the workflow
+definition point of view.  As HyperScheme is a programming language for
+general purpose, it can represent illegal workflows.  Though GUI based
+workflow definition tool is provided in order to restrict the ranges of
+workflows to be defined, there still remains possibilities users define
+illegal workflows by customizing rules not using the workflow definition
+tool.
+
+\subsection{WorkWeb}
+
+WorkWeb \cite{tarumi:tripsj95-6, tarumi:tripsj96-1} is much
+different from other workflow management systems.  It deals with some
+constraints about the common resources of the organizations --- objects,
+persons, and money.  Agents are provided for each person, each resources,
+each shared data, and each workflows, and they negotiates each other to
+resolve conflicts of these constraints.  The negotiation is done over
+a number of work processes running in parallel at one organization.
+
+WorkWeb can treat more wider constraints than our workflow model shown
+in Chapter \ref{chap:ext}.  However, the way for managing each workflow
+process is not discussed in WorkWeb.  This means the constraint
+management in WorkWeb can be compatible with our workflow model.
+
+\section{Process Modeling Approach}
+
+Process modeling is a research area closely related with workflows.  It
+has been studied mainly in software process modeling, in modeling of
+reactive systems, and in office information systems.  In recent years,
+the similarities between process modeling and workflows are pointed out
+\cite{robinson:nsf96}, and researches of applying process modeling into
+workflows have been studied.
+
+\subsection{Activity Management System}
+
+\begin{sloppypar}
+ Activity Management System (AMS) \cite{tueni:studiescscw91} is a
+ knowledge-based system which supports the representation and execution
+ of procedural knowledge, which is expressed like as workflows.
+ In this system, the architecture of AMS can be stratified into three
+ layers: a control structure to handle the interruption, resumption, and
+ cancelation of tasks; a mechanism to schedule tasks that are in
+ progress; a mechanism to handle missing information.  This system also
+ provides some office operators such as send, request, acknowledge, and
+ answer.  Concatenating these operators, it organizes procedural
+ knowledge which is similar with speech act model \cite{winograd:book86}.
+ The operators are implemented based on Petri nets.
+\end{sloppypar}
+
+Though AMS can express cooperative works flexibly, there is no
+discussion about agents as executors of the units of work.  
+
+\subsection{Statechart}
+
+Statechart \cite{harel:scp87} is a hierarchical finite automaton with
+concurrent execution and broadcast mechanisms for communications between
+them.  Its semantics is formerly defined like finite automaton using
+transitions between sets of exclusive states, called configurations.
+Based on statechart, a computerized environment for the development of
+reactive systems, called STATEMATE \cite{harel:ieeese90}, is proposed.
+STATEMATE has a design database of statechart with general query
+language, which have an expressive power almost same as that of the
+conjunctive query in relational databases.  Though STATEMATE is proposed 
+for modeling reactive systems, it is also suitable for process
+modeling.  From this viewpoint, we can find some papers applying
+statecharts into software process modeling \cite{kellner:hawaiiconf89,
+humphrey:icse89}.
+
+Many similarities can be found between our workflow model and
+statechart/STATEMATE\@.  First, both are based on finite automaton with
+some extensions like hierarchy, concurrent execution, synchronization,
+etc.  Secondly, both give formal semantics of the models.  Thirdly, both 
+systems use database for process data management.  And finally, both
+systems provide general query languages based on relational algebra.
+The query language of STATEMATE can express queries on a set of states
+as well as on a set of statecharts, although few discussions about the
+data model of statecharts are found in \cite{harel:ieeese90}.
+
+In spite of the similarities with our model, statecharts lacks some
+features which are important for workflow management.  Statechart
+provides no function to change its own execution dynamically; there is no
+discussion about agents as executors of work, instantiation like
+WFT/WFI, integrity constraints of the model, etc.
+
+\subsection{KyotoDB}
+
+KyotoDB \cite{matsumoto:asst90} is a software project database based on
+an object model.  In this system, both process programs and data are
+encapsulated into objects, and stored into one database.  Work process,
+called unit workload in KyotoDB, is modeled as a sequence of work slice,
+a directed graph of work process nodes, validation nodes, and
+communication nodes with other unit workloads.
+
+KyotoDB treats the units of work as an object in a strict sense; each
+object permits to be accessed only via its own methods.  When the user
+wants to access objects based on set operations, he has to use general
+query languages on OODBMS such as OQL.
+
+\section{Database Approach}
+
+As mentioned in Section \ref{sec:pre:wfms}, almost all researches about
+workflows from the database point of view treat transaction management
+among processes.  We found few papers discussing workflows from the data
+model point of view.
+
+\subsection{C\&Co}
+
+C\&Co \cite{forst:jdps95} is a programming language with some
+coordination extension features in C\@.  Concurrent execution of
+processes, dependencies between processes, transactions with retrying or
+compensating options, synchronization, etc. are newly introduced in C.
+
+In order to implement workflow management systems with database
+technology, programming language should have these features newly
+introduced in C\&Co.  However, in the workflow language point of view,
+C\&Co does not provide sufficient capabilities for representing
+workflows; that is, the functions C\&Co provide for workflow management
+are too primitive to represent workflows.
+
+\subsection{Event-Condition-Message Rules}
+
+M. Rusinkiewicz et al. propose a rule-based workflow model closely
+related with database technologies \cite{jean:codas96}.  In this model,
+a workflow is represented as a set of Event-Condition-Message (ECM)
+rules, whose semantics is ``When event $E$ occurs, evaluate condition
+$C$.  If it evaluates to true, send message $M$''.  Tasks are implicitly
+related to each other through ECM rules; that is, when a task is
+finished, an event of ``finishing'' is sent to a workflow and the
+corresponding ECM rules are fired and evaluated.  If a condition
+evaluates to true, a message is sent to a set of tasks to be invoked.  A
+workflow in this model is depicted as a hierarchical state transition
+diagram.  They also discusses database schema to store workflow
+definitions and workflow instances, query languages, and system
+architecture of prototype.
+
+Their standpoints are quite similar as ours: they use database
+management systems to store the static specification of workflows, as
+well as their run-time information; they provide a method for querying
+the database to get several information about workflows.  However,
+workflows are stored as a directed graph in their model.  This makes
+editing a workflow specification by database query languages to be
+difficult, as they pointed out in \cite{jean:codas96}.

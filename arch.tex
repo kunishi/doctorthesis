@@ -1,0 +1,117 @@
+%#!latex main
+
+\chapter{System Architecture of Workflow Base}
+\label{chap:arch}
+
+In this chapter, we discuss about how to implement workflow base, mainly
+from system architecture point of view.  Though workflow base is closely
+related to database systems, it has various features not found in
+traditional database systems, such as an execution model based on
+production systems.  First we show a system interface between workflow
+base and application programs.  After that, overall of the architecture
+and each functional components are described.
+
+%\section{System Requirements}
+
+%As stated above, workflow model in workflow base is similar with data
+%models such as relational data model, object-oriented data model,
+%deductive data model, etc., but not the same.  Therefore an mechanism to 
+%treat workflow model must be implemented on top of the traditional
+%database systems.
+%
+%In a similar reason, an interpreter for workflow operations must be
+%realized as a different software component with database query
+%interpreter.
+%
+%The present status of each WFTs must be managed.  Remark that each
+%agents assigning the units of work in WFTs may do a number of work
+%concurrently.  Even in this case, the roles of the agents in each WFTs
+%must be distinguished in workflow base.
+
+\begin{sloppypar}
+ \section{The Interface Between Applications and Workflow Base}
+\end{sloppypar}
+
+Workflow base has two roles for its application programs, called {\em
+workflow clients}: as a workflow database and as a workflow server.
+That is, workflow base is more than a workflow repository in workflow
+management systems; it can behave as a server of workflow management
+systems itself because it provides an execution model of each
+workflows.
+
+Therefore workflow base has two modules in its interface: interface to
+the workflow database and interface to the workflow server.  
+
+The former provides database operations described in Chapter
+\ref{chap:dbop}.  Workflow clients uses this interface as querying
+workflow base, such as retrieving, reorganizing workflows, etc.
+
+Meanwhile the latter provides the protocol between the capsule and the
+problem solver mentioned in Chapter \ref{chap:agentReconsidered}.  In
+the coordination system point of view, all agents related with a
+collaborative work of workflows are implemented in the workflow server
+and coordinate each other in the style of Chapter
+\ref{chap:agentReconsidered}.  A workflow client is denoted as a problem
+solver in this structure.
+
+\section{The System Architecture of Workflow Base}
+
+\begin{sloppypar}
+ Workflow base organizes from four functional components: Database, WFT
+ organizer, WFT interpreter, and Query processor.  An overview of the
+ system architecture is shown in Figure \ref{fig:wfarch}.
+\end{sloppypar}
+
+\begin{figure}
+\begin{center}
+\setlength{\unitlength}{0.4mm}
+{\small
+ \input{wfbarch}
+}
+\end{center}
+\caption{System Architecture of Workflow Base}
+\label{fig:wfarch}
+\end{figure}
+
+\emph{Database} stores all information about WFTs such as their
+definitions, all activity objects, all P-box and C-box components,
+assignments, progress status, etc.  Remark that this is no need for
+object-oriented database, though we use the term ``objects'' in workflow
+base.  Activity object is not encapsulated because it has no concepts of
+methods.  Hence it is more similar to tuple in relational database than
+object in object-oriented database.
+
+\emph{WFT organizer} constructs WFTs from the information in Database,
+and decomposes WFTs in data who belongs to the schema in Database.  In
+other words, WFT organizer translates WFTs and schema of Database each
+other.  It plays a role of hiding database implementation --- relational
+database, object-oriented database, etc. --- from other components of
+workflow base.
+
+\emph{WFT interpreter} interprets and executes WFTs based on its
+execution model proposed in Section \ref{sec:execmodel}.  It must keep
+the current status of all WFTs currently on work.  Hence, in
+implementation level, it is newly invoked every time a WFT is
+available.  That is, WFTs now on work and WFT interpreters currently
+running are related with one-to-one correspondence.  Integrity
+constraints on WFTs are checked by WFT interpreter.
+
+\emph{Query processor} is an interpreter of workflow operations shown in 
+Chapter \ref{chap:dbop}.  It mainly manages queries on workflow base and 
+the operations which changes WFTs or activity objects directly.  On the
+other hand, WFT interpreter manages operations on WFTs in the frame of
+the execution model of WFT.
+
+Agents in real world --- humans in most cases --- use \emph{workflow
+clients} to communicate with workflow base.  In this sense, a
+client-server system consisting from WFT clients and WFT interpreters
+corresponds with traditional workflow management system.
+
+\section{Summary}
+
+In this chapter system architecture of workflow base is discussed.
+Though the roles of each software components are briefly mentioned, more
+discussions about the architectures of them should be needed.  In
+especial, these two points must be discussed: interpretation procedure
+for the execution model WFT interpreter should have, and database schema
+for modeling WFTs.

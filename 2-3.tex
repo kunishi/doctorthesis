@@ -1,0 +1,261 @@
+%#!latex main
+
+% \documentstyle[math,eepic,eepicemu]{jarticle}
+%\documentstyle[math,eepic]{jarticle}
+%\renewcommand{\baselinestretch}{1.2}
+%\renewcommand{\labelenumi}{\theenumi)}
+%\begin{document}
+%\large
+
+% 2.3
+\begin{sloppypar}
+ \section{Definite Clauses, Production Rules, and ECA Rules}
+\end{sloppypar}
+
+In this thesis, we use definite clause based logic programming such as
+pure Prolog, production rules, and ECA (Event-Control-Action) rules to
+control workflows.  We assume that the readers are familiar with them.
+Here we introduce their basic concepts, definitions, and behaviors.
+
+\subsection{Definite Clauses and Logic Programming}
+
+Any closed formula in the first order logic can be transformed into a
+set of clauses, each of which is in the following form:
+\[p_1\Or p_2\Or\cd\Or p_n\Or \Not q_1\Or \Not q_2\Or\cd \Or\Not q_m\]
+where $p_i$, $q_j$ ($0\le i\le n$, $0\le j\le m$) are atomic formulas (atoms).
+
+A clause with at most one positive atom is called a {\em clause},
+written as follows:
+\[\begin{array}{l}
+p\hi q_1,q_2,\cd,q_m.\\
+p\hi.\\
+\hi q_1,q_2,\cd,q_m
+\end{array}\]
+where $p$ is a positive atom and $q_i$ is a negative atom.  The
+first and the second clauses are called {\em definite clauses}, a
+set of which is called a {\em program} or a {\em database}.  The third
+clause is called a {\em goal}.  Without loss of generality, we can
+assume that the second clause does not have any variables, as in
+extensional databases of deductive databases.  The second one is
+called a {\em fact}, and the first one is called a {\em rule}.  The
+left hand side of $\hi$ is a {\em head} and the right hand side of
+$\hi$ is a {\em body}.
+
+As usual, we can define three kinds of formal semantics: declarative
+semantics as the minimum Herbrand model, procedure semantics such as
+SLD resolution, and least fixpoint semantics.  Here we focus on the
+procedure semantics.  Given a query ?-$q$ to a program $P$, query
+processing is represented as the following sequence of pairs of a set
+of goals and a set of substitutions:
+\[(G_0,\emptyset)\mi(G_1,S_1)\mi\cd\mi(G_i,S_i)\mi\cd\mi(\emptyset,\S_n)\]
+where $G_0=\{q\}$, and if 
+$p\hi p_1,p_2,\cd,p_m\in P$, $q'\in G_i$, and $p\theta=q'\theta$, then
+\[\begin{array}{l}
+G_{i+1}=G_i\cup\{p_1\theta,p_2\theta,\cd,p_m\theta\}\\
+S_{i+1}=S_i\cup\theta
+\end{array}.\]
+
+To control workflows, we treat an atom corresponding to a work: i.e., a rule
+$p\hi p_1,p_2,\cd,p_n$ means that works $p_1,p_2,\cd,p_n$ should be
+done to complete a work $p$.  In other word, if $p$ is activated by
+and receives inputs in some arguments as a result of unification, $p$
+activates subgoals $p_1,p_2,\cd,p_n$ and sends inputs to them as a
+substitution.  If subgoals are executed successfully, they return
+outputs as new substitution.  If a subgoal is defined by another rule,
+it activates the corresponding rule. 
+
+\subsection{Production Rules}
+
+A production rule is a basic component of an expert system and 
+defined as 
+\begin{center}
+if {\em condition-part}, then {\em action-part},
+\end{center}
+where the condition-part consists of multiple conditions.
+Here, we denote a production rule as $w\Hi w_1,w_2,\cd,w_n$.
+In this thesis, we consider each condition as the completion of its 
+corresponding work, and an action as a newly activated work.
+
+Differently from definite clauses, we evaluate production rules
+forwardly as one way information passing from condition-part to
+action-part as usual.
+
+\subsection{ECA Rules}
+
+We introduce an ECA (event-control-action) as an extension of a production
+rule for efficient processing.
+The semantics of a ECA rule is that if an event E occurs, then a
+condition C is evaluated, and if C is satisfied, then an action A is
+executed.
+
+Comparative with a production rule, an ECA rule has some advantages
+for our application, workflow:
+\begin{itemize}\itemsep0mm\parskip0mm
+\item In workflow, it is easier to model events such as feedback and
+analyze of failure.
+\item We can classify rules according to kinds of events and
+optimize them.
+\item An event corresponds to the timing of evaluation, while
+conditions correspond to the contents of evaluation.
+\end{itemize}
+ Recently ECA rules are used in the context of active
+databases \cite{mccarthy:sigmod89}, while
+we use them to classify kinds of flows among works.
+
+% 2.4
+\section{Agent as an Executer}
+
+A workflow defines a set of works and their structured flows, where
+each work may be executed either automatically by a program, or by a person:
+i.e., simply speaking, the executer of work can be abstracted as a 
+{\em problem solver}
+or an {\em agent}.  In this thesis, we
+use a {\em problem solver} as a general term for
+a database system, a knowledge-base system, a constraint solver, an
+expert system, an application program, and a person,
+and we employ a concept {\em agent},
+proposed by a heterogeneous distributed cooperative problem solver,
+{\em Helios}\cite{helios94,helios95}, as an abstracted problem solver
+with the same protocol.
+
+A basic concept (in {\em Helios}) is an {\em agent}, defined as follows:
+\centab{lcl}
+agent	&:=	&(capsule, problem-solver)\\
+	&$|$	&(capsule, environment, \{agent$_1$, $\cd$, agent$_n$\})
+\tabcen
+A {\em simple} agent is defined as a pair of a {\em capsule} and a
+problem solver: intuitively, a problem solver is wrapped with a
+capsule as in Figure \ref{f:agent}.
+A {\em complex} agent is defined as a triple of a capsule, an {\em
+environment}, and a set of agents (agent$_1$,$\cd$,agent$_n$), where
+an environment is a field where agent$_1$,$\cd$,agent$_n$ can exist
+and communicate with each other.
+Intuitively, as a pair of an environment and a set of agents can be
+considered also as a problem solver, a new agent can be defined by
+wrapping them by a capsule.
+That is, an agent can be also hierarchically organized.
+Figure \ref{f:agent} shows such structures.
+
+\begin{figure}
+\bpics{.7}{166}{60}(0,2)\thinlines
+\maput{83}{57}{user (environment)}\vtput{83}{49}{5}\vbput{83}{49}{4}
+\maput{20}{47}{complex agent}
+{\Thicklines\ovbx{83}{20}{166}{48}{}\maput{83}{40}{capsule}}
+\ovbx{83}{17}{158}{38}{}\maput{45}{30}{environment}
+
+\maput{33}{21}{simple agent}
+{\Thicklines\ovbx{33}{9}{46}{18}{}\maput{33}{14}{capsule}}
+\ovbx{33}{6}{38}{8}{problem solver}
+
+\maput{82}{31}{complex agent}
+{\Thicklines\ovbx{107}{14}{90}{28}{}\maput{107}{24}{capsule}}
+\ovbx{107}{11}{82}{18}{}\maput{107}{16}{environment}
+{\Thicklines\ovbx{88}{9}{34}{6}{agent}
+	    \ovbx{126}{9}{34}{6}{agent}}
+\epic
+\caption{Basic Model of Agent}\label{f:agent}
+\end{figure}
+
+A capsule and an environment are defined as follows:
+\begin{center}
+\begin{tabular}{lll}
+ capsule	   & := & (agent-name, methods, self-model, \\
+ & &  negotiation-strategy)\\
+ environment & := & (agent-names, common-type-system, \\
+ & &  negotiation-protocol, ontology)
+\end{tabular}
+\end{center}
+An {agent name} in a capsule is an identifier of the corresponding
+agent, and {\em agent names} in an environment specify what agents
+exist in the environment.
+{\em Methods} in a capsule define {\em import} and {\em export}
+method protocols of the corresponding agent.
+An agent with only import methods is called {\em passive} and an agent
+with both methods is called {\em active}: that is, only an agent which
+sends new messages through export methods can negotiate with other
+agents.
+A {\em common type system} in an environment enforces all agents under
+the environment to type all messages strongly.
+A {\em self model} in a capsule defines what the agent can do.
+An environment extracts necessary information from self models in
+agents to dispatch messages among agents.
+Under a {\em negotiation protocol} in an environment, each agent
+defines a {\em negotiation strategy} to communicate with other agents.
+An {\em ontology} defines the transformation of the contents of
+messages among agents, while a capsule converts the syntax and type of
+messages between the common type system and the intrinsic type system
+of the corresponding problem solver.
+These information is defined in {\em CAPL} (CAPsule Language) and
+{\em ENVL} (ENVironment Language).
+
+Although various information is defined in each environment and each
+agent, a {\em message} among agents is in the form of a global {\em
+communication protocol} consisting of the message identifier, the
+identifier of a sender agent, the identifier of a receiver agent, a
+transaction identifier, and a message.
+A message identifier is common in a query message and answer messages.
+A transaction identifier is used to identify a negotiation process as
+a transaction, which can be nested.
+
+A user can play three roles in {\em Helios}: an end user, an outermost
+environment, and a problem solver if he keep the above same protocol.
+
+For communication between a user and an agent, a user can give his
+user model, which corresponds to a common type system and data
+structures defined in an outermost capsule.
+Given a user model to an agent, its capsule transforms all messages
+between the user and the agent.
+
+A user is defined as the outermost environment where there is only one
+(simple or complex) agent.
+If an internal agent cannot solve a problem, the problem is thrown out
+in the outer environment.
+Hence, a user receives unsolvable problems finally.
+If the user returns the answer to the agent, the agent continues to
+process the suspended message.
+
+Furthermore, a user may be defined also as an agent, that is, a user
+can process a message sent by its capsule and return its result to
+the capsule.
+This feature helps not only prototyping a system, but also
+constructing a groupware environment, if multiple users are defined
+as agents.
+In this thesis, we use such features of an agent as an executer of
+a work.
+Such models make prototyping multi-agent programming in our model
+easier.
+
+Relations among users and agents are shown in Figure \ref{f:user}.
+\begin{figure}
+\bpic{88}{68}\Thicklines
+\ovbx{4}{34}{8}{68}{\shortstack[c]{U\\S\\E\\R}}
+\path(38,61.5)(8,61.5)\path(38,62.5)(8,62.5)
+%\path(14,2.5)(8,2.5)\path(14,3.5)(8,3.5)
+\path(14,5.5)(8,5.5)\path(14,4.5)(8,4.5)
+\ovbx{52}{62}{28}{12}{environment}\path(52,56)(52,52)
+\ovbx{52}{46}{20}{12}{capsule}\path(52,40)(52,36)
+\ovbx{52}{30}{28}{12}{environment}\path(26,18)(52,24)(50,14)\path(52,24)(78,14)
+\ovbx{26}{15}{20}{6}{capsule}\path(26,12)(26,10)
+\ovbx{26}{5}{24}{10}{\shortstack[c]{problem\\solver}}
+\ovbx{50}{7}{20}{14}{agent}
+\maput{64}{7}{$\cd$}
+\ovbx{78}{7}{20}{14}{agent}
+\epic
+\caption{User as an Environment and an Agent}\label{f:user}
+\end{figure}
+
+%\begin{thebibliography}{9}
+%\bibitem{helios94}
+%Kazumasa Yokota and Akira Aiba, 
+%``A New Framework of Very Large Knowledge Bases'', 
+%{\it Knowledge Building and Knowledge Sharing},
+%eds. by K. Fuchi and T. Yokoi, pp.192-199, Ohmsha and IOS Press, 1994.
+%
+%\bibitem{helios95}
+%Akira Aiba, Kazumasa Yokota, and Hiroshi Tsuda,
+%``Heterogeneous Distributed Cooperative Problem Solving System
+%Helios and Its Cooperation Mechanisms'',
+%{\it Int. Journal of Cooperative Information Systems}, Vol.4, no.4, 
+%pp.369-385, Dec., 1995.
+%\end{thebibliography}
+%\end{document}

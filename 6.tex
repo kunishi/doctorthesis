@@ -1,0 +1,362 @@
+%#!latex main
+
+% \documentstyle[math,eepic,eepicemu]{jarticle}
+%\documentstyle[math,eepic,epsf]{jarticle}
+%\renewcommand{\baselinestretch}{1.2}
+%\renewcommand{\labelenumi}{\theenumi)}
+%\begin{document}
+%\large
+
+% Agent Reconsidered
+\chapter{Agents Reconsidered}
+\label{chap:agentReconsidered}
+
+To make a collaborative work possible, related programs and persons
+should have a common protocol, which resolve each heterogeneity with
+some protocol.  We call these entities related with the collaborative
+work such as database systems, knowledge-base systems, constraint
+solvers, application programs, persons, and so on, as a problem solver.
+Therefore {\em agents}, wrapping problem solvers by a common protocol,
+should be considered in a collaborative work.
+
+Considering a big problem such as workflow, 
+we can find many applications which
+require multiple {\em heterogeneous} problem solvers:
+\begin{itemize}\itemsep0mm
+\item Modeling Heterogeneity\\
+The complexity of a given problem requires a combination of multiple
+heterogeneous problem solvers,
+\item Spatial Heterogeneity:\\
+Spatially distributed problem solvers are required to process a given
+problem.
+\item Temporal Heterogeneity:\\
+For a new problem, a new problem solver is not necessarily developed:
+that is, multiple existing problem solvers must be reused for a new
+problem.
+\end{itemize}
+There have been some approaches: an arithmetic calculator in Prolog
+and a constraint logic programming language with a single constraint
+solver.  Such a restricted approach seems to be neither flexible nor
+promising for most applications.
+
+Further, considering the spread of distributed environments, there
+might be similar sources, each of which does not have complete
+information.  
+In such an environment, we can frequently get better results by
+accessing and merging multiple information sources or multiple
+problem solvers.
+In other words, cooperation among distributed sources are frequently
+required.
+Considering such applications and environments, heterogeneous,
+distributed, cooperative problem solvers will become more important
+and can play a role of a very large knowledge-base.
+The situation is almost the same, because there might be many agents
+who can possibly solve a given problem.
+A coordinator agent can select and judge an agent for the work.
+
+From workflow and workflow base points of view, in a unit of workflow
+definition, all agents should have the same protocol, for which we
+use an environment concept as in Helios.
+In this chapter, we discuss how to define such environments 
+for workflow management.
+
+\section{Logic-Oriented Definition}
+
+In the previous chapters, we consider a workflow as a set of
+activity objects  by corresponding an activity object to a work.
+An agent which (or who) is responsible for a work is embedded in its activity
+object.
+However, as an agent usually has multiple kinds of works, we consider
+another definition of an agent:
+\[a/[w(I)=O]\Hi S|C\]
+where $a$ is an agent identity, $w$ is an work identity, $I$ is a
+set of inputs, $O$ is a set of outputs, $S$ is a set of sub-agents, which
+are called by $a$, and $C$ is a set of constraints which are delivered
+from $a$ to $S$.
+As in deductive object-oriented languages such as F-logic\cite{f-logic}, 
+we can correspond the rule to conventional object-orientation concepts: 
+a work identity corresponds to a method identifier, $I$ is a set of
+input values, $O$ is a set of return values, and $S|C$ is its 
+implementation.
+
+As an agent do many kinds of works, it is defined as follows:
+\[\begin{array}{l}
+a/[w_1(I_1)=O_1]\Hi S_1|C_1\\
+a/[w_2(I_2)=O_2]\Hi S_2|C_2\\
+\mn\hs{1cm}\vdots\\
+a/[w_n(I_n)=O_n]\Hi S_n|C_n
+\end{array}\]
+or
+\[\begin{array}{l}
+a/[w_1(I_1)=O_1, w_2(I_2)=O_2,\cd w_n(I_n)=O_n]\\
+\Hi S_1\cup S_2\cup\cd\cup S_n|C_1\cup C_2\cup\cd\cup C_n
+\end{array}\]
+In this definition, we introduce concurrency in $a$ easily because
+each work does not share variables with other works, however it is very 
+difficult to control it.
+Further, as each agent is not encapsulated, it is difficult to correspond
+an agent to a person who is responsible for its work.
+
+\section{Agent-Based Definition}
+
+Considering autonomous agents who execute various works,
+we had better introduce a concept of an {\em agent}, which can
+be defined independently from definitions of workflows.
+Each agent can estimate workload and schedule a set of works.
+In this subsection, we define an agent in the sense of {\em Helios}
+and discuss an agent as a person.
+
+\subsection{Agents and Environments}
+
+\begin{sloppypar}
+ As mentioned in Section 2.4, an agent is defined as follows:
+ \begin{center}
+ \begin{tabular}{lcl}
+ agent	   &:=& (capsule, problem-solver) $|$\\
+           &  & (capsule, environment, \{agent$_1$, $\ldots$, agent$_n$\})
+ \end{tabular}
+ \end{center}
+ where a {\em capsule} is a module which contains a translator, and each
+ problem-solver is enclosed in a capsule.  An encapsulated problem
+ solver is called an {\em agent}, and a problem-solver is called a {\em
+ substance}.  
+\end{sloppypar}
+
+A {\em simple} agent is defined as a pair of a {\em capsule} and a
+problem-solver: conceptually, the problem-solver is encapsulated in
+the capsule.
+
+A {\em complex} agent is defined as a triple of a capsule, an
+environment, and a set of agents (agent$_1$,$\ldots$,agent$_n$), where
+an environment is a field where agent$_1$,$\ldots$,agent$_n$ can exist
+and communicate mutually.  Conceptually, a pair of an environment and a
+set of agents can be considered as a problem-solver; a new agent can be
+defined by encapsulating them.  That is, an agent can be hierarchically
+organized.  We show such structure in Figure 2.2.  Since an encapsulated
+problem-solver or an environment can be considered as an agent and the
+outside of an agent is an environment, the user can be considered as an
+environment.
+
+A common space for agents is called an {\em environment}.  An
+environment takes care of message-passing between agents in it, and
+manages global information for those agents. 
+Each agent has its own logical name that is unique in the
+environment.
+
+A capsule and an environment is defined as follows:
+\begin{center}
+\begin{tabular}{lll}
+capsule	   &:=&(agent-name, methods, self-model,\\
+           &  &\ translation-rules, negotiation-strategy)\\
+environment&:=&(agent-names, common-type-system,\\
+           &  &\ negotiation-protocol, ontology)
+\end{tabular}
+\end{center}
+
+In a capsule, an {\em agent-name} is an identifier of the agent.  Each
+agent has its own agent-name that is unique in the environment.  A
+{\em method} is a definition of {\em import methods} and {\em export
+methods}. An import method defines a method by which the agent is
+called, and an export method defines a method that the agent can call.
+An agent with only import methods is called {\em passive} and an agent
+with both methods is called {\em active}: only an agent which sends
+new messages through export methods can negotiate with other agents.
+A {\em self model} defines what the agent can do in terms of the name
+of functions provided by the agent.  An environment extracts the
+necessary information from self models in agents to dispatch messages
+between agents.  {\em Translation-rules} define translation between
+internal representation of the agent and common representation given
+by its environment in the initialization of the problem solving
+system.
+
+In an environment, {\em agent names} state which agents are in the
+environment.  A {\em common type system} defines a type system used to
+type all messages in the environment.  A {\em negotiation protocol}
+defines the protocol used by all agents in the environment.  Under a
+{\em negotiation protocol} in an environment, each agent defines a
+{\em negotiation strategy} to communicate with other agents.  An {\em
+ontology} defines the transformation of the contents of messages
+between agents, while a capsule converts the syntax and type of
+messages between the common type system and the intrinsic type system
+of the corresponding problem-solver.
+
+To define this information, we introduce a capsule description
+language {\em CAPL} (CAPsule description Language), and an environment
+description language {\em ENVL} (ENVironment description Language). 
+Programs written in those languages are processed by their
+corresponding compilers.
+
+Although various information is defined locally in each environment
+and each agent, a {\em message} between agents is in the form of a
+global {\em communication protocol} consisting of the following:
+
+\begin{itemize}\itemsep0mm\parskip0mm
+\item Message identifier\\
+An identifier used for identifying a message. This field is unique
+within an environment.
+
+\item Message type\\
+As described above, a message is either a method
+invocation or an answer. The former message is called a {\em query
+message}, and the latter message is called a {\em reply message}. This
+field is used to distinguish a query message from a reply message.
+
+\item Sender agent identifier\\
+This field contains the agent name of the agent that sends this
+message.
+
+\item Designation of destination agents\\
+The methods of designating destination agents in a query message are
+described below. In a reply message, this
+field contains the agent name of the agent that is the sender of the
+corresponding query message.
+
+\item Transaction identifier\\
+If the update of the content of a destination problem-solver is
+attendant on the invocation of a message, then a transaction
+identifier is required to control it.  This field contains a
+transaction identifier. For nested transactions, a transaction
+identifier with a nested structure is used.
+
+\item Status\\
+This field contains information on the status of invoked methods for
+error handling.
+
+\item Message content\\
+In a query message, this field contains a method invocation, and in a
+reply message, this field contains the answer to the invocation.
+\end{itemize}
+
+In the previous subsection, we consider some difficulties in logic-oriented
+approach.
+On the other hand, in this agent-oriented approach, as each agent is
+autonomous, concurrency control 
+can be done by a capsule or a substance, and correspondence with a person
+is made possible by wrapping by a capsule.
+
+\subsection{Coordination among Agents}
+
+In our workflow model, $(I,O,P,S)$, an agent $P$ controls a set,
+$S=\{a_1,a_2,\cd,a_m\}$, of activity objects.
+It can be written as a complex agent as follows:
+\[P=(c,e,\{a_1,a_2,\cd,a_n\})\]
+
+In Helios, messages are dispatched as follows:
+\begin{itemize}\itemsep0mm
+\item Initialization\\
+First, during the initialization of agent processes in the
+environment, the environment constructs a map of a logical agent name
+and a physical process address (or IP address).
+Secondly, the environment gathers method information and function
+information in self models from each agent and constructs two kinds of
+maps: a method and an agent name; a function name and an agent name.
+Such maps work for dispatching messages among agents.
+
+\item Dispatching:\\
+As a method or a function does not necessarily corresponds to an agent
+uniquely, a message is possibly sent to multiple agents.
+This mechanism is useful for the followings:
+\begin{itemize}\itemsep0mm
+\item It is unnecessary to specify an agent name in problem solvers
+explicitly.
+\item It is possible to send simultaneously a message to possible
+agents.
+\end{itemize}
+An environment decides to send a message sequentially or in parallel to
+candidates listed by the maps, and processes answers sequentially or
+by grouping as a set.
+In the case of set grouping, aggregation functions can be specified in
+an environment.
+Such a mode can be selected in a query message.
+\end{itemize}
+
+As already mentioned, differently from Helios, $P$ is responsible for
+dispatching works (messages) to agents and coordinating their execution.
+In the sense, $P$ provides the capsule $c$ and includes the functions
+of an environment $e$.
+
+A message is analyzed and its corresponding processing plan is 
+constructed as a dependency graph by a parent agent as in 
+a query in conventional distributed databases.
+Synchronization information between sub-messages is attached to each
+sub-message and controlled by the capsule of each agent: i.e.,if necessary, 
+child agents can communicate with each other.
+The coordination protocol between a parent agent and child agents
+is rather simple:
+\begin{itemize}\itemsep0mm
+\item success/failure:\\
+An child agent sends a success or failure message to the parent agent.
+The parent agent redispatches the work to another child agent or cancels
+all works dispatched to all child agents related to the work.
+There might be various reasons of failures: unsatisfaction of time
+constraints, lack of resources, and so on.
+
+\item resource requirements:\\
+A child agent can request some resources necessary for executing its
+own work to the parent agent.
+The parent agent sends additional resources to the child agent if
+the parent has enough resources.
+If the parent does not have necessary resources, it requests them 
+to other child agents.
+If a child agent has enough ones, it sends them to the parent.
+\end{itemize}
+
+We assume that a person involved in some workflow has an appropriate
+interface to the capsule of the corresponding agent.
+As a person can do many works, he is connected to many capsules.
+In this thesis, we do not discuss the topic.
+
+\subsection{Relations between Workflow Base and Agent Definitions}
+
+We have two kinds of definitions about a workflow: a workflow
+definition and a agent definition.
+As mention in Section 3.5, a workflow base consists of a workflow 
+definition and its execution model.
+A workflow definition corresponds to a static aspect of workflow,
+while an execution model corresponds to its dynamic aspect, where
+activity objects are dynamically generated and activated in P-box and their
+relations are defined in C-box in the form of definite clauses.
+A definite clause, $p\hi q_1,q_2,\cd,q_n$, is a dispatching plan,
+which corresponds to an activity object $p$, which is also in P-box.
+That is, an isolated activity object in P-box just corresponds to
+an agent definition.
+
+\section{Summary}
+
+Considering a big problem such as workflow, 
+we can find many applications which
+require multiple {\em heterogeneous} problem solvers.
+To make a collaborative work possible, related programs and persons
+should have a common protocol, which resolve each heterogeneity with some
+protocol.
+
+There have been some approaches: an arithmetic calculator in Prolog
+and a constraint logic programming language with a single constraint
+solver.  Such a restricted approach seems to be neither flexible nor
+promising for most applications.
+
+From workflow and workflow base points of view, in a unit of workflow
+definition, all agents should have the same protocol, for which we
+use an environment concept as in Helios.
+In this chapter, we discussed how to define such environments 
+for workflow management.
+
+A problem solver, a generic term of database systems, knowledge-base
+systems, constraint solvers, application programs, persons, and so on,
+is called an {\em agent} by wrapped by a common protocol.
+
+Considering such applications and environments, heterogeneous,
+distributed, cooperative problem solvers will become more important
+and can play a role of a very large knowledge-base.
+The situation is almost the same, because there might be many agents
+who can possibly solve a given problem.
+A coordinator agent can select and judge an agent for the work.
+
+%\begin{thebibliography}{9}
+%\bibitem{f-logic}
+%M.~Kifer and G.~Lausen, ``F-Logic --- A Higher Order Language for
+%Reasoning about Objects, Inheritance, and Schema'', {\it Proc. 
+%{\small\it ACM SIGMOD} Int. Conf. on Management of Data}, 
+%pp.134-146, Portland, June, 1989.
+%\end{thebibliography}
+%\end{document}

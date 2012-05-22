@@ -1,0 +1,55 @@
+%#!latex main
+
+\chapter{A Workflow Model with Database Technologies}
+\label{chap:wfbase}
+
+In this chapter a formal workflow data model is proposed.  This model
+represents a workflow as a \emph{workflow template} (WFT), a set of
+\emph{activity objects}.  Each activity object corresponds to each
+office work units of the workflow.  An activity object is regarded as a
+transformation function of \emph{message objects}, executed by an agent
+or by sub activity objects as subroutines.  Two kinds of flows,
+\emph{horizontal flows} and \emph{vertical flows}, are derived from
+input-output relationships and part-of relationships between activity
+objects, respectively.  An execution model of a WFT is defined as a
+production system which treats horizontal flows and vertical flows as
+production rules and definite clauses, respectively.
+
+We also propose an instantiation mechanism of workflows in a formal way.
+A partial ordering of WFTs is defined based on Smyth orderings of its
+components.  Instantiation of a WFT is treated as an assignment over this 
+ordering.
+
+Based on these formal models, a workflow database, \emph{workflow base},
+is formerly defined.  We also discuss about its integrity constraints.
+
+%\section{Motivations}
+%\label{sec:wfbase:intro}
+
+\input{yokota3}
+
+\section{Summary}
+\label{sec:wfbase:conclu}
+
+In this chapter a formal workflow data model, \emph{workflow base} was
+proposed.  This model represents a workflow as a \emph{workflow
+template} (WFT), a set of \emph{activity objects}.  Each activity object
+corresponds to each office work units of the workflow, executed by an
+agent or by sub activity objects as subroutines.  
+
+Two kinds of flows, \emph{horizontal flows} and \emph{vertical flows},
+are derived from input-output relationships and part-of relationships
+between activity objects, respectively.  An execution model of a WFT is
+defined as a production system which treats horizontal flows and
+vertical flows as production rules and definite clauses,
+respectively.  This execution model deals with both static flow control
+and dynamic dispatching of subworks in the same matter.
+
+We also proposed an instantiation mechanism of workflows in a formal way.
+A partial ordering of WFTs is defined based on Smyth orderings of its
+components.  Instantiation of a WFT is treated as an assignment over this 
+ordering.
+
+Based on these formal models, a workflow database, \emph{workflow base},
+was formerly defined.  We also discussed about its integrity constraints.
+

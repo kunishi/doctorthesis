@@ -1,0 +1,413 @@
+%#!latex main.tex
+
+\section{Workflow Model}
+\label{sec:wfmodel}
+
+An {\em activity object}, which corresponds to a unit of work, 
+is recursively defined as follows:
+\begin{center}
+$a=(I,O,P,S)$ where
+ 	$\begin{array}[t]{l}
+	I=\{i_1,\cd,i_n\}\ (n\ge 1)\\
+	O=\{o_1,\cd,o_m\}\ (m\ge 1)\\
+	P=\mx{string}\\
+	S=\mx{WFT}
+	\end{array}$
+\end{center}
+where $I$ is a set of inputs of $a$, $O$ is a set of outputs of $a$, 
+$P$ is an agent who is responsible for the execution of $a$, 
+and $S$ is a WFT (defined in the following) of $a$, which executes
+subworks of $a$.
+Intuitively, $a$ receives $I$, $P$ executes its necessary work, and $a$
+sends $O$. 
+During the execution, if necessary, $a$ divides $I$, dispatches them
+to $S$, monitors their execution processes, and composes $O$ from
+their results. 
+
+\begin{sloppypar}
+ Strictly speaking, an activity object is defined as a quintet
+ $(a,I,O,P,S)$, whose identifier is $a$. 
+ In this paper, for simplicity, we denote simply $a$ or $a=(I,O,P,S)$.
+ Further, when $I$, $O$, and $P$ are singletons, \{\} is omitted, if
+ there is no misunderstanding. 
+\end{sloppypar}
+
+A {\em workflow template} (WFT) $W$ is defined as a set,
+$\{a_1,\cd,a_n\}$, of activity objects $a_1, \cd, a_n\  (n\ge 0)$. 
+Exactly, it is $(W,\{a_1,\cd,a_n\})$, the identifier of which is $W$.
+For simplicity, we denote $W=\{a_1,\cd,a_n\}$, as in an activity object.
+
+Now we can define workflows.
+There are two kinds of flows in a WFT as follows:
+\begin{enumerate}
+\item {\em horizontal flow} ``$\lMi$''
+\begin{eqnarray*}
+a_1\!\lMi\!a_2&\mydefi&(O_1\supseteq I_2)\\
+\{a_1,a_2,\cd,a_n\}\!\lMi\!a &\mydefi &
+	(\sum_{i=1}^n O_i\supseteq I)\And
+		\All j\;\Not(\bigcup_{i=1}^n O_i- O_j\supseteq I)
+\end{eqnarray*}
+The second definition specifies the minimality of inputs.
+\item {\em vertical flow} ``$\lmi$''
+\begin{eqnarray*}
+a\lmi a_i&\mydefi& a_i\in S\ \mx{where}\ a=(I,O,P,S)
+\end{eqnarray*}
+If $a_1\lmi a_2$, $a_2$ is called a {\em child} of $a_1$ and $a_1$ is
+a {\em parent} of $a_2$.
+\end{enumerate}
+
+Consider an example.
+There are four activity objects, $a_1$, $a_2$, $a_3$, and $a$, such that
+$O_1=\{o_1,o_2\}, O_2=\{o_2,o_3\}, O_3=\{o_3,o_1\}$, $I=\{o_1,o_2,o_3\}$.
+The possible workflows are defined as follows:
+\[\{a_1,a_2\}\lMi a,\ \{a_2,a_3\}\lMi a,\ \{a_3,a_1\}\lMi a\]
+On the other hand, $\{a_1,a_2,a_3\}\lMi a$ is not a workflow because it 
+violates the minimality condition.
+
+To define various classes of workflows from a WFT, 
+we define several restrictions:
+\begin{enumerate}
+\item {\em closed} WFT:\\
+Consider any activity object $a=(I,O,P,S)$ in a WFT $W$.
+If $a_i\in W$ for any $a_i\in S$, then $W$ is called {\em closed}.
+%In this paper, we assume closed WFTs without loss of generality.
+
+\item {\em acycle} WFT:\\
+We define transitive closures of $\lMi$ and $\lmi$:
+\begin{enumerate}
+\item $a_1\mystack{+}{\lMi}a_2\mydefi 
+	a_1\lMi a_2\Or((a_1\mystack{+}{\lMi}a_1')\And a_1'\lMi a_2)$
+\item $a_1\mystack{+}{\lmi}a_2\mydefi 
+	a_1\lmi a_2\Or((a_1\mystack{+}{\lmi}a_1')\And a_1'\lmi a_2)$
+\end{enumerate}
+
+If $\All a\in W.\ \Not (a\mystack{+}{\lMi}a$), 
+then $W$ is called {\em acyclic} in $\lMi$, and
+if $\All a\in W.\ \Not (a\mystack{+}{\lmi}a$), 
+then $W$ is called {\em acyclic} in $\lmi$.
+Note that a cyclic workflow corresponds to a feedback of a work.
+
+\item {\em redundant} WFT:\\
+      For any $a=(I,O,P,S)$, if $O\subseteq I$, then $a$ is called {\em
+      redundant}.  A WFT containing redundant activity objects is called
+      a {\em redundant} WFT.  Note that, even if two activity objects
+      $a_1=(I_1,O_1,P_1,S_1)$ and $a_2=(I_2,O_2,P_2,S_2)$ have
+      relations of $I_1\subseteq I_2\And O_2\subseteq O_1$, we consider
+      they are not redundant if $P_1\neq P_2$.
+
+\item {\em triangle} of WFT:\\
+      Let $\leadsto=\mystack{+}{\lMi}\cup\mystack{+}{\lmi}$.
+      Then if $\Ex a. (a_1\Longrightarrow a_2 \vee a_1 \longrightarrow a_2)
+      \And a_1\leadsto a \And a\leadsto a_2$,
+      then there exists two ways between $a_1$ and $a_2$.  A WFT
+      containing $a_1$ and $a_2$ with such a relation is called {\em
+      triangle}.
+\end{enumerate}
+
+{\em Workflow} is defined as a WFT $W$ satisfying these restrictions:
+\[
+ \forall\; a_1 \in W, \exists\; a_2 \in W.\ 
+ a_1 \leadsto a_2 \vee a_2 \leadsto a_1,
+\]
+and $W$ constitutes a connected graph.
+
+This definition is easily extended into a set of workflows.
+Consider a set, $S$, of workflows, each of which is connected to another
+workflow in $S$: that is, 
+\[\begin{array}{l}
+\All w_1\in S, \Ex w_2\in S.\ \\
+((w_1=a\!\leadsto\!a'\And w_2=a'\!\leadsto\!a'')
+\Or (w_2=a\!\leadsto\!a'\And w_1=a'\!\leadsto\!a'')),
+%\All w_1,w_2\in S.\ w_1\mystack{*}{\leadsto}w_2\Or w_2\mystack{*}{\leadsto}w_1
+\end{array}\]
+%where $w_1\!\mystack{*}{\leadsto}\!w_2\mydefi w_1\!=\!w_2
+%	\Or w_1\!\leadsto\!w_2\Or
+%(\Ex w_3. w_1\!\mystack{*}{\leadsto}\!w_3\And 
+%w_3\!\mystack{*}{\leadsto}\!w_2)$
+and $S$ constitutes a single graph.  We extend the above definition and
+call such a set of workflows a workflow generally.  The above
+definitions, closedness, acyclicity, and redundancy, are also
+considered in this definition of a workflow.  
+In the case of triangle restriction, it is extended as follows:
+$S\lMi a\And \Ex S'\subseteq S.\ S'\pq a'\And a'\pq a$.
+Remark that we can
+consider a set of workflows also as a set of activity objects because
+flows are represented only implicitly.
+
+Consider two workflows, $S_1$ and $S_2$.
+Ordering between $S_1$ and $S_2$ is defined by subset relation: i.e.,
+$S_1\subseteq S_2$.
+In this order, a maximal set in a WFT called a {\em maximal} workflow.
+In a maximal workflow, an activity object without any parents is
+simply called a {\em parent}. 
+Generally, a WFT defines multiple workflows in the sense of this definition.
+
+A closed WFT guarantees at least one definition of a closed workflow,
+which corresponds to the unit of a complete work: 
+On the other hand, an unclosed workflow includes a definition of a work, 
+lacking some activity objects to which a work might be submitted. 
+
+
+\section{Execution Model}
+\label{sec:execmodel}
+
+To execute a WFT for a work, we must define its execution model.
+The execution model of a WFT consists of two models, {\em P-box} and
+{\em C-box}, each of which corresponds to horizontal and vertical flows, 
+respectively.
+
+A horizontal flow defines the following production rules:
+\begin{center}
+ \begin{tabular}{rl}
+ If $a_1\lMi a_2$, &then $a_2\Hi a_1$\\
+ If $a_1\lMi a_3$ and $a_2\lMi a_3$, &then $a_3\Hi a_1,a_2$\\
+ If $a_1\lMi a_2$ and $a_1\lMi a_3$, &then $a_2\Hi a_1$ and $a_1\Hi
+  a_1$\\
+ If $a_1$, & then $a_1 \Leftarrow .$\\
+ \end{tabular}
+\end{center}
+The right hand side of $\Hi$ is a set of conditions, while the left
+hand side is an action.
+This rule is evaluated forwardly as in ordinary production rules.
+That is, by receiving all end conditions of the corresponding activity
+objects, the corresponding activity object to the action is activated.
+An activity object itself is represented as a fact.
+
+A production system, as a set of such production rules, is stored in
+{\bf P-box} in the WFT.
+
+On the other hand, a vertical flow represents a set of definite clauses
+as in logic programming such as Prolog.
+That is, when an activity object $a$ generates children $a_1,a_2,\cd,a_n$,
+the execution model is represented as follows:
+\[a\hi a_1,a_2,\cd,a_n\]
+Intuitively, constraints and binding information are propagated from $a$ 
+to $a_1,a_2,\cd,a_n$, and if all children objects end successfully, then
+$a$ ends its execution successfully.
+That is, these rules are evaluated backwardly as in Prolog.
+
+Such a set of definite clauses is stored in a {\bf C-box} in the WFT\@.
+As dynamically generated child objects are also activity objects,
+they are stored in P-box, not in C-box.
+
+Consider an example (Figure \ref{f:review}).
+\begin{figure}
+{\small 
+\begin{center}
+ \setlength{\unitlength}{0.82mm}
+ \input{wfreview}
+\end{center}
+ }
+\caption{Review Process}\label{f:review}
+\end{figure}
+Such a process is defined as a WFT in Figure \ref{f:wft}.
+\begin{figure}
+ \begin{center}
+  \begin{tabular}{lcl}
+   review-process & = & \{receive, dispatch-1, dispatch-2, review, send\}\\
+   receive & = & (all-submitted-papers, received-letter, \\
+   &   &  secretary, \{\})\\
+   dispatch-1 & = & (all-submitted-papers, all-review-reports, \\
+   &   & chair, \{dispatch-2\})\\
+   dispatch-2 & = & (selected-submitted-papers, \\
+   &   & selected-review-reports, \\
+   &   & PC-member, \{review\})\\
+   review & = & (submitted-paper,     review-report,     reviewer, \\
+   &   & \{\})\\
+   send   & = & (all-review-reports, review-letter, secretary, \\
+   &   & \{\})
+  \end{tabular} 
+ \end{center}
+ \caption{WFT of a Review Process}\label{f:wft}
+\end{figure}
+In a real review process, we must instantiate ``submitted-paper'',
+``chair'', ``secretary'', ``PC-member'', and so on.  We will introduce
+the instantiation concept of workflow in the next section.
+Remark that multiple instances of a child object, ``review'', must be 
+dynamically generated, after ``chair'' received ``all-submitted-papers''.
+
+The corresponding execution model is shown in Figure \ref{f:box}.
+\begin{figure}
+ \begin{center}
+  \begin{tabular}{ll}
+   P-box:
+   &receive\\
+   &dispatch-1\\
+   &send$\Hi$dispatch-1\\
+   &$\left.
+   \begin{array}{l}
+    \mx{dispatch-2}_1\\
+    \mx{dispatch-2}_2\\
+    \vdots\\
+    \mx{dispatch-2}_n\\
+    \vdots
+   \end{array}
+   \right\}$
+   \begin{tabular}{l}
+    Dynamically generated\\
+    activity objects
+   \end{tabular}\\
+   C-box:
+   &dispatch-1  $\hi$dispatch-2$_1$,dispatch-2$_2$,$\cd$,dispatch-2$_n$.\\
+   &dispatch-2$_1\hi$ review$_{11}$,review$_{12}$,$\cd$,review$_{1l}$\\
+   &dispatch-2$_2\hi$review$_{21}$,review$_{12}$,$\cd$,review$_{2m}$\\
+   &$\vdots$\\
+   &dispatch-2$_n\hi$review$_{n1}$,review$_{n2}$,$\cd$,review$_{nk}$
+  \end{tabular}
+ \end{center}
+ \caption{Execution Model of a Review Process}\label{f:box}
+\end{figure}
+\begin{sloppypar}
+ First, three production rules, ``receive'', ``dispatch-1'', and ``send
+ $\Hi$ dispatch-1'' are generated in P-box.  After activating
+ ``dispatch-1'', $n$ activity objects,
+ ``dispatch-2$_1$'',``dispatch-2$_2$'', $\cd$, ``dispatch-2$_n$'' are
+ generated as instances of ``dispatch-2''.  Such activity objects are
+ generated in P-box and its corresponding rule (definite clause),
+ ``dispatch-1 $\hi$ dispatch-2$_1$, dispatch-2$_2$, $\cd$,
+ dispatch-2$_n$'', which controls their execution, is generated in C-box.
+ After each activity object ``dispatch-2$_i$'' is activated, its
+ corresponding activity objects, ``review$_{i1}$'',$\cd$,
+ ``review$_{ir}$'', for ``review'' and its rule,
+ ``dispatch-2$_i\hi$review$_{i1}$,$\cd$,review$_{ir}$'', is stored in
+ P-box and C-box, respectively.
+\end{sloppypar}
+
+Activity objects, generated and inserted into P-box during execution,
+do not cause any conflict to existing activity objects, because they
+are newly generated.
+Therefore, dynamic update of P-box is an conservative extension
+and does not change its semantics and does not cause new conflicts.
+
+\section{Workflow Instance}
+\label{sec:workflowinstance}
+
+To apply WFTs defined in the previous sections to real works,
+we must instantiate inputs, outputs, agents, and so on.
+Such instantiated WFTs are called {\em workflow instances} (WFI)\@.
+Although a WFI is an instance of a WFT, they are essentially the same.
+Here we use a WFI as a WFT to execute a real work.
+
+First we define ordering between objects and, as the results, ordering 
+between WFTs.
+Consider a domain $\cM$ of message objects consisting of inputs and outputs,
+and a domain $\cP$ of agents.
+An activity object $a=(I,O,P,S)$ is basically a function from $I$ to $O$,
+defined as follows:
+\begin{enumerate}\itemsep0mm\parskip0mm
+\item $I\in 2^\cM$, $O\in 2^\cM$
+\item $P\in 2^\cP$
+\item $a\in\cA$, $S\subseteq\cA$, where $\cA$ is a set of activity objects,
+defined as follows:
+\begin{eqnarray*}
+\cA&:=&2^\cM\times 2^\cM\times 2^\cP\times 2^\cA
+\end{eqnarray*}
+\end{enumerate}
+
+Although $P$ can be defined as a function on $\cM$, we take another
+domain $\cP$, because we consider that two activity objects with the
+same inputs and the same outputs, but the different agents should be
+defined as different objects.
+
+For an activity object $a=(I,O,P,S)$, we consider assignment $\theta$ of
+$I$ to $I'=\{i_1,i_2,\cd,i_n\}$, $O$ to $O'=\{o_1,o_2,\cd,o_m\}$, and
+$P$ to $P'=\{p_1,p_2,\cd,p_k\}$.
+$\cM,\cP$ are assumed to be partially ordered sets by $\spq_\cM$ and
+$\spq_\cP$, respectively.
+We usually omit the subscripts of $\spq$, for simplicity.
+The assignment is denoted as follows:
+\[\theta=
+	\{I/\{i_1,\cd,i_n\},O/\{o_1,\cd,o_m\},P/\{p_1,\cd,p_k\}\},\]
+which corresponds to specialization with the following relations:
+\begin{eqnarray*}
+I'\spq_S I&\MH&\All i\in I,\, \Ex i'\in I'.\: i'\spq i\\
+O'\spq_S O&\MH&\All o\in O,\, \Ex o'\in O'.\: o'\spq o\\
+P'\spq_S P&\MH&\All p\in P,\, \Ex p'\in P'.\: p'\spq p
+\end{eqnarray*}
+That is, $\spq_S$ is Smyth ordering, which is necessary and sufficient 
+condition of being assignment.
+
+The orderings between two activity objects $a = (I_1, O_1, P_1, S_1)$
+and $a' = (I_2, O_2, P_2, S_2)$ is defined as follows:
+\begin{eqnarray*}
+a \spq a'  &\mydefi&I_1\spq_S I_2\And O_1\spq_S O_2\\
+	   &      &\And\: P_1\spq_S P_2\And S_1\spq_S S_2.
+\end{eqnarray*}
+where the orderings of $S_1$ and $S_2$ is defined as:
+\[
+ S_1 = \{a_1, \cdots, a_n\} \sqsubseteq_S S_2 = S_1\theta \mydefi
+\{a_1\theta, \cdots, a_n\theta\}.
+\]
+A partial assignment into $S$ is also defined as follows:
+\begin{eqnarray*}
+a'\spq a&\MH&\{a'\}\cup S\spq_S\{a\}\cup S
+\end{eqnarray*}
+An assignment $\theta$ to a WFT $W$ is defined as
+$W\theta\!=\!\{a_1\theta,\cd,a_m\theta\}$.
+As WFTs and WFIs are the same, we can define ordering among them by using 
+assignment.
+
+\begin{sloppypar}
+ Consider the previous example (Figure \ref{f:review}).
+ To instantiate ``review-process'' into ``CODAS-review'',
+ we define the following assignment:
+ \begin{center}
+ \begin{tabular}{l}
+  all-submitted-papers/\{paper$_1$,paper$_2$,$\cd$,paper$_n$\}\\
+  chair/Kambayashi\\
+  PC-members/\{Masunaga, Uemura, Makinouchi, Tanaka, $\cd$\}\\
+  secretary/\{Takada\}\\
+  $\vdots$
+ \end{tabular}
+ \end{center}
+ Using this assignment, a WFT ``review-process'' is instantiated into
+ ``CODAS-review''.  Such instantiation can be denoted as follows:
+ \begin{center}
+ $\begin{array}[t]{l}
+	\mbox{review-process}/\mbox{CODAS-review}
+ \end{array}$
+ \end{center}
+ We can activate a WFI by such instantiation.
+\end{sloppypar}
+
+\section{Workflow Base}
+\label{sec:workflowbase}
+
+Various information defined in the previous sections are stored in a
+workflow database, that is, {\em workflow base} (WFB)\@.
+For simplicity, we assume that identifiers of WFT/WFI, activity objects,
+message objects and agents are global in a workflow base.
+
+A workflow base is defined by a set of WFTs (including WFIs) and 
+$(\cM,\, \spq_\cM)$, $(\cP,\, \spq_\cP)$.
+Now we generalize the definitions of WFTs in Section \ref{sec:wfmodel} 
+to include the identifier of the upper WFT and assignment.
+That is, each WFT $W$ ($=W'\theta$) is defined as follows:
+\begin{center}
+\begin{tabular}{ll}
+definition: &$\begin{array}[t]{l}
+	   W=(W',\, \theta,\, \{a_1,\cd,a_m\})\\
+	   a_1=(I_1,\, O_1,\, P_1,\, S_1)\\
+	   \vdots\\
+	   a_n=(I_n,\, O_n,\, P_n,\, S_n)
+	   \end{array}$\\
+execution model:&\begin{tabular}[t]{l}
+	    P-box: $\cd$\\
+	    C-box: $\cd$
+	    \end{tabular}
+\end{tabular}
+\end{center}
+Note that the execution model can be generated from the definition
+initially, however dynamically generated activity objects and rules are not
+stored initially.
+
+As for a workflow base, there is an integrity constraint:
+\begin{itemize}
+\item Specialization hierarchy of WFTs:\ 
+Ordering among WFTs are consistently defined by $(\cM,\, \spq_\cM)$ and 
+$(\cP,\, \spq_\cP)$.
+\end{itemize}
+Furthermore, we can impose various integrity constraints defined in Section
+\ref{sec:wfmodel}, according to applications' requirements.
+
+%\end{document}

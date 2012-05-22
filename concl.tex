@@ -1,0 +1,52 @@
+%#!latex main
+
+\chapter{Conclusions}
+\label{chap:conclusion}
+
+In this thesis we proposed a flexible framework of workflow management
+suitable for database technologies, {\em workflow base}.  
+
+In this model, a workflow is defined as a set of objects (\emph{activity
+objects}), each of which corresponds with the units of work in
+workflows.  Two kinds of flows in workflow base, horizontal flows and
+vertical flows, are treated as constraints among activity objects, hence
+they are created dynamically from the definitions of activity objects.
+We provide important features of workflow management systems as
+applications of database technologies: workflow instantiation based on
+generalization/specialization hierarchy of workflows; execution model
+based on production systems; loopback flows are defined using ECA rules;
+view functions and query functions as a set of database operations;
+various constraints on workflows as integrity constraints; agent as a
+problem solver under heterogeneous distributed environment.
+
+Workflow base has an important contribution into workflow researches
+other than these original features.
+
+When a number of agents cooperate each other, they share some data in
+almost all cases.  In this sense, data sharing is essential activity in
+cooperative work, as noted in \cite{greif:toois87}, and database will
+surely be an infrastructure of groupware technology.
+However, it is not in today's groupware.  Why?
+
+I think one of the reasons is a gap between groupware from database
+point of view and database from groupware point of view.  From database
+point of view, groupware is software on a distributed environment,
+sometimes executed automatically; from groupware point of view, on the
+other hand, database is software to make capabilities of human beings to
+be higher.  Both viewpoints are true; database technologies supporting
+cooperative work should satisfy the requirements from both viewpoints.
+
+Workflow base supports well-structured cooperative work from both
+viewpoints: to provide a formal but simple workflow model with concrete
+execution semantics from database point of view; to provide general and
+powerful query language on workflows from groupware point of view.
+
+In this sense, research of query languages on workflow base is the most
+important future work.  Though an operation set on workflow base
+proposed in Chapter \ref{chap:dbop} is based on relational algebra, it
+is quite exhaustive.  From the algebraic point of view, relational
+algebra has many good properties: equality with relational calculus,
+relationships with Datalog, etc.  Refinement of the operation set to
+establish ``workflow algebra'' would give powerful and easy-to-use
+workflow management systems, as relational database did in the database
+area.

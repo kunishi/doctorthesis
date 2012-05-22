@@ -1,0 +1,440 @@
+%#!latex main
+
+\newcommand{\ancestor}{\mathop{\rm ancestor}\nolimits}
+\newcommand{\descendant}{\mathop{\rm descendant}\nolimits}
+\newcommand{\wft}{\mathop{\rm wft}\nolimits}
+\newcommand{\wfi}{\mathop{\rm wfi}\nolimits}
+\newcommand{\wftgeneral}{\mathop{\rm general}\nolimits}
+\newcommand{\wftspecial}{\mathop{\rm special}\nolimits}
+\newcommand{\evalexp}{\mathop{\rm eval}\nolimits}
+
+\newcommand{\selectao}{\mathop{\sigma}}
+\newcommand{\selectwft}{\mathop{\sigma'}}
+\newcommand{\getworkflow}{\mathop{\eta}}
+\newcommand{\wfbhide}{\mathop{\psi}}
+\newcommand{\wfbshow}{\mathop{\Psi}}
+\newcommand{\wfbgeneral}{\mathop{\vartheta}}
+\newcommand{\wfbspecial}{\mathop{\Theta}}
+\newcommand{\wfbancestor}{\mathop{\vartheta^+}}
+\newcommand{\wfbdescendant}{\mathop{\Theta^+}}
+\newcommand{\wfbgrouping}{\mathop{\omega}}
+\newcommand{\wfbflatten}{\mathop{\Omega}}
+\newcommand{\wfbsplit}{\mathop{\gamma}}
+\newcommand{\wfbconcat}{\mathop{\Gamma}}
+\newcommand{\wfbplugin}{\mathop{\Join^+}}
+\newcommand{\wfbplugout}{\mathop{\pi^+}}
+
+\chapter{Database Operations on Workflow Base}
+\label{chap:dbop}
+
+As mentioned in Section \ref{sec:pre:wfms}, conventional workflow
+management systems have no standard data manipulation language.
+This causes several problems into WFMSs: the lack of interoperability
+among WFMSs, as pointed out in \ref{sec:pre:wfms}; poor functions for
+reorganizing workflows such as workflow reuse, view functions
+including the creation of to-do lists, workflow optimization in business 
+process reengineering, etc.
+
+Data manipulation language is what database technologies make the
+greatest contribution to workflow management, because data manipulation
+of general purpose is one of the most essential facilities in DBMSs, and 
+therefore many technologies such as SQL are developed.
+
+Workflow base provides a formal model of workflows, which is suitable
+for data manipulation of database technologies.  In this chapter, we
+give several operations manipulating workflows on workflow base.
+
+They are defined as an extension of ordinary relational algebra.  That
+is, these operations get a set of WFTs or a set of activity objects from
+WFTs in WFB\@.  The operations are classified into three categories:
+\begin{itemize}
+ \item Query operations.\\
+       A {\it new} set of WFTs (or of activity objects) is obtained from
+       the previously defined workflows  No effects over the original
+       WFTs (or activity objects).
+ \item Operations handling WFTs.\\
+       Though some effects may cause over other WFTs, they keep WFTs as
+       workflows to be consistent.
+ \item Operations handling activity objects directly.\\
+       Any effects may cause over WFTs.  Sometimes the effects make WFTs 
+       no more than workflows.
+\end{itemize}
+As some of them do not always keep the closure property of relational
+algebra, an operation for keeping closure property is also provided.
+The combination of this operation with others makes the closure property
+to be kept.
+
+When using these operations, users can organize new workflows from the
+workflows in WFB\@.  For example, the following functions are available
+using the operations:
+\begin{itemize}
+\itemsep0mm\parskip0mm
+ \item Views over workflows, such as to-do lists.
+ \item Investigation of progress.
+ \item Workflow reorganization.
+ \item Reuse of workflows.
+\end{itemize}
+
+Note that any ordinary set operators or operations in relational algebra
+can be used for manipulating WFTs or activity objects.  And also note
+that the components of an activity object are accessible using dot
+notations.  That is, $a.I$ means $I$ of $a$.  Hence the notations such
+as $a.I := a.I \cup \{kunishima\}$ can be available.  We do not discuss
+these points further in this thesis.
+
+\section{Query Operations}
+\label{sec:retrieveop}
+
+\subsection{Selection}
+
+Two selection operations on a WFB can be considered: selection for a set 
+of activity objects, and selection for a set of WFTs.
+
+Selection of activity objects, $\selectao_{expr} W$, gets a set of activity
+objects satisfying an AO-expression $expr$ from a specified WFT $W$.
+AO-expressions are recursively defined as follows:
+\begin{itemize}
+ \itemsep0mm\parskip0mm
+ \item $p \in P$ is an AO-expression, where $p \in {\cal P}$.
+ \item $m \in I$ is an AO-expression, where $m \in {\cal M}$.
+ \item $m \in O$ is an AO-expression, where $m \in {\cal M}$.
+ \item $\ancestor(a)$ is an AO-expression, where $a \in W$.
+ \item $\descendant(a)$ is an AO-expression, where $a \in W$.
+ \item If both $exp1$ and $exp2$ are AO-expressions, $exp1 \charop
+      exp2$ is also an AO-expression, where $\charop$ is a conventional logical
+      operator.
+\end{itemize}
+If $W$ is omitted, a WFT of all activity objects in a WFB, $W_{all}$, is
+assumed as $W$.  This assumption is all applicable on other operations.
+Evaluation value of an AO-expression $expr$, $\evalexp(expr)$ is defined as
+follows.  For an activity object $a' = (I, O, P, S) \in W$,
+\[
+ \begin{array}{l}
+ \evalexp(p \in P) = {\tt true} \chariff p \in P.\\
+ \evalexp(m \in I) = {\tt true} \chariff m \in I.\\
+ \evalexp(m \in O) = {\tt true} \chariff m \in O.\\
+ \evalexp(\ancestor(a)) = {\tt true} \chariff a \longrightarrow a', a' \in W.\\
+ \evalexp(\descendant(a)) = {\tt true} \chariff a' \longrightarrow a, a' \in W.\\
+ \evalexp(exp1 \charop exp2) = \evalexp(exp1) \charop \evalexp(exp2)
+ \end{array}
+\]
+
+Selection of WFTs, $\selectwft_{expr} W$, on the other hand, gets a set of
+WFTs satisfying a WFT-expression $expr$ from a specified WFT $W$.
+WFT-expressions are recursively defined as follows:
+\begin{itemize}
+ \itemsep0mm\parskip0mm
+ \item $\wft(W')$ is a WFT-expression, where $W'$ is a WFT.
+ \item $\wfi(W')$ is a WFT-expression, where $W'$ is a WFT.
+ \item $\wftgeneral(W')$ is a WFT-expression, where $W'$ is a WFT.
+ \item $\wftspecial(W')$ is a WFT-expression, where $W'$ is a WFT.
+ \item If both $exp1$ and $exp2$ are WFT-expressions, $exp1 \charop
+      exp2$ is also a WFT-expression, where $\charop$ is a conventional logical
+      operator.
+\end{itemize}
+Evaluation value of a WFT-expression $expr$, $\evalexp(expr)$ is
+defined as follows.  For a WFT $W''$,
+\[
+ \begin{array}{l}
+  \evalexp(\wft(W')) = {\tt true} \chariff W' \sqsubseteq W'',
+      \neg\exists W_1. W' \sqsubseteq W_1 \sqsubseteq W''.\\
+  \evalexp(\wfi(W')) = {\tt true} \chariff W'' \sqsubseteq W',
+      \neg\exists W_1. W'' \sqsubseteq W_1 \sqsubseteq W'.\\
+  \evalexp(\wftgeneral(W')) = {\tt true}  \chariff W' \sqsubseteq W''.\\
+  \evalexp(\wftspecial(W')) = {\tt true} \chariff W'' \sqsubseteq W'.\\
+  \evalexp(exp1 \charop exp2) = \evalexp(exp1) \charop \evalexp(exp2)
+ \end{array}
+\]
+
+Both selection operations are similar with selection operator in
+relational algebra.  However, there is a difference between those two:
+the result of $\selectao$ is not always a closed WFT, meanwhile the result
+of $\selectwft$ is always closed.  That is, when $\selectao$ is applied on a
+workflow, the result is not always a workflow.
+
+Now we provide an operation to get a workflow from a set of activity
+objects, {\em get workflow} operation, noted as $\getworkflow$.  Its
+syntax is $\getworkflow_W a$ or $\getworkflow_W \{a_1, \cdots, a_n\})$.
+It gets a maximal workflow including an activity object $a$ or activity
+objects $\{a_1, \cdots, a_n\}$ respectively, from a specified WFT $W$.
+
+By using $\getworkflow$, a workflow can be obtained from the result of
+$\selectao$.
+
+\subsection{Operations on Has-a Hierarchies}
+
+In general, a WFT organizes hierarchically by vertical flows.  Hence
+there exists a requirement to hide some sub activity objects from a WFT to
+look at an overview of work.  In order to satisfy the requirement, we
+provide operations {\em hide} and {\em show} as the reverse operator of
+{\em hide}.
+
+Hide operation, noted as $\wfbhide(W_1, W_2)$, returns a WFT $W_1 - W_2$
+where $W_1$ is a WFT, $W_2$ is a closed WFT, and $W_2 \subseteq W_1$.
+Intuitively, this operator hides all the descendants of the activity
+objects in $W_2$.  In other words, $\wfbhide$ works as an abstraction
+operation on a WFT.  The obtained WFT does not always satisfy closed
+property.
+
+Show operation, denoted as $\wfbshow W_1$, is the reverse operation of
+$\wfbhide$.  For a WFT $W_1$, this operation returns a WFT
+\[
+ W_1 \cup \bigcup_{a \in W_1} \descendant(a).
+\]
+$W_1$ may not be closed.  On the other hand, the obtained WFT is
+always closed.
+Intuitively this operation shows all the descendants of $W_1$.  In other 
+words, $\wfbshow$ works as a detailing operation on a WFT.
+
+\subsection{Operations on Specialization Hierarchies}
+
+Specialization hierarchies of WFTs are useful for retrieving WFTs from
+their instantiation relationships.  For example, by using specialization 
+hierarchies, we can retrieve all the instances of the same parent.  This 
+manipulation is frequently used in investigating the progress status of
+work.
+
+{\em General} operation, noted as $\wfbgeneral(W, \theta)$ is defined as
+\[
+ \wfbgeneral (W, \theta) \mydefi \{W' | W'\theta = W\}.
+\]
+This operation obtains a set of WFTs each of which is a parent of $W$
+over the partial ordering $\sqsubseteq$.
+
+{\em Special} operation, noted as $\wfbspecial(W, \theta)$, is defined as 
+\[
+ \wfbspecial(W, \theta) \mydefi \{W' | W' = W\theta\}.
+\]
+This operation obtains a set of WFTs each of which is a child of a WFT
+$W$ over the partial ordering $\sqsubseteq$.
+
+We also define the transitive closure of $\wfbgeneral$ and
+$\wfbspecial$, noted as $\wfbancestor$ and $\wfbdescendant$,
+respectively.  These operation obtain all the ancestors and all the
+descendants on the specialization hierarchies, respectively.
+
+\section{Operations Handling WFTs}
+\label{sec:changewfop}
+
+%Ordinary set operations can be used as the operators on WFTs, though we
+%don't mention about the their definitions in this paper.
+
+\subsection{Grouping, Ungrouping}
+
+First we define an operation for grouping multiple activity objects into 
+one activity object, and its reverse operation.
+
+For a closed WFT $W = \{a_1, \cdots, a_n\}$, {\em grouping} operation,
+noted as $\wfbgrouping W$, returns an activity object
+\[
+ a' = (\bigcup^n_{i=1}I_i-\bigcup^n_{i=1}O_i,
+ \bigcup^n_{i=1}O_i-\bigcup^n_{i=1}I_i, \bigcup^n_{i=1}P_i, W), 
+\]
+and lets $W' = (W' - W) \cup \{a\}$ for all WFTs $W'. W \subseteq W'$.
+Intuitively this is a ``grouping'' operation.  It regards a WFT
+$W$ as a sequence of one work, and creates an activity object
+including $W$ as subworks.
+
+Next the reverse operation of grouping, {\em flattening} operation,
+noted as $\wfbflatten a$, is defined.
+Let $a_1 = (I_1, O_1, P_1, S_1)$.  For all activity objects $a_1$ where
+$a = (I, O, P, S) \in S_1$, this operation lets $S_1 = S_1 \cup S -
+\{a\}$ if $S \neq \emptyset$.  If $S = \emptyset$, it does nothing.
+
+\subsection{Split, Concatenation}
+{\em Split} operations, noted as $\wfbsplit(a, W)$, is defined as
+follows.  For an activity object $a = (I, O, P, S)$ and a closed and
+consistent WFT $W = \{a_1, \cdots, a_n\}$ where $W \subseteq S$, this
+operation returns a WFT $W' = \{a'_1, a'_2\}$ where:
+\begin{eqnarray*}
+ a'_1 & = & (\bigcup^n_{i=1}I_i-\bigcup^n_{i=1}O_i,
+  \bigcup^n_{i=1}O_i-\bigcup^n_{i=1}I_i, P, W)\\
+ a'_2 & = & ((I - I'_1) \cup O'_1, (O - O'_1) \cup I'_1, P, S-W)
+\end{eqnarray*}
+
+Intuitively this operation splits a WFT $S$ from a specified WFT $W$.
+In general, the obtained WFT $W'$ is not always acyclic in
+$\Longrightarrow$.  That is, two horizontal flows, $a'_1 \Longrightarrow
+a'_2$ and $a'_2 \Longrightarrow a'_1$, hold simultaneously.  To make
+$W'$ to be acyclic in $\Longrightarrow$, one of these two conditions
+must be satisfied: $I'_1 - O'_1 \subseteq I$ or $O'_1 - I'_1 \subseteq
+O$.
+
+{\em Concatenation} operation, noted as $\wfbconcat(a_1, a_2)$, is
+closely related with split operation.
+If neither $a_1 \Longrightarrow a_2$ nor $a_2 \Longrightarrow
+a_1$ are satisfied, this operation lets $I_2 = I_2 \cup O_1$.  If
+one of the two conditions are satisfied, this operation does
+nothing.
+
+Intuitively it connects two activity objects $a_1, a_2$ by a
+horizontal flow.  From the definition of horizontal flow, the
+outputs of $a_1$ must be added to the inputs of $a_2$ when no
+horizontal flow is found between $a_1$ and $a_2$.
+
+\section{Operations Handling Activity Objects}
+\label{sec:changeaoop}
+
+Some kinds of changes on WFTs, such as changing flows or adding new
+activity objects, need operations on activity objects in the WFTs
+directly.  Moreover, operations handling WFTs shown in the previous
+section are implemented using operations on activity objects.  For these 
+reasons, operations handling activity objects directly are necessary for 
+WFB.  
+
+In addition to the conventional set operations or the operations in
+relational algebra, we provide these operations listed below for
+handling activity objects:
+\begin{itemize}
+ \item $\operator{new}(a, I, O, P, S)$\\
+       It creates a new activity object.
+ \item $\operator{destroy}(a)$\\
+       It destroys a specified activity object $a$.
+ \item $\operator{foreach}\; a\; \operator{in}\; s\; \operator{do}\;
+       Operator$\\
+       It executes an operation WFT $Operator$ for each activity object
+       $a$ in a set $s$.  $Operator$ can be any operator on an activity
+       object.  This operator is useful when the maintainer wants to do
+       the same operations on the number of activity objects.  For
+       example, if yokota's works are all transferred to kunishima, the
+       maintainer will do the following operation:
+       \[
+	\operator{foreach}\; a\; \operator{in}\;
+       \selectao_{yokota\in P} W_{all} \; \operator{do}
+       \;\; a.P := \{kunishima\};
+       \]
+\end{itemize}
+
+However, these operations may cause integrity violations of WFTs.  For
+example, if the operation $\operator{destroy}(\mbox{dispatch-1})$ is
+applied on the workflow ``review-process'' in Figure \ref{f:wft},
+``review-process'' will be no more than a workflow because it is not
+closed and not connected.  Hence the operations shown in this section
+are mainly for the maintainers of workflow base.
+
+\section{Operations on Activity Objects With Plugins}
+
+{\em Plug-in} operation, $\wfbplugin$, is provided for adding plugins
+such as time plugin or resource plugin to activity objects.  It is
+defined as: 
+\[
+ a \wfbplugin L \mydefi a \Join L 
+\]
+ where $a$ is an activity object and $L$ is a plugin.  As shown in this
+definition, plug-in operation on an activity object is in actual same as
+natural join operations in relational algebra\footnote{The notations of
+the operators in relational algebra are based on
+\cite{ullman:database88:1}.}.
+
+Plug-in operation $\wfbplugin$ on a WFT is defined as:
+\[
+ W \wfbplugin L = \{a_1 \wfbplugin L, \cdots, a_n \wfbplugin L\}
+\]
+where $W=\{a_1, \cdots, a_n\}$.
+
+{\em Plug-out} operation, $\wfbplugout$, is defined as a reverse operator of
+$\wfbplugin$ such as:
+\[
+ \wfbplugout_{L} a_1 \mydefi (I, O, P, S)
+\]
+where $a_1 = (I, O, P, S, L)$.  Plug-out operation is a special case of 
+projection operation in relational algebra.
+
+Plug-out operation on a WFT can be defined as same as the plug-in
+operator on a WFT:
+\[
+ \wfbplugout_{L} W = \{\wfbplugout_{L} a_1, \cdots, \wfbplugout_{L} a_n\} 
+\]
+where $W = \{a_1, \cdots, a_n\}$.
+
+Plug-in operation and plug-out operation can be applied into activity
+objects already plugged in by another plugins, with no modification of
+the definitions above.
+
+\section{Examples on Applying Operations}
+
+We show some examples of applying the operations on workflow-base.
+
+\subsection{Retrievals}
+
+Consider a situation doing a review process based on the workflow in
+Figure \ref{f:wft}.  The chair wants to investigate the progress of the
+review process of a submitted paper ``A100''.  He gets the workflow
+of the process by applying this operation:
+\[
+ \getworkflow \selectao_{A100 \in I} W_{all};
+\]
+
+Then he finds the review process is delayed at reviewer {\it Taro}.  He
+wants to know all the works {\it Taro} is doing.  {\it Taro}'s all
+activity objects can be obtained by applying the following:
+\[
+ W_{taro} := \selectao_{Taro \in P} W_{all};
+\]
+The precise of each workflows can be obtained by:
+\[
+ W_{taroPrecise} := \wfbshow W_{taro};
+\]
+
+Consider another query.  A committee member {\it jiro} wants to
+investigate that other committee members have asked {\it taro} to review
+submitted papers.  Because $\mbox{review}_{11}, \cdots,
+\mbox{review}_{nj_k}$ in Figure \ref{f:box} are children of a WFT ``review''
+over the partial ordering $\sqsubseteq$, this query is described as the
+following:
+\[
+ \selectao_{taro \in P} \selectwft_{\wfi(review)} W_{all};
+\]
+
+\subsection{Updates of Workflows}
+
+Figure \ref{fig:registration} shows a workflow of a registration process of 
+the same conference.
+\begin{figure}
+\begin{center}
+\begin{tabular}{lcl}
+ registration-process & = & \{registration, send-registration\}\\
+ registration & = & (entry-sheet, participant-name, secretary, \\
+              &   & \{register into the participants list.\})\\
+ send-registration & = & (participant-name, acceptance-sheet, \\
+                   &   & secretary, \{\})
+\end{tabular}
+\end{center}
+\caption{WFT of a Registration Process}
+\label{fig:registration}
+\end{figure}
+
+``send-registration'' in Figure \ref{fig:registration} and
+``send'' in Figure \ref{f:wft} are almost the same process
+in the sense that a secretary sends something to someone.  For this
+reason, these two processes can be joined into one process
+``send-object'' by applying the following operations: 
+\[
+ \begin{array}{l}
+ \operator{new}(\mbox{send-object}, \mbox{address}, \mbox{objects},
+  \mbox{secretary}, \{\});\\
+ \wfbsplit(W_1, \{\mbox{send-review-report}\});\\
+ \wfbsplit(W_2, \{\mbox{send-registration}\});\\
+ \wfbgeneral(\{\mbox{send}\},\\
+  \{\mbox{address/participants-name}, \mbox{objects/acceptance-sheet}\});\\
+ \wfbgeneral(\{\mbox{send-registration}\},\\
+ \{\mbox{address/all-review-reports}, \mbox{objects/review-letter}\});
+ \end{array}
+\]
+
+\section{Summary}
+
+Operations to a WFB are defined as an extension of ordinary relational
+algebra.  These operations get a set of WFTs or a set of activity
+objects from WFTs in WFB\@.  They do not always keep the closure property
+of relational algebra.  Some operations are provided in order to let a
+set of activity objects into a WFT\@.  The combination of these operations
+with others makes the closure property to be kept.
+
+When using these operations, users can organize new workflows from the
+workflows in WFB\@.  For example, the following functions are available
+using the operations: views over workflows, such as to-do lists;
+investigation of progress; workflow reorganization; reuse of workflows.
+
+The operations are classified into three categories: query operations,
+operations handling WFTs, and operations handling activity objects.

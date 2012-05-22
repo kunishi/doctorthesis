@@ -1,0 +1,192 @@
+%#!latex main
+
+\chapter{Preliminaries}
+\label{chap:preliminaries}
+
+\section{Workflow Management Systems}
+\label{sec:pre:wfms}
+
+\subsection{Basic Concepts}
+
+\emph{Workflow} is a concept for automating or reengineering business
+processes in an organization \cite{abbott:cscw94, georgakopoulos:jdps95,%
+schal:book96}.  However, there is little agreement for the features a
+workflow management system must provide.  This is because the term
+``workflow'' uses in various situations: business process specification,
+business process automation, business process reengineering, etc.
+Moreover, in the domain of workflow management, products are developed
+earlier than researches with strict definitions or theorems.  Here are a
+few examples of workflow products \cite{georgakopoulos:jdps95}: Lotus
+Notes from Lotus Development Corp., FloWare from Recognition
+International, Staffware from Staffware Corp., DocuFLOW from Inventor
+Inc., WorkMAN from Reach Software Corp., ActionWorkflow from Action
+Technologies, TeamLinks for Pathworks from Digital Equipment Corp., etc.
+
+In 1996, Workflow Management Coalition \cite{wfCoalition}, international
+organization for standardization of workflow software technology,
+published a document about workflow software terminology
+\cite{96:wfCoalitionTC1011}.  This document explains almost all
+important concepts of workflow model.
+
+A workflow defines a collection of \emph{process instances} organized to
+accomplish some business processes, the order of process instances to be
+invoked, and several conditions under process instances invocations.
+In \cite{96:wfCoalitionTC1011} there are five kinds of the invocation
+order:
+\begin{itemize}
+ \setlength{\itemsep}{0mm}
+ \setlength{\parskip}{0mm}
+ \item AND-Split.  A single thread of control splits into two or more
+       parallel processes.
+ \item AND-Join.  Two or more parallel executing processes converge into
+       a single common thread of control.
+ \item OR-Split.  A single thread of control makes a decision upon which
+       branch to take when encountered with multiple alternative
+       workflow branches.
+ \item OR-Join.  Two or more alternative processes workflow branches
+       re-converge to a single common process as the next step
+       within the workflow.
+ \item Iteration.  The repetitive execution of one or more workflow
+       processes until a condition is met.
+\end{itemize}
+
+Each process instance is performed by human, by a team of humans, or by
+softwares.  Moreover, each process instance may have subprocess
+instances.  Therefore workflows can be constructed hierarchically.
+
+A workflow is often described as a directed graph whose nodes and arcs
+represent business tasks and their invocation order respectively.  Note
+that the graph may have cycles because business tasks sometimes repeats
+until their aims are attained.  Figure \ref{fig:wfexample} shows an
+example of workflow.  In this workflow, the processes ``Review 1'',
+``Review 2'', and ``Review 3'' are executed concurrently.  Hence, the
+invocation order from ``Distribute Papers'' to ``Review 1'', ``Review
+2'', and ``Review3'' should be ``AND-Split''; the order from ``Review
+1'', ``Review 2'', ``Review 3'' to ``Combine Reviews'' should be
+``AND-Join''.
+\begin{figure}
+\begin{center}
+\epsfile{file=wfsample.eps,scale=0.65}
+\end{center}
+\caption{Workflow Example: Paper Review Workflow}
+\label{fig:wfexample}
+\end{figure}
+
+\emph{Workflow management} is a technology to support automation or
+reengineering using workflows.  It mainly organized from these four
+procedures:
+\begin{enumerate}
+ \setlength{\itemsep}{0mm}
+ \setlength{\parskip}{0mm}
+ \item defining workflows by analyzing the business processes to be
+       managed.
+ \item instantiating workflows by assigning several variables with real
+       instances --- for example, organization role name with human name.
+ \item executing instantiated workflows.  It is similar with the
+       execution of finite automaton.  First an initial task (state) is
+       set, and when receiving transition events, tate transitions are
+       invoked with some actions such as sending E-mail for
+       notifications.
+ \item restructuring workflows for optimization of business processes.
+\end{enumerate}
+These procedures are invoked at the endless order; that is,
+restructuring workflows results into defining new workflows, and
+starting a new procedure sequence.
+
+A workflow management system consists of software components to store
+and interpret process definitions, to create and manage workflow instances
+to execute them, and to control the interactions with users.  In order to
+store process definitions and to manage execution status of workflows,
+databases are indispensable component of workflow management systems.
+
+%\subsection{An Illustrative Example}
+%
+%We show some illustrative examples of collaborative work using workflow
+%management.
+%
+%Show again Figure \ref{fig:wfexample}.  This is a workflow definition of
+%review processes in some conference.  First, the chair of the program
+%committee receives all submitted papers.  
+
+\subsection{Previous Researches}
+
+\begin{sloppypar}
+ Workflow management systems provide methodologies to support
+ \cite{georgakopoulos:jdps95}:
+\end{sloppypar}
+\begin{enumerate}
+ \setlength{\itemsep}{0mm}
+ \setlength{\parskip}{0mm}
+ \item business process modeling to capture business processes as
+       workflow specifications.
+ \item business process reengineering to optimize specified processes.
+ \item workflow automation to generate workflow implementations from
+       workflow specifications.
+\end{enumerate}
+In addition, workflow management systems support asynchronous
+distributed cooperative work whose structure is well-defined in most
+cases.
+
+Another methodology of workflow management systems is transaction
+management.  That is, cooperative work supported by workflow management
+systems is routine work, and many numbers of transactions, some of these 
+sharing office resources, run concurrently during workflow management.
+
+Hence, in the workflow area, researches and developments had been
+advanced from these three directions:
+\begin{itemize}
+ \item \begin{sloppypar}
+	\emph{Process modeling approach}.  This approach mainly focuses on
+       	business process modeling, business process automation, business
+       	process reengineering including dynamic change mechanism, etc.
+       	Many formal models of business process have been proposed based
+       	on this approach: Petri-net based \cite{ishii:tripsj86,%
+       	ishii:jip91, blumenthal:coocs95, ellis:coocs95}, state transition
+       	diagram based \cite{humphrey:icse89, harel:ieeese90,%
+       	sarin:cocs91, jarke:ijicis92, swenson:coocs93, isaka:tripsjgw96},
+       	distributed knowledge-base based \cite{tueni:studiescscw91,%
+       	jarke:ijicis92, plexousakis:coocs95, mahling:ieeeexpert95,
+	robinson:nsf96}, etc.
+       \end{sloppypar}
+ \item \begin{sloppypar}
+	\emph{Groupware approach}, \cite{shepherd:cscw90, kaplan:cocs91,%
+       	medina-mora:cscw92, mahling:coocs93, tarumi:tipsj95} for example.
+       	This approach views workflow management system as a kind of
+       	groupware supporting cooperative activities of human beings in a
+       	distributed environment.  It mainly focuses on communication
+       	theory \cite{winograd:book86, mahling:coocs93}, flexible support
+       	for human communications \cite{mazer:toois84, bogia:coocs93,%
+       	blumenthal:coocs95, iiduka:tripsj96}, system architecture
+       	including GUI \cite{kaplan:cocs91}, toolkits for implementing
+	WFMSs \cite{forst:jdps95}, etc.
+       \end{sloppypar}
+ \item \emph{Database approach},  \cite{georgakopoulos:ijicis94,
+       rusinkiewicz:adbis94, krishnakumar:jdps95, alonso:icde96} for
+       example.  This approach mainly views from transaction management
+       from database point of view, such as transaction model supporting 
+       transaction hierarchies and concurrency control, 
+\end{itemize}
+
+\subsection{Benefits for Workflow Management by Using Database Technologies}
+
+As described in the previous section, databases bring some benefits
+into workflow management systems, especially in transaction management
+area.  Transaction management in databases are useful when workflow
+management systems become very large, for example involving thousand of
+users in wide area networks.
+
+However, as mentioned in \cite{alonso:nsf96}, applying database
+technologies to workflow management bring several benefits other than
+transaction management, such as interoperability among several workflow
+management systems.
+Interoperability is one of the very serious problems in workflow
+management area, because workflow management technologies have been
+leaded by commercial products, no interoperability in each other.
+
+Database technologies will be helpful for resolving interoperability
+problem in workflow management by providing general purpose workflow
+manipulation languages, like SQL in data management.  Therefore database 
+technologies can provide the infrastructure for managing workflows in
+more general and flexible way than in conventional WFMSs technologies.
+
+\input{2-3}

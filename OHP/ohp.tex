@@ -1,0 +1,1979 @@
+%#!jlatex ohp
+
+\documentclass[a4,slidesonly]{seminar}
+\usepackage{epic,eepic,eclepsf,fancybox,latexsym}
+
+\slideframe{Oval}
+
+\newcommand{\heading}[1]{\begin{center}
+{\large {\bf \underline{#1}}}
+\end{center}\vspace{2ex minus 1ex}}
+
+\newcommand{\mydef}{\stackrel{\mbox{def}}{=}}
+\newcommand{\mydefi}{\stackrel{\mathit{def}}{=}}
+
+\newcommand{\horflow}{\Longrightarrow}
+\newcommand{\verflow}{\longrightarrow}
+\newcommand{\transhorflow}{\stackrel{+}{\horflow}}
+\newcommand{\transverflow}{\stackrel{+}{\verflow}}
+
+\newcommand{\ancestor}{\mathop{\rm ancestor}\nolimits}
+\newcommand{\descendant}{\mathop{\rm descendant}\nolimits}
+\newcommand{\wft}{\mathop{\rm wft}\nolimits}
+\newcommand{\wfi}{\mathop{\rm wfi}\nolimits}
+\newcommand{\wftgeneral}{\mathop{\rm general}\nolimits}
+\newcommand{\wftspecial}{\mathop{\rm special}\nolimits}
+\newcommand{\evalexp}{\mathop{\rm eval}\nolimits}
+
+\newcommand{\selectao}{\mathop{\sigma}}
+\newcommand{\selectwft}{\mathop{\sigma'}}
+\newcommand{\getworkflow}{\mathop{\eta}}
+\newcommand{\wfbhide}{\mathop{\psi}}
+\newcommand{\wfbshow}{\mathop{\Psi}}
+\newcommand{\wfbgeneral}{\mathop{\vartheta}}
+\newcommand{\wfbspecial}{\mathop{\Theta}}
+\newcommand{\wfbancestor}{\mathop{\vartheta^+}}
+\newcommand{\wfbdescendant}{\mathop{\Theta^+}}
+\newcommand{\wfbgrouping}{\mathop{\omega}}
+\newcommand{\wfbflatten}{\mathop{\Omega}}
+\newcommand{\wfbsplit}{\mathop{\gamma}}
+\newcommand{\wfbconcat}{\mathop{\Gamma}}
+\newcommand{\wfbplugin}{\mathop{\Join^+}}
+\newcommand{\wfbplugout}{\mathop{\pi^+}}
+
+\newcommand{\operator}[1]{{\sf #1}}
+\newcommand{\chariff}{\mathop{\rm iff}\nolimits}
+\newcommand{\charop}{\mathop{\rm op}\nolimits}
+
+\title{Studies on Flexible Workflow Model\\ with Database Technologies\\
+{\small ($B%G!<%?%Y!<%95;=Q$K4p$E$/=@Fp$J%o!<%/%U%m!<%b%G%k$K4X$9$k8&5f(B)}}
+\author{$BT"Eg>f@8(B}
+\date{1997$BG/(B2$B7n(B7$BF|(B}
+
+\newpagestyle{mh}{$BGn;NO@J88xD02q(B, 1997/02/07\hfil\thepage}{}
+\pagestyle{mh}
+
+%\pagestyle{myheadings}
+%\markright{}
+
+\begin{document}
+
+\begin{slide}
+\maketitle
+\end{slide}
+
+\begin{slide}
+\heading{$BK\H/I=$N9=@.(B}
+\begin{itemize}
+ \item $B8&5f$NGX7J(B%
+ \item $B%o!<%/%U%m!<4IM}%7%9%F%`(B%
+ \item Workflow Base%
+ \item Workflow Base $B$KBP$9$k3HD%(B%
+ \item Workflow Base $B$K$*$1$k%G!<%?%Y!<%91i;;(B%
+ \item $B%(!<%8%'%s%H$H(B Workflow Base%
+ \item Workflow Base $B$N%7%9%F%`9=@.(B%
+ \item $B4XO"8&5f$H$NHf3S(B
+ \item $B$^$H$a!":#8e$N2]Bj(B
+\end{itemize}
+\end{slide}
+
+\begin{slide}
+ \heading{$BGX7J(B}%
+ $B%$%s%?!<%M%C%H$N3HBg!&MxMQ<TA}2C$KH<$$!"(B\textbf{$B%0%k!<%W%&%'%"(B}$B$J$I$N(B%
+ $B?7$7$$%"%W%j%1!<%7%g%s$,CmL\$r=8$a$F$$$k!#(B%
+ \begin{itemize}
+  \item $B%0%k!<%W%&%'%"(B: $B6&DL$N%?%9%/(B($B$^$?$OL\I8(B)$B$K=>;v$9$k?M$N=8CD$r(B%
+	$B;Y1g$7!"6&M-4D6-$X$N%$%s%?%U%'!<%9$rDs6!$9$k!"(B%
+	$B7W;;5!%Y!<%9$N%7%9%F%`!#(B%
+	(C. A. Ellis et al., ``Groupware: Some Issues and Experiences'',
+	CACM 1991)
+ \end{itemize}
+% \begin{itemize}
+%  \item \textbf{$B9=B$E*%"%W%m!<%A(B}: $B%f!<%64V$N2qOC9=B$$N%b%G%k2=(B
+%  \item \textbf{$BHs9=B$E*%"%W%m!<%A(B}: $B2qOC9=B$$KFCDj$N%b%G%k$r@_$1$J$$(B%
+%	($B1GA|$K$h$kDL?.$J$I(B)
+% \end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{$B%o!<%/%U%m!<4IM}%7%9%F%`(B(WFMS)}
+ $BHsF14|!&J,;67?6(F1:n6H$r;Y1g$9$k%0%k!<%W%&%'%"$N0l$D!#(B%
+ 
+ $B%*%U%#%9!&%W%m%7%8%c!&%7%9%F%`(B($B%0%k!<%W:n6H$N<j=g!":n6H<T!"%G!<%?$J$I$N(B%
+ $B9=B$$r%b%G%k2=$7!"$=$l$K4p$E$/EE;R%a!<%k%7%9%F%`$r9=C[$7$F;E;v$NN.$l$r(B%
+ $B<+F0@)8f$9$k%0%k!<%W%&%'%"(B)$B$rH/E8$5$;$?$b$N$G$"$j!"<o!9$N%D!<%k$r(B%
+ $BE}9g$7$?$j!"%G!<%?%Y!<%9$K$h$k:n6H>u67$N4IM}$J$I$r9T$&!#(B
+ \begin{itemize}
+  \item $B%S%8%M%9J8=q2sMw4IM}!"%G%8%?%k=PHG$J$I!"(B{\bf $B9=B$2=6(F1:n6H(B}$B$N;Y1g(B%
+  \item $B%S%8%M%9!&%W%m%;%9!&%j%(%s%8%K%"%j%s%0$NF;6q(B%
+  \item $B>&MQ%7%9%F%`$,B?$/3+H/!&HNGd$5$l$F$$$k!#(B\\%
+	{\small Lotus Notes (Lotus Development Corp.), FloWare (Recognition 
+	International), Staffware (Staffware Corp.), DocuFLOW ($B%$%s%Y%s%?<R(B), %
+	WorkMAN ($B%j!<%A!&%=%U%H%&%'%"<R(B), ActionWorkflow ($B%"%/%7%g%s!&(B%
+	$B%F%/%N%m%8<R(B), TeamLinks for Pathworks (DEC), etc.}
+ \end{itemize}
+\end{slide}
+
+\begin{slide}
+ \heading{$B%o!<%/%U%m!<$NNc(B}%
+ \begin{center}
+  \epsfile{file=wfsample.eps,scale=0.3}
+ \end{center}
+ \begin{itemize}
+  \item $B%o!<%/%U%m!<$O!"%N!<%I$,6(F1:n6H$NC10L!";^$,;E;v$N%U%m!<$rI=$9(B%
+	$BM-8~%0%i%U$GI=8=$G$-$k!#(B%
+  \item $B%o!<%/%U%m!<$O3,AXE*$K9=@.$G$-$k!#(B
+ \end{itemize}
+\end{slide}
+
+\begin{slide}
+ \heading{$B$J$<%o!<%/%U%m!<4IM}%7%9%F%`$K$O%G!<%?%Y!<%9$,I,MW$+(B?}%
+ \begin{enumerate}
+  \item $B%H%i%s%6%/%7%g%s4IM}(B\\%
+	$B0lHL$K$O!"J#?t$N%o!<%/%U%m!<$,;q8;$r6&M-$7$D$DJB9T$KF0$/!#(B%
+       $B$7$?$,$C$F!"(BWFMS $B$O%o!<%/%U%m!<4V$G$N%H%i%s%6%/%7%g%s4IM}(B%
+       ($BJB9T@-@)8f$J$I(B)$B$r9T$o$J$1$l$P$J$i$J$$!#(B
+ \item $B%G!<%?$N6&M-!&C_@Q(B\\
+       $B$"$k6(F1:n6H$K4X$o$C$F$$$k%(!<%8%'%s%H$O!"0lHL$KMM!9$J%G!<%?$r(B%
+       $B6&M-$7$F$$$k!#(BWFMS $B$O$3$l$i$r4IM}$7$J$1$l$P$J$i$J$$!#$^$?!"(B%
+       $B:n6H$N?JD=>u67$K$D$$$F$b4IM}$7$J$1$l$P$J$i$J$$!#(B
+ \end{enumerate}
+\end{slide}
+
+\begin{slide}
+ \heading{$BK\8&5f$NF05!!&L\E*(B}
+$B%G!<%?%Y!<%95;=Q$K$h$k!"$h$j@Q6KE*$J%o!<%/%U%m!<4IM};Y1g!#(B
+
+$B$3$l$K$h$j!"<!$N$h$&$JMxE@$,?7$?$K%o!<%/%U%m!<4IM}%7%9%F%`$K$b$?$i$5$l$k!#(B
+\begin{itemize}
+ \itemsep0mm \parskip0mm
+ \item $B$9$Y$F$N%o!<%/%U%m!<5-=R$r(B DBMS $B$G4IM}$9$k$3$H$K$h$j!"%o!<%/%U%m!<(B%
+       $B4V$N@)Ls$N4IM}$,MF0W$K$J$k!#(B
+ \item $B%o!<%/%U%m!<3,AX$N4IM}$K$h$j!"%o!<%/%U%m!<$N:FMxMQ$,MF0W$K$J$k!#(B
+ \item $B%o!<%/%U%m!<$KBP$9$k1i;;$NDs6!!#$3$l$K$h$j!"%o!<%/%U%m!<$NJQ99!"(B%
+       $B:F9=@.$J$I$N%o!<%/%U%m!<A`:n$,(B%
+       $BBN7OE*$K9T$($k!#$^$?!"8D?M$N%9%1%8%e!<%kI=$N$h$&$J%o!<%/%U%m!<$N(B%
+       $B2C9)$r%S%e!<5!G=$H$7$FDs6!$9$k$3$H$,$G$-$k!#(B
+ \item $B%W%m%;%9%G!<%?$H%W%m%@%/%H%G!<%?$NE}9gE*$J4IM}!#(B
+\end{itemize}
+\end{slide}
+
+\begin{slide}
+ \heading{Workflow Base}
+ \begin{itemize}
+  \item Workflow Base $B$N35MW(B
+  \item $B%o!<%/%U%m!<%b%G%k(B%
+  \item $B%o!<%/%U%m!<$N<B9T%b%G%k(B%
+  \item $B%o!<%/%U%m!<$N<BBN2=(B%
+  \item Workflow Base
+ \end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{Workflow Base}
+\begin{center}
+ \epsfile{file=wfbconcept.eps,scale=0.32}
+\end{center}
+\end{slide}
+
+\begin{slide}
+\heading{Workflow Base öööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööö$9$k!#(B
+\end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{$B3hF0%*%V%8%'%/%H(B (Activity Object)}
+\begin{center}
+$a=(I,O,P,S)$. $B$3$3$G(B
+ 	$\begin{array}[t]{l}
+	I=\{i_1,\cdots,i_n\}\ (n\geq 1)\\
+	O=\{o_1,\cdots,o_m\}\ (m\geq 1)\\
+	P=\mbox{string}\\
+	S=\mbox{WFT}
+	\end{array}$
+\end{center}
+$I$$B$O(B$a$$B$NF~NO=89g$r!"(B$O$$B$O(B$a$$B$N=PNO=89g$r!"(B$P$$B$O(B$a$$B$N<B9T$K@UG$$rIi$&(B%
+$B%(!<%8%'%s%H$r!"(B$S$$B$O(B$a$$B$NI{:n6H$r9T$&(B WFT ($BDj5A$O8e=R(B)$B$r$=$l$>$lI=$9!#(B
+$BD>4QE*$K$O!"(B$a$$B$,(B$I$$B$r<u<h$j!"(B$P$$B$,I,MW$J:n6H$r9T$$!"(B$a$$B$,(B$O$$B$r=PNO$9$k(B
+$B$3$H$rI=$9!#(B
+
+\heading{$B%o!<%/%U%m!<%F%s%W%l!<%H(B}
+{\bf $B%o!<%/%U%m!<%F%s%W%l!<%H(B} (Workflow Template, WFT) $W$$B$O3hF0(B
+$B%*%V%8%'%/%H$N=89g(B$\{a_1,\cdots,a_n\} (n\geq 0)$$B$G$"$k!#(B
+\end{slide}
+
+\begin{slide}
+\heading{WFT $B$N%U%m!<(B}
+\begin{itemize}
+ \item {\bf $B?eJ?%U%m!<(B} ``$\horflow$''
+       \begin{eqnarray*}
+	a_1\!\horflow\!a_2&\mydefi&(O_1\supseteq I_2)\\
+	\{a_1,a_2,\cdots,a_n\}\!\horflow\!a &\mydefi &
+	 (\sum_{i=1}^n O_i\supseteq I)\\
+	& & \wedge\:\forall j\neg(\bigcup_{i=1}^n O_i- O_j\supseteq I)
+       \end{eqnarray*}
+ \item {\bf $B?bD>%U%m!<(B} ``$\verflow$''
+       \begin{eqnarray*}
+	a\verflow a_i&\mydefi& a_i\in S\ \mbox{where}\ a=(I,O,P,S)
+       \end{eqnarray*}
+\end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{$B%o!<%/%U%m!<(B}
+$B<!$N(B2$B>r7o$rK~$?$9(B WFT $W$ $B$r(B\textbf{$B%o!<%/%U%m!<(B}$B$H$$$&!#(B
+\begin{enumerate}
+ \item $\forall a_1 \in W,\: \exists a_2 \in W.\; a_1 \leadsto a_2 \vee a_2
+       \leadsto a_1$$B!#$?$@$7!"(B$\leadsto \mydefi \transhorflow \cup
+       \transverflow$$B!#(B
+
+       ($\transhorflow$$B!"(B$\transverflow$$B$O$=$l$>$l(B$\horflow$$B$H(B$\verflow$$B$N(B%
+       $B?d0\E*JDJq$rI=$9(B)
+ \item $W$ $B$O!"3hF0%*%V%8%'%/%H$r%N!<%I!"?eJ?%U%m!<$H?bD>%U%m!<$r;^$H$_(B%
+       $B$J$9$H$-!"C10l$N%0%i%U$r9=@.$9$k!#(B
+\end{enumerate}
+\end{slide}
+
+\begin{slide}
+\heading{WFT$B$NNc(B: $B::FI%W%m%;%9(B}
+\begin{center}
+ \epsfile{file=reviewwft.eps,scale=0.28}
+
+{\scriptsize
+ review-process = \{receive, dispatch-1, dispatch-2, review, send\}\\
+ \begin{tabular}{rcl}
+ receive        & = & (all-submitted-papers, received-letter, secretary,   \{\})\\
+ dispatch-1     & = & (all-submitted-papers, all-review-reports, chair,
+  \\
+                &   & \{dispatch-2\})\\
+ dispatch-2     & = & (selected-submitted-papers, selected-review-reports, \\
+                &   & PC-member, \{review\})\\
+ review         & = & (submittedöööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööö \vee (w_2=a\!\leadsto\!a'\wedge w_1=a'\!\leadsto\!a''))
+ \end{array}
+\]
+$B$3$N$H$-!"(B$S$$B$b$^$?%o!<%/%U%m!<$H$$$&!#$7$?$,$C$F!"%o!<%/%U%m!<$O3,AXE*$K(B
+$B9=@.$9$k$3$H$,$G$-$k!#(B
+\end{slide}
+
+\begin{slide}
+\heading{WFT$B$N@)Ls(B}
+\begin{itemize}
+ \item {\bf $BJD:?@-(B}:\\
+       WFT $W$$BCf$N(B$a=(I,O,P,S)$$B$K$*$$$F!"G$0U$N(B$a_i\in S$$B$KBP$7$F(B$a_i\in W$$B$N(B%
+       $B$H$-!"(B$W$$B$O(B\textbf{$BJD$8$F$$$k(B}$B$H$$$&!#(B
+ \item {\bf $BHs=[4D@-(B}:\\
+       $\forall a\in W.\ \neg (a\transhorflow a$)$B$N$H$-!"(B$W$$B$O(B
+       $B?eJ?%U%m!<$K4X$7$F(B{\bf $BHs=[4D(B}$B$G$"$k$H$$$&!#(B
+       $\forall a\in W.\ \neg
+       (a \transverflow a$)$B$N$H$-!"(B$W$$B$O?bD>%U%m!<$K4X$7$F(B{\em $BHs=[4D(B}$B$G(B%
+       $B$"$k$H$$$&!#(B
+\item {\bf $B>iD9@-(B}:\\
+       $BG$0U$N(B$a=\{I,O,P,S\}$$B$K$*$$$F!"(B$O\subseteq I$$B$J$i$P(B$a$$B$O(B
+       {\bf $B>iD9(B}$B$G$"$k$H$$$&!#(B
+\end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{WFT $B$N@)Ls(B}
+\begin{itemize}
+ \item {\bf $B;03Q@-(B}:\\
+       $\exists a. (a_1\horflow a_2 \vee a_1 \verflow a_2)
+       \wedge a_1\leadsto a \wedge a\leadsto a_2$
+       $B$G$"$k$h$&$J3hF0%*%V%8%'%/%H(B%
+       $a_1, a_2$$B$r4^$`(B WFT $B$r(B\textbf{$B;03Q@-(B}$B$r;}$D$H$$$&!#(B
+\end{itemize}
+\begin{center}
+\epsfile{file=triangle.eps,scale=0.7}
+\end{center}
+\end{slide}
+
+\begin{slide}
+\heading{$B6KBg%o!<%/%U%m!<(B}%
+ 2$B$D$N%o!<%/%U%m!<(B$S_1$$B$H(B$S_2$$B$N4V$N=g=x4X78$r!"ItJ,=89g4X78(B
+ $S_1\subseteq S_2$$B$K$h$C$FDj$a$k!#$3$N$H$-!"$"$k(BWFT$B$NCf$K$O$3$N=g=x4X78(B
+ $B>e$G6KBg$H$J$k%o!<%/%U%m!<$,>/$J$/$H$b$R$H$DB8:_$9$k!#$3$l$r(B%
+ {\bf $B6KBg%o!<%/%U%m!<(B}$B$H$$$&!#(B
+
+ $BJD$8$?(BWFT$BCf$K$O6KBg%o!<%/%U%m!<$,>/$J$/$H$b0l$DB8:_$9$k!#(B
+\end{slide}
+
+\begin{slide}
+\heading{$B<B9T%b%G%k(B (1)}
+\renewcommand{\baselinestretch}{0.9}\Large\normalsize
+$B?eJ?%U%m!<$N<B9T%b%G%k$O!"<!$N%W%m%@%/%7%g%s%k!<%k$K$h$C$FM?$($i$l$k!#(B
+\begin{center}
+ \begin{tabular}{rl}
+  If $a_1\horflow a_2$, &then $a_2\Leftarrow a_1$.\\
+  If $a_1\horflow a_3$ and $a_2\horflow a_3$, &then $a_3\Leftarrow a_1,a_2$.\\
+  If $a_1\horflow a_2$ and $a_1\horflow a_3$, &then $a_2\Leftarrow a_1$ \\
+  & and $a_3\Leftarrow a_1$.\\
+  If $a_1$, & then $a_1 \Leftarrow .$
+ \end{tabular} 
+\end{center}
+$B$3$l$i$N%k!<%k$OA08~$-$KI>2A$5$l$k!#$9$J$o$A!"(B
+\begin{quote}
+ $B%k!<%k$N:8JU$KBP1~$9$k$9$Y$F$N3hF0%*%V%8%'%/%H$N=*N;>r7o$r<u$1<h$k$H!"(B%
+ $B%k!<%k$N1&JU$KBP1~$9$k3hF0%*%V%8%'%/%H$,3h@-2=$5$l$k!#(B
+\end{quote}
+
+$B$3$l$i$N%k!<%k$O(B{\bf P-box}$B$H$$$&%W%m%@%/%7%g%s%7%9%F%`$K3JG<$5$l$k!#(B
+\end{slide}
+
+\begin{slide}
+\heading{$B<B9T%b%G%k(B (2)}
+$B?bD>%U%m!<$N<B9T%b%G%k$O<!$N$h$&$KM?$($i$l$k!#(B
+\begin{quote}
+ If $a \verflow a_1, \cdots, a \verflow a_n$, then 
+ $a \leftarrow a_1, a_2, \cdots, a_n$.
+\end{quote}
+$BD>4QE*$K$O!"@)Ls$HB+G{>pJs$,(B$a$$B$+$i(B$a_1,a_2,\cdots,a_n$$B$KEAGE$5$l!"(B
+$B$9$Y$F$N;R%*%V%8%'%/%H$,@5>o$K=*N;$9$l$P(B$a$$B$O@5>o$K=*N;$9$k!#(B
+$B$D$^$j!"$3$l$i$N%k!<%k$O8e$m8~$-$KI>2A$5$l$k!#(B
+
+$B$3$l$i$N%k!<%k$O(B{\bf C-box}$B$H$$$&%W%m%@%/%7%g%s%7%9%F%`$K3JG<$5$l$k!#(B
+\end{slide}
+
+\begin{slide}
+\heading{$B::FI%W%m%;%9$N<B9T%b%G%k(B}
+{\small
+\begin{center}
+ \begin{tabular}{ll}
+ P-box:
+	&receive\\
+	&dispatch-1\\
+	&send$\Leftarrow$dispatch-1\\
+	&$\left.\begin{array}{l}
+	 \mbox{dispatch-2}_1\\
+	 \vdots\\
+	 \mbox{dispatch-2}_n\\
+	 \vdots
+	 \end{array}\right\}$\begin{tabular}{l}
+			    $BF0E*$K@8@.$5$l$?(B\\
+			    $B3hF0%*%V%8%'%/%H(B
+			    \end{tabular}\\
+ C-box:
+	&dispatch-1  $\leftarrow$dispatch-2$_1$, $\cdots$, dispatch-2$_n$.\\
+	&dispatch-2$_1\leftarrow$ review$_{11}$,$\cdots$,review$_{1l}$\\
+	&$\vdots$\\
+	&dispatch-2$_n\leftarrow$review$_{n1}$,$\cdots$,review$_{nk}$
+ \end{tabular}
+\end{center}
+}
+\end{slide}
+
+\begin{slide}
+\heading{$B4X?t$H$7$F$N3hF0%*%V%8%'%/%H(B}
+$B3hF0%*%V%8%'%/%H(B$a=(I,O,P,S)$$B$O<!$N$h$&$KDj5A$5$l$k(B$I$$B$+$i(B$O$$B$X$N4X?t$G$"$k!#(B
+\begin{enumerate}
+ \item $I\in 2^\mathcal{M}, O\in 2^\mathcal{M}$
+ \item $P\in 2^\mathcal{P}$
+ \item $a\in\mathcal{A}, S\subseteq\mathcal{A}$$B!#$3$3$G(B$\mathcal{A}$ 
+       $B$O<!$N$h$&$KDj5A$5$l$k3hF0%*%V%8%'%/%H$N=89g$NDj5A0h$G$"$k!#(B
+       \begin{eqnarray*}
+	\mathcal{A}&:=&2^\mathcal{M}\times 2^\mathcal{M}\times 
+	 2^\mathcal{P}\times 2^\mathcal{A}
+       \end{eqnarray*}
+\end{enumerate}
+$\mathcal{M}$$B$H(B$\mathcal{P}$$B$O$=$l$>$l%a%C%;!<%8%*%V%8%'%/%H$NDj5A0h!"(B
+$B%(!<%8%'%s%H$NDj5A0h$rI=$9!#(B
+\end{slide}
+
+\begin{slide}
+\heading{$B%o!<%/%U%m!<%$%s%9%?%s%9(B}
+$B%o!<%/%U%m!<%F%s%W%l!<%H$O!"<B9T$5$l$kA0$KF~NO!"=PNO!"%(!<%8%'%s%H$J$I$r(B
+$B<BBN2=$7$F(B{\bf $B<BBN2=(B}$B$7$J$1$l$P$J$i$J$$!#(B
+
+$B<BBN2=$NNc(B:
+\begin{center}
+ \begin{tabular}{l}
+  dispatch-template = (all-submitted-papers, all-review-reports, \\
+  chair, \{dispatch-2\})\\
+  \hfil$\Downarrow$\\
+  dispatch-instance = (\{paper$_1$, $\cdots$, paper$_n$\}, 
+  \{review$_1$, $\cdots$, review$_n$\}, \\
+  Taro, \{dispatch-2\})
+ \end{tabular}
+\end{center}
+\end{slide}
+
+\begin{slide}
+\heading{$B3hF0%*%V%8%'%/%H$X$N3d$jEv$F(B}
+$B3hF0%*%V%8%'%/%H$X$N3d$jEv$F(B$\theta$:
+\[
+ \theta=\{I/\{i_1,\cdots,i_n\},O/\{o_1,\cdots,o_m\},P/\{p_1,\cdots,p_k\}\}
+\]
+$B$3$l$O!"<!$N$h$&$JFC2=$KAjEv$9$k!#(B
+\begin{eqnarray*}
+ I'\sqsubseteq_S I & \Leftrightarrow &\forall\: i\in I,
+  \exists\: i'\in I'.\ i'\sqsubseteq i\\
+ O'\sqsubseteq_S O & \Leftrightarrow &\forall\: o\in O,
+  \exists\: o'\in O'.\ o'\sqsubseteq o\\
+ P'\sqsubseteq_S P & \Leftrightarrow &\forall\: p\in P,
+  \exists\: p'\in P'.\ p'\sqsubseteq p
+\end{eqnarray*}
+\end{slide}
+
+\begin{slide}
+\heading{WFT $B$NFC2=3,AX(B}
+2$B$D$N3hF0%*%V%8%'%/%H(B $a_1 = (I_1, O_1, P_1, S_1)$, $a_2 = (I_2, O_2, 
+P_2, S_2)$$B$K4X$9$k=g=x(B
+\begin{eqnarray*}
+a_1\sqsubseteq a_2&\mydefi&I_1\sqsubseteq_S I_2\wedge O_1\sqsubseteq_S O_2\\
+	   &      &\wedge P_1\sqsubseteq_S P_2\wedge S_1\sqsubseteq_S S_2.
+\end{eqnarray*}
+2$B$D$N(B WFT $S_1, S_2$ $B$K4X$9$k=g=x(B
+\[
+ S_1 = \{a_1, \cdots, a_n\} \sqsubseteq_S S_2 = S_1\theta \mydefi
+ \{a_1\theta, \cdots, a_n\theta\}
+\]
+WFT $B$X$NItJ,3d$jEv$F(B
+\begin{eqnarray*}
+ a'\sqsubseteq a &\Leftrightarrow &\{a'\}\cup S\sqsubseteq_S\{a\}\cup S
+\end{eqnarray*}
+WFT $B$N<BBN2=$O!"$3$l$i$N=g=x$K4p$E$/3d$jEv$F$H$7$FDj5A$5$l$k!#(B
+
+%WFI $B$O(B WFT $B$H$7$F07$&$3$H$b$G$-$k$N$G!"(BWFT $B$N=g=x$,3d$jEv$F$r(B
+%$BMQ$$$FDj5A$G$-$k!#(B
+
+\end{slide}
+
+\begin{slide}
+\heading{$B3d$jEv$F$NNc(B}
+{\footnotesize
+ \begin{center}
+ \fbox{
+  \begin{minipage}{0.9\textwidth}
+   \begin{tabular}{l}
+    dispatch-template = (all-submitted-papers, all-review-reports, \\
+    chair, \{dispatch-2\})\\
+    \hfil$\Downarrow$\\
+    dispatch-instance = (\{paper$_1$, $\cdots$, paper$_n$\}, 
+    \{review$_1$, $\cdots$, review$_n$\}, \\
+    Taro, \{dispatch-2\})
+   \end{tabular}
+  \end{minipage}
+  }
+ \end{center}
+}
+\[
+ \mbox{dispatch-template}\:\theta = \mbox{dispatch-instance}
+\]
+where
+\begin{eqnarray*}
+ \theta & = & \{\mbox{all-submitted-papers}/\{\mbox{paper}_1, \cdots,
+  \mbox{paper}_n\},\\
+ &   & \mbox{all-review-reports}/\{\mbox{review}_1, \cdots,
+  \mbox{review}_n\},\\
+ &   & \mbox{chair}/\mbox{Taro}\}
+\end{eqnarray*}
+\end{slide}
+
+\begin{slide}
+\heading{Workflow Base}
+{\bf Workflow Base}$B$O(B WFT $B$N=89g(B
+$(\mathcal{M},\sqsubseteq_\mathcal{M})$$B$H(B2$B$D$N=g=x(B
+$(\mathcal{P},\sqsubseteq_\mathcal{P})$$B$+$iDj5A$5$l$k!#3F(BWFT $W$$B$O(B
+$B<!$N$h$&$KDj5A$5$l$k!#(B
+\begin{center}
+\begin{tabular}{ll}
+$BDj5A(B: &$\begin{array}[t]{l}
+	   W=(W',\theta,\{a_1,\cdots,a_m\})\\
+	   a_1=(I_1,O_1,P_1,S_1)\\
+	   \vdots\\
+	   a_n=(I_n,O_n,P_n,S_n)
+	   \end{array}$\\
+$B<B9T%b%G%k(B:&\begin{tabular}[t]{l}
+	    P-box: $\cdots$\\
+	    C-box: $\cdots$
+	    \end{tabular}
+\end{tabular}
+\end{center}
+
+\heading{Workflow Base $B$N0l4S@-@)Ls(B}%
+ WFT$B$NHF2=3,AX(B: WFT $B4V$N=g=x$,(B
+ $(\mathcal{M},\sqsubseteq_\mathcal{M})$$B!"(B
+ $(\mathcal{P},\sqsubseteq_\mathcal{P})$$B$K4p$E$$$FL7=b$J$/Dj5A$5$l$F$$$k!#(B
+\end{slide}
+
+\begin{slide}
+ \heading{Workflow Base $B$N3HD%(B}%
+ \begin{itemize}
+  \item $B%U%#!<%I%P%C%/%k!<%W$N<B8=(B\\%
+	$B8=<B$N%o!<%/%U%m!<4IM}$G$O!"7k2L$,$"$k>r7o(B($BIJ<A$J$I(B)$B$rK~$?$9$^$G(B%
+	$B$"$k:n6H$r7+$jJV$7$F9T$&$3$H$,$"$k!#(B
+  \item $B;~4V@)Ls(B%
+	\begin{itemize}
+	 \item $B3+;O;~4V(B(startline): $B$=$N%W%m%;%9$,$$$D$+$i3+;O$G$-$k$+!#(B%
+	 \item $B=*N;;~4V(B(deadline): $B$$$D$^$G$K$=$N%W%m%;%9$r=*N;$7$J$1$l$P(B%
+	       $B$J$i$J$$$+!#(B
+	 \item $B:n6H;~4V(B(duration): $B%W%m%;%9$N:n6H;~4V$ND9$5$K4X$9$k@)Ls!#(B%
+	 \item $B8+@Q$b$j;~4V(B(estimated time): $B:n6H;~4V$N8+@Q$b$j$K4X$9$k@)Ls!#(B
+	\end{itemize}
+  \item $B;q8;@)Ls(B: $B;q6b!"?M4V$J$I$K4X$9$k@)Ls(B
+ \end{itemize}
+\end{slide}
+
+%\begin{slide}
+% \heading{$B%o!<%/%U%m!<$K$*$1$k;q8;$N@)Ls(B}%
+% \begin{itemize}
+%  \item $B;~4V(B%
+%  \item $B;q8;(B: 
+% \end{itemize}
+%\end{slide}
+
+\begin{slide}
+ \heading{ECA $B%k!<%k$rMQ$$$?%U%#!<%I%P%C%/%k!<%W$N<B8=(B}%
+ $W$ $B$r(B WFT $B$H$9$k$H$-!"(B2$B$D$N3hF0%*%V%8%'%/%H(B$a_1, a_2 \in W. a_1 
+ \stackrel{+}{\Longrightarrow} a_2$$B$KBP$7$F!"(B$a_2$$B$+$i(B$a_1$$B$X$N(B%
+ {\bf $B%U%#!<%I%P%C%/%U%m!<(B}$B$,<!$N$h$&$KDj5A$5$l$k!#(B%
+ \[
+ E \circ a_2 \Longrightarrow a_1\ (E: $B%$%Y%s%H$N=89g(B)
+ \]%
+ $BD>4QE*$K$O!"%$%Y%s%H(B$E$$B$,H/@8$7$?$H$-$N$_(B$a_2$$B$N=PNO$,(B$a_1$$B$KAw$i$l$k(B%
+ $B$3$H$r0UL#$9$k!#(B
+
+% $BF1MM$K!"3hF0%*%V%8%'%/%H(B%
+% $a_1, \cdots, a_n, a \in W. \{a_1, \cdots, a_n\} \transhorflow a$ $B$KBP$7!"(B%
+% $a$ $B$+$i(B $\{a_1, \cdots, a_n\}$ $B$X$N%U%#!<%I%P%C%/?eJ?%U%m!<$O<!$N$h$&$K(B%
+% $BDj5A$5$l$k!#(B%
+% \[
+% E, a \horflow \{a_1, \cdots, a_n\}.
+% \]
+\end{slide}
+
+\begin{slide}
+ \heading{$B%U%#!<%I%P%C%/%k!<%W$N<B9T%b%G%k(B}%
+ \begin{center}
+  \begin{tabular}{rcl}
+   $E, a_2 \horflow a_1$ & $B$J$i$P(B & $a_1 \Leftarrow E(a_2)$\\
+   $E, a \horflow \{a_1, \cdots, a_n\}$ & $B$J$i$P(B & \\%
+   & \multicolumn{2}{l}{$a_1 \Leftarrow E(a), \cdots, a_n \Leftarrow E(a)$}
+  \end{tabular}
+ \end{center}
+ $B%$%Y%s%H=89g(B$E$$B$,H/@8$9$k$H!"$9$Y$F$N3hF0%*%V%8%'%/%H$N=*N;>r7o$,(B%
+ $B<u$1<h$i$l!"BP1~$9$k3hF0%*%V%8%'%/%H$,3h@-2=$5$l$k!#(B
+\end{slide}
+
+%$\Leftarrow$ $B$N:8JU$OF0:n!"1&JU$O%U%#!<%I%P%C%/%$%Y%s%H$N=89g(B $E(a)$ $B$H(B
+%$B>r7o$N=89g$r4^$`!#%U%#!<%I%P%C%/%$%Y%s%H$KBP1~$7$F!"<u<h$jB&$N3hF0%*%V%8%'(B
+%$B%/%H$KEO$5$l$k%a%C%;!<%8%*%V%8%'%/%H$N=89g$,Dj5A$5$l$F$$$k!#%$%Y%s%H=89g(B
+%$E$$B$,H/@8$9$k$H!"1&JU$K(B$E$$B$r4^$`%k!<%k=89g$,3h@-2=$5$l!":8JU$NF0:n$,<B9T(B
+%$B$5$l$k!#%$%Y%s%H$r1&JU$K;}$?$J$$%W%m%@%/%7%g%s%k!<%k$O!"$3$N>l9g$K$O3h@-(B
+%$B2=$5$l$J$$!#5U$K!"%$%Y%s%H$r1&JU$K;}$D%W%m%@%/%7%g%s%k!<%k$O!"DL>o$N?eJ?(B
+%$B%U%m!<$,3h@-2=$5$l$k>l9g$K$O!"%$%Y%s%H$,H/@8$7$F$$$J$$$?$a!"3h@-2=$5$l$J(B
+%$B$$!#%U%#!<%I%P%C%/?eJ?%U%m!<$KBP1~$9$k%k!<%k$O!"DL>o$N?eJ?%U%m!<$N>l9g$H(B
+%$BF1MM$K(B P-box $B$K3JG<$5$l$k!#(B
+
+\begin{slide}
+ \heading{$B>r7oIU$-%U%#!<%I%P%C%/%k!<%W(B}
+ $E$ $B$,H/@8$7$?$H$-$K2?$i$+$N>r7o$rI>2A$5$;$k>l9g$O!"%U%#!<%I%P%C%/?eJ?%U(B
+ $B%m!<$N:8JU$K>r7o(B $c_1, \cdots, c_m$ $B$r$D$1$l$P$h$$!#(B
+ \[
+ E, c_1, \cdots, c_m, a_2 \horflow a_1.
+ \]
+ $B$3$N%U%m!<$N0UL#$O<!$N(B ECA $B%k!<%k$K$h$C$FM?$($i$l$k!#(B
+ \[
+ a_1 \Leftarrow E(a_2), c_1, \cdots, c_n.
+ \]
+ $BD>4QE*$K$O!"(B$E$ $B$,H/@8$9$k$H%k!<%k$,3h@-2=$5$l!">r7o(B $c_1, \cdots, c_n$ 
+ $B$,I>2A$5$l$k!#$3$l$i$,$9$Y$F??$K$J$l$P!"3hF0%*%V%8%'%/%H(B $a_1$ $B$,3h@-2=(B
+ $B$5$l$k!#$3$l$K$h$C$F!"J#?t$NJ,4t$r;}$D%o!<%/%U%m!<$,$?$H$($P0J2<$N$h$&$K(B
+ $B<B8=$G$-$k!#(B
+ \[
+ \begin{array}{l}
+  E, c_1, a_2 \horflow a\\
+  E, c_2, a_2 \horflow a'\\
+ \end{array}
+ \]
+ %The first flow occurs when $c_1$ is true, while the second flow occurs
+ %when $c_2$ is true.  That is, flows will branch by the evaluation
+ %results of the conditions $c_1$ and $c_2$.
+\end{slide}
+
+%\paragraph{$B3+;O;~9o@)Ls(B}
+%
+%
+%%$B?^(B\ref{f:review}$B$N%o!<%/%U%m!<$K$*$$$F!"::FI%U%)!<%^%C%H$r(B ftp $B$GG[I[$9(B
+%%$B$k$h$&$J>l9g$r9M$($k!#(Bbut the
+%%preparation of ftp service was not in time for dispatch of submitted
+%%papers.  In such a case, the reviewers must wait for writing review
+%%reports until ftp service is available.  In this example, startline
+%%constraint plays an role of implicit flows.  The workflow in Figure
+%%\ref{f:review} does not explicitly describe review report sheets as
+%%message objects through vertical flows from ``dispatch-1'' to
+%%``dispatch-2'', or from ``dispatch-2'' to ``review''.
+%
+%\paragraph{$B=*N;;~9o@)Ls(B}
+%
+%
+%
+%%In Figure \ref{f:review}, as deadline of the process ``send'' is fixed
+%%at the stage of call-for-papers, each unit of work in the workflow has a
+%%deadline determining backwardly from the deadline of ``send''.
+%
+%\paragraph{$B:n6H;~4V@)Ls(B}
+%
+%
+%
+%%``Receive'' process in Figure \ref{f:review} must be started at least
+%%one day after, for example, from receiving a submitted paper.
+%%
+%%In some cases, processes in workflow must be executed simultaneously.
+%%For example, ``send-review-letters'' process in Figure \ref{f:review}
+%%must be started at the same time for all authors of the submitted
+%%papers.  This kind of simultaneity can be considered as a duration
+%%constraint of no duration.
+%
+%\paragraph{$B8+@Q$b$j;~4V@)Ls(B}
+%
+%
+%
+%%When a reviewer receives submitted papers, he estimates the time to be
+%%required for the reviews, and then decides whether to undertake
+%%reviewing.  If he decides to undertake reviewing but he is too busy to
+%%review all papers by himself, he may redistribute the papers to those
+%%who are working under him.  In such a case, he estimates how long each
+%%staff takes to review a paper.
+
+%$BBhFs$K!"%*%U%#%96HL3$K4X$9$k@)Ls$N07$$$,5s$2$i$l$k!#(B
+%$B8=<B$N%*%U%#%96HL3$G$O!";~4V!";q6b!":`NA!"?M$J$I!"$5$^$6$^$J;q8;$K4X$9$k(B
+%$B@)Ls$,$"$j!"$3$l$,%o!<%/%U%m!<$NDj5A$d<BBN2=$K1F6A$7$F$/$k!#(B
+%$BA0>O$N%b%G%k$O!"$3$N$h$&$J@)Ls$N07$$$K$D$$$F$O2?$b5,Dj$7$F$$$J$$!#(B
+
+\begin{slide}
+ \heading{$B;~4V%W%i%0%$%s(B}
+ $B3hF0%*%V%8%'%/%H$KBP$9$k(B\textbf{$B;~4V%W%i%0%$%s(B} $plug_T$ $B$r<!$N$h$&$KDj5A(B
+ $B$9$k!#(B
+ \[
+ plug_T \mydefi (s, e, d, p)
+ \]
+ $s$: $B3+;O;~4V!#(B$e$: $B=*N;;~4V!#(B$d$: $B:n6H;~4V!#(B$p$: $B8+@Q$b$j;~4V!#(B
+
+ $B3hF0%*%V%8%'%/%H$O!";~4V%W%i%0%$%s(B 
+ $plug_T$ $B$rMQ$$$F0J2<$N$h$&$K(B\textbf{$B%W%i%0%$%s3HD%(B}$B$9$k$3$H$,$G$-$k!#(B
+ \[
+ a_T =(I, O, P, S, s, e, d, p)
+ \]
+ %$B;~4V%W%i%0%$%sIU3hF0%*%V%8%'%/%H$K$h$C$F9=@.$5$l$?(B WFT $B$r(B
+ %activity objects with time plugin is called a \emph{WFT with time
+ %plugin}.
+
+\end{slide}
+
+\begin{slide}
+ \heading{$B;~4V%W%i%0%$%s$K4X$9$k@)Ls(B}
+ $a_T$$B$r@5$7$/<B9T$9$k$?$a$K$O!"(B$a_T$$B$O0J2<$N(B2$B$D$NITEy<0$rK~$?$5$J$1$l$P(B
+ $B$J$i$J$$!#(B%
+ \[
+  e-s \geq d, d \geq p
+ \]
+
+ $B;~4V%W%i%0%$%sIU3hF0%*%V%8%'%/%H$KBP$9$k3d$jEv$F(B $\theta$ $B$O(B
+ $e/e'$ $B$H(B $d/d'$ $B$N$$$:$l$+$rI,$:4^$^$J$1$l$P$J$i$:!"$+$D(B
+ \begin{itemize}
+ \item $\theta$ $B$K(B $e/e'$ $B$,4^$^$l$J$1$l$P!"(B$e/s'+d'$ $B$,$"$k$b$N$H2>Dj$5(B%
+       $B$l$k!#(B
+ \item $\theta$ $B$K(B $d/d'$ $B$,4^$^$l$J$1$l$P!"(B$d/e'-s'$ $B$,$"$k$b$N$H2>Dj$5(B%
+       $B$l$k!#(B
+ \end{itemize}
+ $B$^$?!"(B$\theta$ $B$K(B $p$, $s$ $B$KBP$9$k3d$jEv$F$,4^$^$l$J$+$C$?>l9g$O!"$=$l(B
+ $B$>$l(B $p/d'$, $s/c$ $B$,2>Dj$5$l$k!#(B($c$ $B$O(B$P'$ $B$N8=:_;~9o(B)
+ %To apply WFTs with time plugin to real works, they are instantiated in
+ %the similar way with instantiation of WFTs without time plugin in
+ %Section \ref{sec:workflowinstance}.  Consider a domain $\mathcal{T}$ of
+ %time and a domain $\mathcal{D}$ of time period, with partial orderings
+ %$\sqsubseteq_\mathcal{T}, \sqsubseteq_\mathcal{D}$, respectively.  For
+ %an activity object with time plugin $a_T = (I, O, P, S, s, e, d, p)$, we
+ %consider assignment $\theta$ of $s$ to $s'$, $e$ to $e'$, $d$ to $d'$,
+ %and $p$ to $p'$, where  $s' \sqsubseteq_\mathcal{T} s, e'
+ %\sqsubseteq_\mathcal{T} e, d' \sqsubseteq_\mathcal{D} d, p'
+ %\sqsubseteq_\mathcal{D} p$, respectively, in addition to the ordinary
+ %assignment into activity objects.  Instantiation of $a_T$ is
+ %defined by an assignment $\theta$ to $a_T$, denoted as $a_T\theta$.  An
+ %assignment $\theta$ to a WFT with time plugin $W_T$ is defined as
+ %$W_T\theta = \{a_{T1}\theta, \cdots, a_{Tn}\theta\}$.  
+\end{slide}
+
+\begin{slide}
+ \heading{$B%U%m!<$KH<$&;~4V@)Ls(B}
+% $B?eJ?%U%m!<$d?bD>%U%m!<$K$h$C$F4XO"$E$1$i$l$?3hF0%*%V%8%'%/%H$N;~4V@)Ls$O(B
+% $B8_$$$K43>D$7$"$&!#(B
+
+ %$B;~4V%W%i%0%$%sIU3hF0%*%V%8%'%/%H(B $a_1, a_2$ $B$K$D$$$F(B%
+ $B?eJ?%U%m!<(B$a_1
+ \horflow a_2$ $B$,@.$jN)$D$H$-!"<!$NITEy<0$,@.N)$7$J$1$l$P$J$i$J$$!#(B%
+ \[
+  s_1 + p_1 \leq s_2, e_1 + p_2 \leq e_2, e_1 \leq s_2
+ \]
+
+ $B?eJ?%U%m!<(B$\{a_1, \cdots, a_n\} \horflow a$$B$K$D$$$F$O!"F1MM$K(B%
+ %$B<!$NITEy<0$,@.N)$7$J$1$l$P$J$i$J$$!#(B
+ \begin{center}
+ $\begin{array}{l}
+  \max(s_1 + p_1, \cdots, s_n + p_n) \leq s_2\\
+  \max(e_1 + p, \cdots, e_n + p) \leq e\\
+  \max(e_1, \cdots, e_n) \leq s \\
+  \end{array}$
+ \end{center}
+
+ $B?bD>%U%m!<(B $a \verflow a_i$ $B$K$D$$$F$O<!$NITEy<0$,@.N)$7$J$1$l$P$J$i$J$$!#(B%
+ \[
+  s < s_i,\: e > e_i,\: d > d_i,\: p > p_i
+ \]
+ $B$?$@$7!"I{3hF0%*%V%8%'%/%H$OJBNs$K<B9T$5$l$F$bNI$$$N$G!"(B$p$ $B$OI,$:$7$b(B 
+ $\Sigma_{i=1}^n p_i$ $B$h$jBg$-$$I,MW$O$J$$!#(B
+\end{slide}
+
+\begin{slide}
+ \heading{2$B3hF0%*%V%8%'%/%H4V$N%9%1%8%e!<%j%s%0(B}
+% $B0lHL$K!"0l$D$N%(!<%8%'%s%H$OJ#?t$N%o!<%/%U%m!<$K4X$o$C$F$*$j!"$3$l$i$GC4(B
+% $BEv$7$F$$$k:n6H$N%9%1%8%e!<%j%s%0$r$9$kI,MW$,$"$k!#(B
+
+ $a_1 = (I_1, O_1, P, \emptyset, s_1, e_1, d_1, p_1)$, 
+ $a_2 = (I_2, O_2, P, \emptyset, s_2, e_2, d_2, p_2)$
+ $B$K4X$9$k%9%1%8%e!<%j%s%0$O<!$N$h$&$K$J$k!#(B
+ \begin{itemize}
+ \item $(s_1 \leq s_2) \wedge (e_1 \leq e_2)$$B$N$H$-(B
+       \[
+	\begin{array}{ll}
+	 \ s_1 + p_1 + p_2 \leq e_2 $B$N>l9g(B & p_1, p_2\\
+	 \ s_1 + p_1 +p_2 > e_2 $B$N>l9g(B & \mbox{fail}
+	\end{array}
+       \]
+ \item $(s_1 < s_2) \wedge (e_2 < e_1)$$B$N$H$-(B
+       \[
+        \begin{array}{ll}
+	 \ e_2 \leq s_1 + p_1 + p_2 \leq e_1 & \\
+	 $B$+$D(B \ p_1\ $B$,I{:n6H$KJ,3d$G$-$k>l9g(B & p_{11}, p_2, p_{12} \\
+	 \ s_1 + p_1 + p_2 \leq e_2 $B$N>l9g(B & p_1, p_2 \\
+	 \ s_1 + p_1 + p_2 > e_1 $B$N>l9g(B & \mbox{fail}
+	\end{array}
+       \]
+ \end{itemize}
+% ``fail'' means that scheduling of these two activity objects is failed.
+% In this case, the agent $P$ must negotiate with another agents to make
+% the time constraints of the activity objects more loose.  We do not discuss
+% the negotiation process in this thesis.
+%
+% Scheduling problem among more than three activity objects is much more
+% difficult than that of two activity objects.  In actual, the problem is
+% treated as an linear programming problem.  The detailed discussions from
+% this point of view is beyond this thesis.  
+\end{slide}
+
+\begin{slide}
+ \heading{$B;~4V$ND4@a(B}
+ $B0lHL$K$O!"3F%(!<%8%'%s%H$O0[$J$k;~7W$r;}$C$F$*$j!";~4V:9$,$"$k!#(B
+ $B$3$l$r07$&$?$a$K!";~4V%W%i%0%$%s$r0J2<$N$h$&$K3HD%$9$k!#(B
+ \[
+ plug_T \mydefi (c, s, e, d, p)
+ \]
+
+ $B%(!<%8%'%s%H(B$P$$B$,(B$a_T$$B$KBP1~$9$k:n6H$r%(!<%8%'%s%H(B$P'$$B$KJ,G[$9$k$H$-!"(B%
+ $P'$$B$O0J2<$N$h$&$J;~4VD4@a$r9T$&!#(B
+ \[
+ s := s - a - t;\;  e := e - a - t;\ ($B$?$@$7(B a = c - c')
+ \]
+ $t$$B$O(B$P$$B$+$i(B$P'$$B$X$NE>Aw;~4V!#(B
+\end{slide}
+
+%\begin{slide}
+% \heading{$B;q8;@)Ls(B}
+% %$B?^(B\ref{fig:publishwf}$B$K;(;o=PHG$N%o!<%/%U%m!<$NNc$r<($9!#(B
+% %$B$3$N:n6H$O9-9p:n@.$H;(;o:n@.$N(B2$B$D$N9)Dx$+$i$J$C$F$*$j!"$=$l$>$l$N9)Dx$O(B
+% %$B?^$N$h$&$K$$$/$D$+$NI{9)Dx$+$i$J$C$F$$$k!#(B
+% %$B9-9p:n@.$H;(;o:n@.$N4V$K$O!"6&DL$N%m%4$r;H$&$H$$$&$h$&$K;q8;$N6&M-$,$"$k(B
+% %$B$?$a!"?eJ?%U%m!<$G4XO"$E$1$i$l$F$$$k!#(B
+% %subprocesses.  In ``planning'' process, an outline of the printing
+% %matter such as its design, funds, total pages and contents in case of
+% %magazine, etc., is determined.  Then the requests of producing contents
+% %are sent to authors.  In case of producing magazine, all the contents
+% %are gathered for editing.  Finally, camera readies are sent to the
+% %printing house for printing.  We assume that posters and magazines use
+% %the same logo; hence a horizontal flow from ``poster printing'' to
+% %``magazine printing'' is put to this workflow because the logo is first
+% %designed in ``poster printing'' process, then sent to ``magazine
+% %printing'' process.
+% %\begin{figure*}
+% %\begin{center}
+% %{\footnotesize
+% % \setlength{\unitlength}{0.72mm}
+% % \input{publwf}
+% %}
+% %\end{center}
+% %\caption{$B=PHG%W%m%;%9$N%o!<%/%U%m!<$NNc(B}
+% %\label{fig:publishwf}
+% %\end{figure*}
+%
+% $B0lHL$K!"%o!<%/%U%m!<$K$O;q8;$K4X$9$k$5$^$6$^$J@)Ls$,$"$k!#$?$H$($P!"3F!9(B
+% $B$N9)Dx$K$+$+$kM=;;$NOB$O!"$"$i$+$8$a7h$a$i$l$?M=;;$r1[$($F$O$J$i$J$$!#$"(B
+% $B$k$$$O!";(;o$J$I$N>l9g!"3F5-;v$N%Z!<%8?t$NAmOB$O$"$i$+$8$a7h$a$i$l$?Am%Z!<(B
+% $B%8?t$HEy$7$/$J$1$l$P$J$i$J$$!#%(!<%8%'%s%H$O!"$3$l$i$N@)Ls$r9M$($?>e$G!"(B
+% $B3F:n6H$K;q8;$r3d$jEv$F$F$$$+$J$1$l$P$J$i$J$$!#K\@a$G$O!"$3$N$h$&$J(B 
+% Workflow Base $B$K$*$1$k:n6H$N;q8;$N07$$$K$D$$$F=R$Y$k!#(B
+%\end{slide}
+
+\begin{slide}
+ \heading{$B;q8;%W%i%0%$%s(B}
+ $amount_R$ $B$r;q8;(B $R$ $B$NAmNL$H$9$k$H$-!"(B$R$ $B$K4X$9$k(B\textbf{$B;q8;%W%i%0%$(B
+ $B%s(B} $plug_R$ $B$O<!$N$h$&$KDj5A$5$l$k!#(B
+ \[
+ plug_R \mydefi (amount_R)
+ \]
+ $B;~4V%W%i%0%$%s$HF1MM$K!"3hF0%*%V%8%'%/%H$O;q8;%W%i%0%$%s$K$h$C$F0J2<$N$h(B
+ $B$&$K%W%i%0%$%s3HD%$9$k$3$H$,$G$-$k!#(B
+ \[
+ a_R \mydefi (I, O, P, S, amount_R).
+ \]
+ $B;q8;%W%i%0%$%s$K$h$C$F3HD%$5$l$?3hF0%*%V%8%'%/%H$+$i9=@.$5$l$?(B WFT $B$r!"(B
+ $B;q8;%W%i%0%$%s$K$h$C$F3HD%$5$l$?(B WFT $B$H$$$&!#(B
+
+ $B;q8;%W%i%0%$%s$H;~4V%W%i%0%$%s$ON>N)2DG=$G$"$k!#$9$J$o$A!"0l$D$N3hF0%*%V(B
+ $B%8%'%/%H$r;q8;%W%i%0%$%s$H;~4V%W%i%0%$%s$r$H$b$K%W%i%0%$%s3HD%$9$k$3$H$,(B
+ $B$G$-$k!#(B
+\end{slide}
+
+\begin{slide}
+ \heading{$B;q8;OBEy<0(B}
+ $B;q8;%W%i%0%$%s$K$h$C$F%W%i%0%$%s3HD%$5$l$?(B WFT $W_R = (I, O, P, S,
+ amount_R)$ $B$K$*$$$F!";q8;@)Ls$H$7$F(B $R$ $B$K4X$9$k(B\textbf{$B;q8;OBEy<0(B}
+ \[
+ \forall a \in W_R \wedge S \neq \emptyset.\ 
+ amount_R = \sum_{a' \in S} a'.amount_R
+ \]
+ $B$r9M$($k$3$H$,$G$-$k!#D>4QE*$K$O!"$3$NEy<0$O!V(B$a$ $B$NI{3hF0%*%V%8%'%/%H$K(B
+ $B3d$jEv$F$i$l$?(B $R$ $B$NAmOB$O!"(B$a$$B$K3d$jEv$F$i$l$?(B $R$ $B$NNL$KEy$7$$!W$H$$(B
+ $B$&$3$H$rI=$9!#;(;oEy$NAm%Z!<%8?t$O!"$3$NEy<0$rK~$?$5$J$1$l$P$J$i$J$$;q8;(B
+ $B$G$"$k!#(B
+\end{slide}
+
+\begin{slide}
+ \heading{$B;q8;OBITEy<0(B}
+ $B0lJ}!"F1$8%o!<%/%U%m!<$G$b!"AmM=;;$O3d$jEv$F$NJ}?K$,0[$J$k!#(B
+ $B$=$l$O!"(B$a$ $B<+?H$G;H$&M=;;$,$"$k$+$i$G$"$k!#$3$N$h$&$J;q8;$G$O!"<!$N$h$&(B
+ $B$J(B $R$ $B$K4X$9$k(B\textbf{$B;q8;OBITEy<0(B}$B$r;q8;@)Ls$H$7$FMQ$$$k!#(B
+ \[
+ \forall a \in W_R \wedge S \neq \emptyset.\ 
+ amount_R \geq \sum_{a' \in S} a'.amount_R
+ \]
+
+ %As all resources in subprocesses are what the parent process allocated
+ %for the subprocesses, resource sum inequality must be satisfied in all
+ %resources.  Resource sum equality and resource sum inequality are called 
+ %generally as \emph{resource constraints}.
+\end{slide}
+
+\begin{slide}
+ \heading{$B;q8;$N:FG[J,(B}
+% $B;R3hF0%*%V%8%'%/%H$N$&$A$$$:$l$+$,;q8;@)Ls$rK~$?$;$J$/$J$C$?>l9g!"?F3hF0(B
+% $B%*%V%8%'%/%H$N%(!<%8%'%s%H$O!"$9$Y$F$N;R3hF0%*%V%8%'%/%H$,;q8;@)Ls$rK~$?(B
+% $B$9$h$&$K;q8;$N:FG[J,$r9T$o$J$1$l$P$J$i$J$$!#(B
+ %$B?^(B\ref{fig:publishwf}$B$N%o!<%/%U%m!<$K$*$$$F!"(BConsider a
+ %situation that an author writes his article of less pages than that of
+ %previously determined.  This causes constraint violation about total
+ %pages.  Hence the publisher must resolve the violation by some means: by
+ %requesting the author to write more pages, by requesting another author
+ %to write more pages, or by changing total pages of the magazine.
+
+ $B;q8;%W%i%0%$%sIU3hF0%*%V%8%'%/%H(B $a_R$ $B$,;q8;@)Ls$rK~$?$;$J$/$J$C$?>l9g!"(B
+ $a_R$ $B$N%(!<%8%'%s%H$O(B $a_R$ $B$N?F3hF0%*%V%8%'%/%H$N%(!<%8%'%s%H$K!V(B$R$ 
+ $B$N3d$jEv$F<:GT!W$N%a%C%;!<%8$rAw$k!#(B
+
+ $B$3$N%a%C%;!<%8$r<u$1<h$C$?%(!<%8%'%s(B
+ $B%H$O!";R3hF0%*%V%8%'%/%H$N(B $R$ $B$N:FG[J,$r;n$_!"@.8y$9$l$P$=$N7k2L$r;R3h(B
+ $BF0%*%V%8%'%/%H$KDLCN$9$k!#<:GT$9$l$P!"%a%C%;!<%8!V(B$R$$B$N3d$jEv$F<:GT!W$r(B
+ $B$5$i$K>e$N3hF0%*%V%8%'%/%H$N%(!<%8%'%s%H$KAw?.$9$k!#(B
+\end{slide}
+
+\begin{slide}
+ \heading{$BGSB>E*%m%C%/$K$h$k?eJ?%U%m!<(B}
+% $B6(F1:n6H$G%G!<%?$r6&M-$9$k>l9g!"%G!<%?$KBP$9$k%"%/%;%9$K$D$$$F%m%C%/5!9=(B
+% $B$rMQ0U$9$k$3$H$,B?$$!#%m%C%/5!9=$K$OBgJL$7$FGSB>E*%m%C%/$H6&M-%m%C%/$N(B2
+% $B<oN`$,$"$k$,!"$3$N$&$AGSB>E*%m%C%/$O!"(BWorkflow Base $B$K$*$$$F0E<(E*$J?eJ?(B
+% $B%U%m!<$r0z$-5/$3$9$3$H$,$"$k!#(B
+
+ $B%G!<%?6&M-$NL\E*$GGSB>E*%m%C%/$,;H$o$l$k>l9g!"3hF0%*%V%8%'%/%H$K4X$9$k;~(B
+ $B4V@)Ls$,?7$?$K@8@.$5$l$k!#$9$J$o$A!"(B2$B$D$N3hF0%*%V%8%'%/%H(B $a_1$ $B$H(B $a_2$ 
+ $B$,F10l$N;q8;(B $f$ $B$r6&M-$7$F$$$k>l9g!"(B$a_1$ $B$,(B $f$ $B$rGSB>E*%m%C%/$r$+$1$F(B
+ $B;H$&$H(B $a_2$ $B$O%m%C%/$,2r=|$5$l$k$^$G:n6H$rCfCG$7$J$1$l$P$J$i$J$$!#(B
+ $B$7$?$,$C$F!";~4V@)Ls(B $e_1 < s_2$ $B$,?7$?$K@8@.$5$l$k!#(B
+
+ Workflow Base $B$G$O!"$3$N8=>]$ODL>o$N?eJ?%U%m!<$HF1MM$K07$&$3$H$,$G$-$k!#(B
+ $a_1$ $B$,GSB>E*%m%C%/$r$+$1$F(B $f$ $B$r;H$$;O$a$k:]!"FCJL$J%a%C%;!<%8%*%V%8%'(B
+ $B%/%H!V(B$f$ $B$N%m%C%/2r=|DLCN!W$r(B $a_1.O$ $B$H(B $a_2.I$ $B$K?7$?$KIU$12C$($k!#(B
+ $B$3$N$H$-!"?eJ?%U%m!<(B $a_1 \horflow a_2$ $B$,<+F0E*$K@8@.$5$l$k!#(B
+ $a_1$ $B$,%m%C%/$r2r=|$9$k$H!"!V(B$f$ $B$N%m%C%/2r=|DLCN!W$,(B $a_1.O$ $B$K$h$C$F(B
+ $B@8@.$5$l!"DL>o$N?eJ?%U%m!<$HF1MM$K(B $a_2$ $B$,$3$N%*%V%8%'%/%H$rF~NO%*%V%8%'(B
+ $B%/%H$H$7$FJa$^$(!"3h@-2=$5$l$k!#(B
+ $B$^$?!"$3$N?eJ?%U%m!<$K4X$9$k;~4V@)Ls$H$7$F!"(B$e_1 < s_2$ $B$b?7$?$K@8@.$5$l(B
+ $B$k!#(B
+\end{slide}
+
+\begin{slide}
+ \heading{Workflow Base $B$K$*$1$k%G!<%?%Y!<%91i;;(B}%
+ \begin{itemize}
+  \item $B0U5A!"L\E*(B%
+  \item $B<ALd7?1i;;(B%
+  \item WFT $BA`:n7?1i;;(B%
+  \item $B3hF0%*%V%8%'%/%HA`:n7?1i;;(B%
+  \item $B1i;;$NE,MQNc(B
+ \end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{$B0U5A!"L\E*(B}
+$B%o!<%/%U%m!<$KBP$9$kA`:n$H$7$F!"<!$N$h$&$J$b$N$X$NMW5a$,$"$k!#(B
+\begin{itemize}
+ \item $B%o!<%/%U%m!<$KBP$9$k%S%e!<5!G=!#(Bto-do $B%j%9%H$J$I!#(B
+ \item $B:n6H$N?JD=>u67$ND4::!#(B
+ \item $B%o!<%/%U%m!<$N:F9=@.!#(B
+ \item $B%o!<%/%U%m!<$N:FMxMQ!#(B
+\end{itemize}
+$B=>Mh$b$3$l$i$N5!G=$O8&5f!&Ds6!$5$l$F$-$F$$$k$,!"BN7OE*$G$O$J$+$C$?!#(B
+
+Workflow Base $B$G$O!"%o!<%/%U%m!<$K4X$9$k%G!<%?$r$9$Y$F%G!<%?%Y!<%9Cf$K(B
+$B3JG<$7$F$*$j!"%G!<%?%Y!<%9$KBP$9$k<ALd5!G=$rMQ$$$F!"HFMQE*$J%o!<%/%U%m!<(B
+$BA`:n8@8l$r9=C[$7$d$9$$!#(B
+
+\end{slide}
+
+\begin{slide}
+\heading{$B<ALd7?1i;;(B}
+\begin{itemize}
+ \item $B3hF0%*%V%8%'%/%H$KBP$9$kA*Br(B(selection):
+       $\selectao_{expr}(W)$\\
+       $expr$$B$rK~$?$93hF0%*%V%8%'%/%H=89g$r(B WFT $W$ $B$+$iF@$k!#(B\\%
+       $expr$: $p \in P$, $m \in I$, $m \in O$, $\ancestor(a)$, 
+       $\descendant(a)$, $B$*$h$S$=$l$i$rO@M}1i;;;R$G7k$s$@<0!#(B
+ \item WFT $B$KBP$9$kA*Br(B: $\selectwft_{expr}(W)$\\
+       $expr$$B$rK~$?$9(BWFT$B=89g$r(B WFT $W$ $B$+$iF@$k!#(B\\%
+       $expr$: $\wft(W')$, $\wfi(W')$, $\wftgeneral(W')$, 
+       $\wftspecial(W')$, $B$*$h$S$=$l$i$rO@M}1i;;;R$G7k$s$@<0!#(B
+\end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{$B<ALd7?1i;;(B}
+\begin{itemize}
+ \item $B6KBg%o!<%/%U%m!<9=@.(B: $\getworkflow_W(a)$; 
+       $\getworkflow_W(\{a_1, \cdots, a_n\})$\\ 
+       WFT $W$$B$+$i!"3hF0%*%V%8%'%/%H(B$a$$B$^$?$O3hF0%*%V%8%'%/%H=89g(B%
+       $\{a_1, \cdots, a_n\}$$B$r4^$`6KBg%o!<%/%U%m!<$rF@$k!#(B
+\end{itemize}
+
+ ($BNc(B): %
+ \begin{minipage}[t]{0.9\textwidth}
+  $BB@O:$,<+J,$N(B to-do $B%j%9%H$rF@$k$K$O(B: $\selectao_{$BB@O:(B \in P}W_{all}$.
+
+  $B<+J,$N4XO"$7$F$$$k$9$Y$F$N%o!<%/%U%m!<$rF@$k$K$O(B:%
+  $\getworkflow(\selectao_{$BB@O:(B \in P}W_{all})$.
+ 
+  $B$9$Y$F$N::FI%o!<%/%U%m!<$rF@$k$K$O(B:%
+  $\selectwft_{\wfi(\mbox{review})} W_{all}$.
+ \end{minipage}
+
+\end{slide}
+
+\begin{slide}
+\heading{$B<ALd7?1i;;(B}
+\begin{itemize}
+ \item $BHF2=(B: $\wfbgeneral(W, \theta) \mydefi \{W' | W'\theta = W\}$\\
+       $BH>=g=x(B$\sqsubseteq$$B>e$G(B $W$ $B$N?F$K$"$?$k(B WFT $B$r5a$a$k!#(B
+ \item $BFC2=(B: $\wfbspecial(W, \theta) \mydefi \{W' | W' = W\theta\}$\\
+       $BH>=g=x(B$\sqsubseteq$$B>e$G(B $W$ $B$N;R$K$"$?$k(B WFT $B$r5a$a$k!#(B
+\end{itemize}
+
+ ($BNc(B): %
+ \begin{minipage}[t]{0.9\textwidth}
+  $W$ $B$HF10l$N?F$r;}$D$9$Y$F$N(B WFT $B$r5a$a$k$K$O(B: 
+  $\wfbspecial(\wfbgeneral(W, \theta), \theta)$.
+ \end{minipage}
+\end{slide}
+
+\begin{slide}
+\heading{$B<ALd7?1i;;(B}
+\begin{itemize}
+ \item $B1#JC(B: $\wfbhide(W_1, W_2) \mydefi W_1 - W_2$\\
+       $B$?$@$7(B$W_2 \subseteq W_1$$Bööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööow W_1 \mydefi W_1 \cup \bigcup_{a \in W_1} 
+	\descendant(a)$\\
+	$W_1$ $B$OJD$8$F$$$J$/$F$b$h$$!#$^$?!"F@$i$l$?7k2L$OI,$:JD$8$?(B WFT 
+	$B$K$J$k!#D>4QE*$K$O!"(B$W_1$ $B$K4^$^$l$k3hF0%*%V%8%'%/%H$N;RB9$r(B%
+	$B$9$Y$F(B $W_1$ $B$K2C$($k1i;;$G$"$k!#(B
+\end{itemize}
+
+ ($BNc(B): PC$B0Q0w$N<!O:$NJ,G[$7$?%W%m%;%9$N>\:Y$r8+$k$K$O(B:
+\[
+ \wfbshow\selectwft_{\wfi(\mbox{dispatch-2})}\mbox{review-process}
+\]
+\end{slide}
+
+\begin{slide}
+\heading{WFT $BA`:n7?1i;;(B}
+\begin{itemize}
+ \item $B%0%k!<%W2=(B: $\wfbgrouping W$\\
+       $BJD$8$?(B WFT $W = \{a_1, \cdots, a_n\}$ $B$KBP$7$F3hF0%*%V%8%'%/%H(B%
+       \[
+       a' = (\bigcup^n_{i=1}I_i-\bigcup^n_{i=1}O_i,
+       \bigcup^n_{i=1}O_i-\bigcup^n_{i=1}I_i, \bigcup^n_{i=1}P_i, W), 
+       \]
+       $B$rJV$7!"$9$Y$F$N(B WFT $W'.\, W \subseteq W'$ $B$KBP$7$F(B $W' = (W' - W)
+       \cup \{a\}$ $B$r<B9T$9$k!#(B%
+       $BD>4QE*$K$O!"(BWFT $W$ $B$r$R$H$^$H$^$j$N;E;v$H$_$J$7!"(B%
+       $W$ $B$rI{:n6H$H$9$k$h$&$J3hF0%*%V%8%'%/%H(B $a$ $B$r:n@.$9$k!#(B
+\end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{WFT $BA`:n7?1i;;(B}
+\begin{itemize}
+ \item $BJ?C32=(B: $\wfbflatten a$\\
+       $B3hF0%*%V%8%'%/%H(B $a = (I, O, P, S), S \neq \emptyset$ $B$H$9$k$H$-!"(B%
+       $B$9$Y$F$N3hF0%*%V%8%'%/%H(B $a_1 = (I_1, O_1, P_1, S_1).\, a \in
+       S_1$ $B$KBP$7$F(B $S_1 = S_1 \cup S - \{a\}$ $B$r9T$&!#$b$7(B $S =
+       \emptyset$$B$G$"$l$P2?$b9T$o$J$$!#D>4QE*$K$O!"(B$a$ $B$N$9$Y$F$N;RB9$r!"(B%
+       $a$ $B$NBe$o$j$K(B $S_1$ $B$KIU$12C$($k1i;;$G$"$j!"%0%k!<%W2=$N5U1i;;$G$"$k!#(B
+\end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{WFT $BA`:n7?1i;;(B}
+\begin{itemize}
+ \item $BJ,3d(B: $\wfbsplit(a, W)$\\
+       $B3hF0%*%V%8%'%/%H(B $a = (I, O, P, S)$ $B$*$h$S!"JD$8$?(B WFT $W =
+       \{a_1, \cdots, a_n\}, W \subseteq S$ $B$K$*$$$F!"(BWFT $W' = \{a'_1,
+       a'_2\}$ $B$rJV$9!#$3$3$G!"(B%
+       \begin{eqnarray*}
+	a'_1 & = & (\bigcup^n_{i=1}I_i-\bigcup^n_{i=1}O_i,
+	 \bigcup^n_{i=1}O_i-\bigcup^n_{i=1}I_i, P, W)\\
+	a'_2 & = & ((I - I'_1) \cup O'_1, (O - O'_1) \cup I'_1, P, S-W)
+       \end{eqnarray*}
+
+       $BD>4QE*$K$O!"(BWFT $W$ $B$+$i(B WFT $W'$ $B$rJ,3d$9$k1i;;$G$"$k!#0lHL$K$O!"(B
+       $BF@$i$l$?(B WFT $W'$ $B$O?eJ?%U%m!<$K4X$9$k=[4D(B WFT $B$H$J$k!#$9$J$o$A!"(B
+       2$B$D$N?eJ?%U%m!<(B $a'_1 \horflow a'_2$ $B$H(B $a'_2 \horflow a'_1$ $B$,@.(B
+       $BN)$7!"%k!<%W$,@8$8$k!#(B%
+%       $W'$ $B$,?eJ?%U%m!<$K4X$7$FHs=[4D$H$J$k$?$a$K(B
+%       $B$O!"(B$I'_1 - O'_1 \subseteq I$ $B$^$?$O(B $O'_1 - I'_1 \ööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööGO"7k$9(B
+       $B$k1i;;$G$"$k!#(B
+
+       %$B?eJ?%U%m!<$NDj5A$K$h$j!"(B$a_1$ $B$H(B $a_2$ $B$N4V$K?eJ?%U%m!<$,@.N)$9(B%
+       %$B$k$?$a$K$OF~=PNO$N0MB84XO"$,$J$1$l$P$J$i$J$$$N$G!"(B$a_1$ $B$N=PNO$r(B $a_2$ 
+       %$B$NF~NO$K2C$($k$3$H$,I,MW$K$J$k!#(B
+\end{itemize}
+\end{slide}
+
+\begin{slide}
+\heading{$B3hF0%*%V%8%'%/%HA`:n7?1i;;(B}
+\begin{itemize}
+ \item $\operator{new}(a, I, O, P, S)$
+ \item $\operator{destroy}(a)$
+ \item $\operator{foreach}\; a\; \operator{in}\; s\; \operator{do}\; Operator$
+
+       $Operator$ $B$H$$$&A`:n$r(B $s$ $BCf$N$9$Y$F$N3hF0%*%V%8%'%/%H$KBP$7$F(B%
+       $B<B9T$9$k!#(B$Operator$ $B$O3hF0%*%V%8%'%/%H$KBP$9$kG$0U$NA`:n!#(B
+\end{itemize}
+
+($BNc(B): $BB@O:$N:n6H$r$9$Y$F<!O:$KE>Aw$9$k>l9g!"4IM}<T$O<!$N$h$&$JA`:n$r(B%
+ $B9T$($P$h$$(B:
+\[
+  \operator{foreach}\; a\; \operator{in}\;
+   \selectao_{$BB@O:(B\; \in\; P} W_{all}\; \operator{do}
+  \;\; a.P := \{$B<!O:(B\};
+\]
+\end{slide}
+
+\begin{slide}
+ \heading{$B%W%i%0%$%s$K4X$9$k1i;;(B}%
+ \begin{itemize}
+  \item {\bf $B%W%i%0%$%s(B}$B1i;;(B $\wfbplugin$
+	\[
+	a \wfbplugin L \mydefi a \Join L 
+	\]
+	$a$ $B$O3hF0%*%V%8%'%/%H!"(B$L$ $B$O%W%i%0%$%s!#(B
+
+	$B4X78Be?t$N<+A37k9g1i;;$NFC<l$J>l9g(B($B1i;;$NDj5A0h$r8BDj$7$?<+A37k9g(B)%
+	$B$KAjEv$9$k!#(B%
+  \item {\bf $B%W%i%0%"%&%H(B}$B1i;;(B $\wfbplugout$
+	\[
+	\wfbplugout_{L} a_1 \mydefi (I, O, P, S)
+	\]	
+	$B$?$@$7(B$a_1 = (I, O, P, S, L)$$B!#(B
+
+	$B4X78Be?t$N<M1F1i;;$NFC<l$J>l9g$KAjEv$9$k!#(B
+ \end{itemize}
+ 
+% WFT $B$KBP$9$k%W%i%0%$%s1i;;!"%W%i%0%"%&%H1i;;(B%
+% \begin{eqnarray*}
+%  W \wfbplugin L & = & \{a_1 \wfbplugin L, \cdots, a_n \wfbplugin L\}\\
+%  \wfbplugout_{L} W & = & \{\wfbplugout_{L} a_1, \cdots, \wfbplugout_{L} a_n\} 
+% \end{eqnarray*}
+% $B$3$3$G(B $W=\{a_1, \cdots, a_n\}$ $B$G$"$k!#(B
+\end{slide}
+
+\begin{slide}
+\heading{$B%o!<%/%U%m!<A`:n$NNc(B}
+{\footnotesize
+ \renewcommand{\baselinestretch}{0.9}
+ \begin{center}
+ \fbox{
+ \begin{minipage}{0.9\textwidth}
+  \begin{tabular}{l}
+   review-process = \{$\cdots$, send-review-reports, $\cdots$\}\\
+   send-review-reports = (all-review-reports, review-letter, secretary,
+   \{\})\\
+   registration-process = \{$\cdots$, send-registration, $\cdots$\}\\
+   send-registration = (participant-name, acceptance-sheet, secretary, \{\})\\
+  \end{tabular}
+ \end{minipage}
+ }
+ \end{center}
+
+ ``send-review-reports''$B$H(B``send-registration''$B$O!"<!$N$h$&$K$7$F(B
+$B$R$H$D$N%W%m%;%9(B``send-object''$B$K$^$H$a$i$l$k!#(B
+ \[%
+ \begin{array}{l}
+ \operator{new}(\mbox{send-object}, \mbox{address}, \mbox{objects},
+  \mbox{secretary}, \{\});\\
+ \wfbsplit(W_1, \{\mbox{send-review-report}\});\\
+ \wfbsplit(W_2, \{\mbox{send-registration}\});\\
+ \wfbgeneral(\{\mbox{send}\},\\
+  \{\mbox{address/participants-name}, \mbox{objects/acceptance-sheet}\});\\
+ \wfbgeneral(\{\mbox{send-registration}\},\\
+ \{\mbox{address/all-review-reports}, \mbox{objects/review-letter}\});
+ \end{array}
+ \]
+}
+\end{slide}
+
+\begin{slide}
+ \heading{$B%(!<%8%'%s%H$H(B Workflow Base}
+ \begin{itemize}
+  \item $BL\E*(B%
+  \item $BO@M};X8~$K$h$k%"%W%m!<%A(B%
+  \item $B%(!<%8%'%s%H;X8~$K$h$k%"%W%m!<%A(B%
+  \item $B%(!<%8%'%s%H4V$N6(D4(B%
+  \item $B%(!<%8%'%s%H$H(B Workflow Base $B$H$N4XO"(B
+ \end{itemize}
+\end{slide}
+
+\begin{slide}
+ \heading{Workflow Base $B$K$*$1$k0[<o@-$N2r7h(B}
+ $B6(D4:n6H$K$*$1$k(B{\bf $B0[<o@-(B} (heterogeneity):
+ \begin{itemize}
+  \item $BLdBj2r7h4o$N0[<o@-(B: $B?M$d$5$^$6$^$J%W%m%0%i%`$,6(D4$9$k!#(B
+%	The complexity of a given problem requires a combination of multiple
+%	heterogeneous problem solvers,
+  \item $B6u4VE*0[<o@-(B: $B6(D4BP>]$O6u4VE*$KJ,;6$7$F$$$k!#(B
+%	Spatially distributed problem solvers are required to process a given
+%	problem.
+  \item $B;~4VE*0[<o@-(B: $B?7$7$$LdBj$KBP$7$F!"?7$7$/LdBj2r7h4o$rMQ0U$9$k$N(B%
+	$B$G$O$J$/!"4{B8$NLdBj2r7h4o$r:FMxMQ$9$k!#(B
+%	For a new problem, a new problem solver is not necessarily developed:
+%	that is, multiple existing problem solvers must be reused for a new
+%	problem.
+ \end{itemize}
+
+ $B6(D4:n6H$N%b%G%k$G$O!"$3$l$i$N0[<o@-$r2r7h$9$k$?$a!"(B%
+ $BLdBj2r7h4o$r6&DL$N%W%m%H%3%k$G$/$k$s$@(B\textbf{$B%(!<%8%'%s%H(B}$B$r9M$($k(B%
+ $BI,MW$,$"$k!#(B
+
+ $B$3$3$G$O!"%o!<%/%U%m!<4IM}$K$*$1$k%(!<%8%'%s%H$N%b%G%k2=!"(B%
+ $B$3$l$i$N6(D4$H(B Workflow Base $B$H$N4X78$K$D$$$F5DO@$9$k!#(B
+% There have been some approaches: an arithmetic calculator in Prolog and
+% a constraint logic programming language with a single constraint
+% solver.  Such a restricted approach seems to be neither flexible nor promising
+% for most applications.
+%
+% Further, considering the spread of distributed environments, there
+% might be similar sources, each of which does not have complete
+% information.  
+% In such an environment, we can frequently get better results by
+% accessing and merging multiple information sources or multiple
+% problem solvers.
+% In other words, cnooperation among distributed sources are frequently
+% required.
+% Considering such applications and environments, heterogeneous,
+% distributed, cooperative problem solvers will become more important
+% and can play a role of a very large knowledge-base.
+% The situation is almost the same, because there might be many agents
+% who can possibly solve a given problem.
+% A coordinator agent can select and judge an agent for the work.
+%
+% From workflow and workflow base points of view, in a unit of workflow
+% definition, all agents should have the same protocol, for which we
+% use an environment concept as in Helios.
+% In this chapter, we discuss how to define such environments 
+% for workflow management.
+\end{slide}
+
+\begin{slide}
+ \heading{$BO@M};X8~$K$h$k%(!<%8%'%s%H$NDj5A(B}
+ \[
+ a/[w(I)=O]\Leftarrow S|C
+ \]
+ $B$3$3$G(B$a$$B$O%(!<%8%'%s%H$N<1JL;R!"(B$w$$B$O:n6H<1JL;R!"(B$I$$B$OF~NO$N=89g!"(B
+ $O$$B$O=PNO$N=89g!"(B$S$$B$OI{%(!<%8%'%s%H$N=89g!"(B$C$$B$O(B$a$$B$+$i(B$S$$B$KEAGE$5$l$k(B%
+ $B@)Ls$N=89g$G$"$k!#(B
+
+ $B$3$N%k!<%k$O!"DL>o$N%*%V%8%'%/%H;X8~$N35G0$KBP1~$E$1$k$3$H$,$G$-$k!#(B
+ $B$9$J$o$A!":n6H<1JL;R$O%a%=%C%I<1JL;R$K!"(B$I$$B$OF~NOCM$N=89g$K!"(B
+ $O$$B$OJV$jCM$N=89g$K!"(B$S|C$$B$O<BAu$K$=$l$>$lBP1~$9$k!#(B
+\end{slide}
+
+\begin{slide}
+ $B0lHL$K$O%(!<%8%'%s%H$OJ#?t$N:n6H$rJB9T$7$F9T$&$?$a!"<!$N$h$&$KDj5A$5$l$k!#(B
+ \[
+ \begin{array}{l}
+  a/[w_1(I_1)=O_1]\Leftarrow S_1|C_1\\
+  a/[w_2(I_2)=O_2]\Leftarrow S_2|C_2\\
+  \mbox{}\hspace{1cm}\vdots\\
+  a/[w_n(I_n)=O_n]\Leftarrow S_n|C_n
+ \end{array}
+ \]
+ $B$^$?$O(B
+ \[\begin{array}{l}
+ a/[w_1(I_1)=O_1, w_2(I_2)=O_2,\cdots w_n(I_n)=O_n]\\
+ \Leftarrow S_1\cup S_2\cup\cdots\cup S_n|C_1\cup C_2\cup\cdots\cup C_n
+ \end{array}\]
+\end{slide}
+
+\begin{slide}
+ \heading{$B%(!<%8%'%s%H;X8~$NDj5A(B}%
+% Considering autonomous agents who execute various works,
+% we had better introduce a concept of an {\em agent}, which can
+% be defined independently from definitions of workflows.
+% Each agent can estimate workload and schedule a set of works.
+% In this subsection, we define an agent in the sense of {\em Helios}
+% and discuss an agent as a person.
+
+ $B0[<oJ,;66(D4LdBj2r7h4o(B Helios [$B2#EDB>(B94, 95] $B$r4p$K$7$F$$$k!#(B
+
+ \begin{center}
+  \begin{tabular}{lcl}
+  $B%(!<%8%'%s%H(B  &:=& ($B%+%W%;%k(B, $BLdBj2r7h4o(B) $|$ \\
+                &  & ($B%+%W%;%k(B, $B4D6-(B, $B%(!<%8%'%s%H=89g(B)
+  \end{tabular}
+ \end{center}
+  \textbf{$B%+%W%;%k(B}$B$OJQ494o$r4^$`%b%8%e!<%k$G$"$j!"3FLdBj2r7h4o$O%+%W%;%k$G(B%
+  $BJ$$o$l$k!#%+%W%;%k2=$5$l$?LdBj2r7h4o$r(B\textbf{$B%(!<%8%'%s%H(B}$B$H8F$V!#(B
+ \begin{center}
+  \epsfile{file=agent.eps,scale=0.35}
+ \end{center}
+% A {\em complex} agent is defined as a triple of a capsule, an
+% environment, and a set of agents (agent$_1$,$\ldots$,agent$_n$), where
+% an environment is a field where agent$_1$,$\ldots$,agent$_n$ can exist
+% and communicate mutually.  Conceptually, a pair of an environment and a
+% set of agents can be considered as a problem-solver; a new agent can be
+% defined by encapsulating them.  That is, an agent can be hierarchically
+% organized.  We show such structure in Figure.  Since an encapsulated
+% problem-solver or an environment can be considered as an agent and the
+% outside of an agent is an environment, the user can be considered as an
+% environment.
+
+\end{slide}
+
+\begin{slide}
+ \heading{$B%+%W%;%k(B}%
+ \begin{center}
+  \begin{tabular}{lcl}
+   $B%+%W%;%k(B  &:=&($B%(!<%8%'%s%HL>(B, $B%a%=%C%I(B, $B<+8J%b%G%k(B,\\%
+   &  &\ $BK]Lu5,B'(B, $B8r>D@oN,(B)\\%
+  \end{tabular} 
+ \end{center}
+\begin{itemize}
+ \item $B%(!<%8%'%s%HL>(B: $B%(!<%8%'%s%H$N<1JL;R(B%
+ \item $B%a%=%C%I(B: $BM"F~%a%=%C%I(B(import method)$B!"M"=P%a%=%C%I(B(export method)
+ \item $B<+8J%b%G%k(B: $B<+J,$,2?$,$G$-$k$+$NDj5A!#MQ0U$5$l$F$$$k5!G=L>$K$h$C$F(B%
+       $BI=$5$l$k!#(B%
+ \item $BK]Lu5,B'(B: $BLdBj2r7h4o$H4D6-$H$N4V$N%a%C%;!<%8$NJQ49$NDj5A!#(B%
+ \item $B8r>D@oN,(B: $BB>%(!<%8%'%s%H$H$N8r>D$N@oN,!#4D6-$N8r>D%W%m%H%3%k$N$b$H$G(B%
+       $BDj5A$5$l$k!#(B
+\end{itemize}
+% In a capsule, an {\em agent-name} is an identifier of the agent.  Each
+% agent has its own agent-name that is unique in the environment.  A
+% {\em method} is a definition of {\em import methods} and {\em export
+% methods}. An import method defines a method by which the agent is
+% called, and an export method defines a method that the agent can call.
+% An agent with only import methods is called {\em passive} and an agent
+% with both methods is called {\em active}: only an agent which sends
+% new messages through export methods can negotiate with other agents.
+% A {\em self model} defines what the agent can do in terms of the name
+% of functions provided by the agent.  An environment extracts the
+% necessary information from self models in agents to dispatch messages
+% between agents.  {\em Translation-rules} define translation between
+% internal representation of the agent and common representation given
+% by its environment in the initialization of the problem solving
+% system.
+
+\end{slide}
+
+\begin{slide}
+ \heading{$B4D6-(B}%
+ \begin{center}
+  \begin{tabular}{lcl}
+   $B4D6-(B      &:=&($B%(!<%8%'%s%HL>=89g(B, $B6&DL7?%7%9%F%`(B,\\%
+   &  &\ $B8r>D%W%m%H%3%k(B, $B%*%s%H%m%8!<(B)
+  \end{tabular}
+ \end{center}
+
+ $B%(!<%8%'%s%H4V$N%a%C%;!<%88r49!"%(!<%8%'%s%H4V$G6&M-$5$l$kBg0h>pJs$N4IM}$r(B%
+ $B9T$&!#(B
+% Each agent has its own logical name that is unique in the
+% environment.
+ \begin{itemize}
+  \item $B%(!<%8%'%s%HL>=89g(B: $B4D6-$KB0$9$k%(!<%8%'%s%H$N<1JL;R=89g!#(B%
+  \item $B6&DL7?%7%9%F%`(B: $B4D6-Fb$N%a%C%;!<%8$N7?$N5,Dj!#(B%
+  \item $B8r>D%W%m%H%3%k(B: $B4D6-$KB0$9$k%(!<%8%'%s%H4V$G;HMQ$5$l$k%W%m%H%3%k!#(B%
+  \item $B%*%s%H%m%8!<(B: $B%(!<%8%'%s%H4V$N8lWC$d35G0$NJQ49!#(B
+ \end{itemize}
+
+% In an environment, {\em agent names} state which agents are in the
+% environment.  A {\em common type system} defines a type system used to
+% type all messages in the environment.  A {\em negotiation protocol}
+% defines the protocol used by all agents in the environment.  Under a
+% {\em negotiation protocol} in an environment, each agent defines a
+% {\em negotiation strategy} to communicate with other agents.  An {\em
+% ontology} defines the transformation of the contents of messages
+% between agents, while a capsule converts the syntax and type of
+% messages between the common type system and the intrinsic type system
+% of the corresponding problem-solver.
+\end{slide}
+
+% To define this information, we introduce a capsule description
+% language {\em CAPL} (CAPsule description Language), and an environment
+% description language {\em ENVL} (ENVironment description Language). 
+% Programs written in those languages are processed by their
+% corresponding compilers.
+
+\begin{slide}
+ \heading{$B%a%C%;!<%8(B}%
+% Although various information is defined locally in each environment
+% and each agent, a {\em message} between agents is in the form of a
+% global {\em communication protocol} consisting of the following:
+
+ \begin{itemize}
+  \item $B%a%C%;!<%8<1JL;R(B ($B4D6-Fb$G0l0U(B)
+  \item $B%a%C%;!<%87?(B: $B<ALd(B($B%a%=%C%I8F$S=P$7(B)$B$HJVEz(B($B%a%=%C%I$+$i$N1~Ez(B)$B$H$N6hJL(B%
+  \item $BAwIU85%(!<%8%'%s%H<1JL;R(B%
+  \item $BJVEz@h%(!<%8%'%s%H$N;XDj(B\\%
+	$B<ALd7?$G$O!"AwIU85%(!<%8%'%s%H$HF1$8!#JVEz7?$G$O!"85<ALd$N(B%
+	$BAwIU85%(!<%8%'%s%H!#(B%
+  \item $B%H%i%s%6%/%7%g%s<1JL;R(B
+%	If the update of the content of a destination problem-solver is
+% attendant on the invocation of a message, then a transaction
+% identifier is required to control it.  This field contains a
+% transaction identifier. For nested transactions, a transaction
+% identifier with a nested structure is used.
+ \item ($B<B9T$7$?%a%=%C%I$N(B)$B>uBV(B
+% This field contains information on the status of invoked methods for
+% error handling.
+ \item $B%a%C%;!<%8$NFbMF(B
+% In a query message, this field contains a method invocation, and in a
+% reply message, this field contains the answer to the invocation.
+ \end{itemize}
+\end{slide}
+
+\begin{slide}
+ \heading{$BO@M};X8~$H%(!<%8%'%s%H;X8~$NHf3S(B}%
+ \begin{itemize}
+  \item $BO@M};X8~(B%
+	\begin{itemize}
+	 \item $BMF0W$KJB9T@-$rF3F~$9$k$3$H$,$G$-$k!#(B%
+	 \item $BJB9T@-$N@)8f$,:$Fq!#(B%
+	 \item $B%(!<%8%'%s%H$,%+%W%;%k2=$5$l$F$$$J$$$N$G!"(B%
+	       $B:n6H$K@UG$$r;}$D?M$H%(!<%8%'%s%H$rBP1~$E$1$k$?$a$K$O(B%
+	       $BJL$N5!9=$,I,MW$K$J$k!#(B
+	\end{itemize}
+  \item $B%(!<%8%'%s%H;X8~(B%
+	\begin{itemize}
+	 \item $B%(!<%8%'%s%H$,<+N'@-$r;}$C$F$$$k$N$G!"JB9T@-@)8f$,(B%
+	       $B%+%W%;%k$rMQ$$$F9T$($k!#(B%
+	 \item $B%+%W%;%k2=$K$h$C$F!"?M$b%(!<%8%'%s%H$N0l<o$H$7$F07$($k!#(B
+	\end{itemize}
+ \end{itemize}
+\end{slide}
+
+\begin{slide}
+ \heading{Workflow Base $B$H%(!<%8%'%s%H(B}
+ Workflow Base $B$N3hF0%*%V%8%'%/%H(B %
+ $a=(I, O, P, S)$ $B$K$*$$$F!"(B$P$ $B$O:n6H$rI{:n6H(B$S$($B$N%(!<%8%'%s%H(B)$B$KJ,G[(B%
+ $B$7!"$=$l$i$N4V$N6(D4$r$H$k@UG$$r;}$D!#$3$N0UL#$G!"(B$P$$B$O%+%W%;%k(B$c$$B$rMQ(B%
+ $B0U$7!"$^$?4D6-(B$e$$B$N5!G=$r;}$C$F$$$k$H8@$($k!#(B
+
+ $B$D$^$j!"(BWorkflow Base $B$N3hF0%*%V%8%'%/%H$O!"J#9g%(!<%8%'%s%H(B%
+ \[
+ P=(c,e,\{a_1,a_2,\cdots,a_n\})
+ \]
+ $B$H$7$F07$&$3$H$,$G$-$k!#(B
+
+ $B?bD>%U%m!<$KAjEv$9$k%k!<%k$,%(!<%8%'%s%H4V$N:n6H$NJ,G[7W2h$KAjEv$9$k!#(B
+
+\end{slide}
+
+\begin{slide}
+ \heading{$B%(!<%8%'%s%H4V$N6(D4(B}%
+ $B%a%C%;!<%8$N8r49$O0J2<$N$h$&$K9T$o$l$k!#(B
+ \begin{itemize}
+  \item $B=i4|2=(B($B4D6-$,9T$&(B)\\%
+	($BO@M}E*$J(B)$B%(!<%8%'%s%HL>$H(B($BJ*M}E*$J(B)$B%"%I%l%9$H$NBP1~I=$N:n@.!#(B%
+	$B%a%=%C%I>pJs!&<+8J%b%G%k$N5!G=>pJs$r<}=8$7!"$=$l$>$l$H%(!<%8%'%s%H(B%
+	$BL>$H$NBP1~I=$r:n@.!#(B%
+  \item $B%a%C%;!<%88r49(B\\%
+%	As a method or a function does not necessarily corresponds to an agent
+%	uniquely, a message is possibly sent to multiple agents.
+%	This mechanism is useful for the followings:
+%        \begin{itemize}
+%	 \item It is unnecessary to specify an agent name in problem solvers
+%	       explicitly.
+%	 \item It is possible to send simultaneously a message to possible
+%	       agents.
+%	\end{itemize}
+	$B4D6-$,%a%C%;!<%8Aw?.$NJ}K!(B($BD>Ns(B/$BJBNs(B)$B$r7hDj$7!"$3$l$K$b$H$E$$$F(B%
+	$B%a%C%;!<%8$r=hM}$9$k!#I,MW$J$i!"I{%(!<%8%'%s%H4V$G$N6(D4$N$?$a$N(B%
+	$BF14|>pJs$r%a%C%;!<%8$KIU2C$9$k!#(B
+%An environment decides to send a message sequentially or in parallel to
+% candidates listed by the maps, and processes answers sequentially or
+% by grouping as a set.
+% In the case of set grouping, aggregation functions can be specified in
+% an environment.
+% Such a mode can be selected in a query message.
+% A message is analyzed and its corresponding processing plan is 
+% constructed as a dependency graph by a parent agent as in 
+% a query in conventional distributed databases.
+% Synchronization information between sub-messages is attached to each
+% sub-message and controlled by the capsule of each agent: i.e.,if necessary, 
+% child agents can communicate with each other.
+ \end{itemize}
+\end{slide}
+
+\begin{slide}
+ \heading{$B?F;R%(!<%8%'%s%H4V$N6(D4%W%m%H%3%k(B}
+ \begin{itemize}
+  \item $B@.8y(B/$B<:GT(B\\%
+       $B;R%(!<%8%'%s%H$+$i?F%(!<%8%'%s%H$X$N%a%C%;!<%8!#!V<:GT!W$r<u$1<h$C$?(B%
+       $B?F%(!<%8%'%s%H$O!":n6H$N:FJ,G[$r;n$_$k$+!";R%(!<%8%'%s%H$KJ,G[$7$?(B%
+       $B:n6H$r$9$Y$F%-%c%s%;%k$7$F$5$i$K?F$N%(!<%8%'%s%H$K!V<:GT!W$rAw?.$9$k!#(B%
+  \item $B;q8;MW5a(B\\%
+	$B;R%(!<%8%'%s%H$+$i?F%(!<%8%'%s%H$X$N%a%C%;!<%8!#?F%(!<%8%'%s%H$O!"(B%
+	$B=<J,$K;q8;$r;}$C$F$$$k$J$i$P;R%(!<%8%'%s%H$KDI2C;q8;$rAw?.$9$k!#(B%
+	$B;q8;$r=<J,$K;}$C$F$$$J$$>l9g$O!"B>$N;R%(!<%8%'%s%H$KMW5a$r$9$k!#(B%
+	$B;R%(!<%8%'%s%H$,=<J,$J;q8;$r;}$C$F$$$k>l9g$O!"$=$l$r?F%(!<%8%'%s%H$K(B%
+	$BAw?.$9$k!#(B
+ \end{itemize}
+\end{slide}
+
+%\begin{slide}
+% We assume that a person involved in some workflow has an appropriate
+% interface to the capsule of the corresponding agent.
+% As a person can do many works, he is connected to many capsules.
+% In this thesis, we do not discuss the topic.
+%\end{slide}
+
+%\begin{slide}
+% \heading{Workflow Base $B$H%(!<%8%'%s%H$H$N4X78(B}
+%
+% We have two kinds of definitions about a workflow: a workflow
+% definition and a agent definition.
+% As mention in Section 3.5, a workflow base consists of a workflow 
+% definition and its execution model.
+% A workflow definition corresponds to a static aspect of workflow,
+% while an execution model corresponds to its dynamic aspect, where
+% activity objects are dynamically generated and activated in P-box and their
+% relations are defined in C-box in the form of definite clauses.
+% A definite clause, $p\leftarrow q_1,q_2,\cdots,q_n$, is a dispatching plan,
+% which corresponds to an activity object $p$, which is also in P-box.
+% That is, an isolated activity object in P-box just corresponds to
+% an agent definition.
+%\end{slide}
+
+%\begin{slide}
+% \heading{Summary}
+%
+% Considering a big problem such as workflow, 
+% we can find many applications which
+% require multiple {\em heterogeneous} problem solvers.
+% To make a collaborative work possible, related programs and persons
+% should have a common protocol, which resolve each heterogeneity with some
+% protocol.
+%
+% There have been some approaches: an arithmetic calculator in Prolog
+% and a constraint logic programming language with a single constraint
+% solver.  Such a restricted approach seems to be neither flexible nor
+% promising for most applications.
+%
+% From workflow and workflow base points of view, in a unit of workflow
+% definition, all agents should have the same protocol, for which we
+% use an environment concept as in Helios.
+% In this chapter, we discussed how to define such environments 
+% for workflow management.
+%
+% A problem solver, a generic term of database systems, knowledge-base
+% systems, constraint solvers, application programs, persons, and so on,
+% is called an {\em agent} by wrapped by a common protocol.
+%
+% Considering such applications and environments, heterogeneous,
+% distributed, cooperative problem solvers will become more important
+% and can play a role of a very large knowledge-base.
+% The situation is almost the same, because there might be many agents
+% who can possibly solve a given problem.
+% A coordinator agent can select and judge an agent for the work.
+%\end{slide}
+
+\begin{slide}
+ \heading{Workflow Base $B$N%7%9%F%`9=@.(B}%
+ \begin{itemize}
+  \item $B%"%W%j%1!<%7%g%s$H$N%$%s%?%U%'!<%9(B%
+  \item $B%7%9%F%`9=@.(B
+ \end{itemize}
+\end{slide}
+
+%\begin{slide}
+%\heading{Workflow Base $B$N%7%9%F%`9=@.(B}
+%In this chapter, we discuss about how to implement workflow base, mainly
+%from system architecture point of view.  Though workflow base is closely
+%related to database systems, it has various features not found in
+%traditional database systems, such as an execution model based on
+%production systems.  First we show a system interface between workflow
+%base and application programs.  After that, overall of the architecture
+%and each functional components are described.
+%\end{slide}
+
+\begin{slide}
+ \heading{$B%"%W%j%1!<%7%g%s$H(B Workflow Base $B$H$N%$%s%?%U%'!<%9(B}
+
+ Workflow Base $B$O!"%"%W%j%1!<%7%g%s(B($B%o!<%/%U%m!<%/%i%$%"%s%H(B)$B$KBP$7$F(B%
+ $B0J2<$NLr3d$r9T$&!#(B
+ \begin{itemize}
+  \item $B%o!<%/%U%m!<4IM}%7%9%F%`$N%5!<%P(B($B%o!<%/%U%m!<%5!<%P(B)\\%
+	$B%(!<%8%'%s%H4V$N%a%C%;!<%8DL?.$N4IM}(B
+  \item $B%o!<%/%U%m!<%G!<%?%Y!<%9(B\\%
+	$B<ALd=hM}!"%o!<%/%U%m!<A`:n!"(Betc.
+ \end{itemize}
+
+% The former provides database operations described.
+% Workflow clients uses this interface as querying
+% workflow base, such as retrieving, reorganizing workflows, etc.
+%
+% Meanwhile the latter provides the protocol between the capsule and the
+% problem solver mentioned in Chapter.  In
+% the coordination system point of view, all agents related with a
+% collaborative work of workflows are implemented in the workflow server
+% and coordinate each other in the style of Chapter. 
+% A workflow client is denoted as a problem
+% solver in this structure.
+\end{slide}
+
+\begin{slide}
+ \heading{Workflow Base $B$N%7%9%F%`9=@.(B}
+
+% Workflow base organizes from four functional components: Database, WFT
+% organizer, WFT interpreter, and Query processor.  An overview of the
+% system architecture is shown in Figure \ref{fig:wfarch}.
+
+ \begin{center}
+% \setlength{\unitlength}{0.22mm}
+% {\small
+% \input{wfbarch}
+% }
+  \epsfile{file=wfarch.eps,scale=0.6}
+ \end{center}
+\end{slide}
+
+\begin{slide}
+ \heading{Workflow Base $B$N%7%9%F%`9=@.(B}%
+ \begin{itemize}
+  \item Database\\
+	WFT $B$K4X$9$k$9$Y$F$N%G!<%?(B($BDj5A!"3hF0%*%V%8%'%/%H!"%W%m%@%/%7%g%s(B%
+	$B%k!<%k!"3d$jEv$F!"?J9T>u67(B etc.)$B$r3JG<$9$k!#(B%
+  \item WFT Organizer\\
+	Database $BCf$N%G!<%?$+$i(B WFT $B$r9=@.$7!"$^$?$=$N5U$b9T$&!#(B%
+	Database $B$N%9%-!<%^$N<BAu$r1#JC$9$kLr3d$r2L$?$9!#(B%
+  \item WFT Interpreter\\
+	$B<B9T%b%G%k$K4p$E$-(B WFT $B$r2r<a<B9T$7!"%o!<%/%U%m!<%/%i%$%"%s%H$H$N(B%
+	$BDL?.$r9T$&!#(B%
+  \item Query Processor\\
+	$B%o!<%/%U%m!<1i;;$r2r<a<B9T$9$k!#%o!<%/%U%m!<$N9=B$JQ2=$rH<$&(B%
+	$BA`:n$O$3$3$G=hM}$5$l!"(BWFT Organizer $B$KJQ99$N0MMj$,9T$o$l$k!#(B
+ \end{itemize}
+% \emph{Database} stores all information about WFTs such as their
+% definitions, all activity objects, all P-box and C-box components,
+% assignments, progress status, etc.  Remark that this is no need for
+% object-oriented database, though we use the term ``objects'' in workflow
+% base.  Activity object is not encapsulated because it has no concepts of
+% methods.  Hence it is more similar to tuple in relational database than
+% object in object-oriented database.
+%
+% \emph{WFT organizer} constructs WFTs from the information in Database,
+% and decomposes WFTs in data who belongs to the schema in Database.  In
+% other words, WFT organizer translates WFTs and schema of Database each
+% other.  It plays a role of hiding database implementation --- relational
+% database, object-oriented database, etc. --- from other components of
+% workflow base.
+% \emph{WFT interpreter} interprets and executes WFTs based on its
+% execution model proposed.  It must keep
+% the current status of all WFTs currently on work.  Hence, in
+% implementation level, it is newly invoked every time a WFT is
+% available.  That is, WFTs now on work and WFT interpreters currently
+% running are related with one-to-one correspondence.  Integrity
+% constraints on WFTs are checked by WFT interpreter.
+% \emph{Query processor} is an interpreter of workflow operations shown in.
+% It mainly manages queries on workflow base and 
+% the operations which changes WFTs or activity objects directly.  On the
+% other hand, WFT interpreter manages operations on WFTs in the frame of
+% the execution model of WFT.
+%
+% Agents in real world --- humans in most cases --- use \emph{workflow
+% clients} to communicate with workflow base.  In this sense, a
+% client-server system consisting from WFT clients and WFT interpreters
+% corresponds with traditional workflow management system.
+\end{slide}
+
+\begin{slide}
+ \heading{$B4XO"8&5f$H$NHf3S(B}%
+% Many researches about workflow management systems have been done from
+% the various aspects.  Moreover, there are also similar concepts as
+% workflows in various research areas, such as groupware, process
+% modeling, and software process engineering.  In this chapter, we pick up
+% several related researches from various research areas, and compare them
+% with our model especially from the workflow model point of view.
+ \begin{itemize}
+  \item $B%0%k!<%W%&%'%"(B\\%
+	OM-1, Action Workflow, Regatta, $B$aAH(B, WorkWeb
+  \item $B%W%m%;%9%b%G%j%s%0(B\\%
+	Activity Management System, StateChart, KyotoDB
+  \item $B%G!<%?%Y!<%9(B\\%
+	C \& Co, Event-Condition-Message Rules
+ \end{itemize}
+
+%\heading{$B%0%k!<%W%&%'%"(B}
+%
+%Automation of office work has been one of the hot topics in the research 
+%area of groupware, and many similar concepts as
+%workflow management systems had been proposed before the term
+%``workflow'' are widely known.
+%
+%\heading{$B%W%m%;%9%b%G%j%s%0(B}
+%
+%Process modeling is a research area closely related with workflows.  It
+%has been studied mainly in software process modeling, in modeling of
+%reactive systems, and in office information systems.  In recent years,
+%the similarities between process modeling and workflows are pointed out,
+%and researches of applying process modeling into
+%workflows have been studied.
+%
+%\heading{$B%G!<%?%Y!<%9(B}
+%
+%As mentioned in Section, almost all researches about
+%workflows from the database point of view treat transaction management
+%among processes.  We found few papers discussing workflows from the data
+%model point of view.
+\end{slide}
+
+\begin{slide}
+ \heading{OM-1 [$B@P0f(B86, $B@P0fB>(B91]}
+ \begin{itemize}
+  \item $B%*%U%#%9!&%W%m%7%8%c!&%7%9%F%`(B%
+  \item $B%*%V%8%'%/%H;X8~%b%G%k$rMQ$$$F!"Dj7?E*6HL3$r@)8f%U%m!<$H(B%
+	$B%*%U%#%99=B$(B($B%G!<%?9=B$!"AH?%9=B$(B etc.)$B$N(B2$BDL$j$G5-=R$7!"(B%
+	$BEE;R%a!<%k$rMQ$$$F;Y1g$9$k!#(B%
+  \item $B6HL3$N5-=R$,J#;($K$J$k!#7A<0E*%b%G%k2=$,=<J,$G$J$$!#(B
+ \end{itemize}
+% OM-1, categorized as an {\em office
+% procedure model}, represents knowledge of well-structured cooperative
+% work both in control flow and in office structures, such as data
+% structures and organization structures, using object-oriented modeling.
+% Three objects --- data, activity, and agent --- are provided as basic
+% office objects.  Office procedure is represented as a graph whose nodes
+% are basic office objects.  Links between office objects represent
+% various relationships between office objects, such as control flow,
+% responsibility, belonging, and operations on data.  Four styles of
+% connections for control flows are provided:  AND join, AND fork, XOR
+% join, and XOR fork.  
+%
+% OM-1 has the ability to represent control flow and office structures in
+% a uniform style.  However, this ability makes office procedures to be
+% much complex.  Our workflow model manages control flows and office
+% structures in a separate way but with relationships.  This makes
+% workflows to be simple.  Moreover, our model has a formal execution
+% model which OM-1 does not provide.
+\end{slide}
+
+\begin{slide}
+ \heading{Action Workflow [Medina-Mora $BB>(B92]}
+ \begin{itemize}
+  \item $B2qOC9TF0M}O@(B[Winograd 86]$B$K4p$E$/%o!<%/%U%m!<%b%G%k(B%
+  \item $B$9$Y$F$N6(F1:n6H$r(B Proposal, Agreement, Performance, Satisfaction 
+	$B$+$i$J$k%k!<%W$N3,AX$G5-=R$9$k!#(B%
+  \item $B$3$l$K4p$E$/%o!<%/%U%m!<4IM}%7%9%F%`(B Workflow Management Server
+	$B$r3+H/(B%
+  \item $B%o!<%/%U%m!<$,J#;($K$J$k!#<B9T%b%G%k$,87L)$K$ODj$a$i$l$F$$$J$$!#(B
+ \end{itemize}
+% Action Workflow is a workflow model based on
+% conversation act theory.  It represents all
+% cooperative works as an action workflow loop, a loop of four processes:
+% proposal, agreement, performance, and satisfaction.  Each process in an
+% action workflow loop can be an action workflow loop.  Hence an action
+% workflow is organized hierarchically in general.  This paper also gives
+% an architecture of workflow management systems based on action workflow
+% model.  The Workflow Management Server, a core system of the workflow
+% management system, manages both the definitions of workflows and the
+% progress of workflows using databases.
+% % STF (Standard Transaction Format) processors ?
+%
+% Action Workflow is a model suitable for ill-structured cooperative work.
+% However, processes provided in Action Workflow are too primitive to
+% represent well-structured cooperative work in a simple way.  Moreover,
+% the execution semantics of the workflows in Action Workflow is not
+% clear.  Data models of the workflows in the Workööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööformed in 1991 to develop software to support
+% workgroups and to aid in reengineering work processes, proposes a model
+% for collaborative work and a graphical language to support this model.
+% In this model, work process is modeled as a
+% network of tasks, each of which represents a task request, commitment,
+% or question.  Though this modeling concept is similar with Action
+% Workflow,  the model provides more functions than Action Workflow such
+% as dynamic modification of flows, incremental automation, etc.
+%
+% The workflow model of the Regatta project has the similar concepts as
+% WFT/WFI\@.  Before workflow instances are executed, they are created from
+% workflow templates by assigning real-world entities into variables.  The
+% features such as hierarchical workflows, dynamic changes, view functions
+% as private to-do lists, etc., are also similar as those of our models.
+% However, formal semantics is not given in these models.  Moreover, the
+% view functions in these models are somewhat ad-hoc, not based on formal
+% operations.
+\end{slide}
+
+\begin{slide}
+ \heading{$B$aAH(B [$B?b?eB>(B95]}
+ \begin{itemize}
+  \item $B%k!<%k%Y!<%9EE;R%a!<%k%7%9%F%`(B%
+  \item $B%k!<%k$K4p$E$/%U%m!<@)8f5!G=$r!"EE;R%a!<%k$r4pHW$H$7$F<B8=$7$F$$$k!#(B%
+	$B%o!<%/%U%m!<Dj5A%7%9%F%`!V0iAH!W$HAH$_9g$o$;$k$3$H$G!"D"I<2sMw$N(B%
+	$B%o!<%/%U%m!<$r<B8=$9$k!#(B%
+  \item ECA $B%k!<%k$H$7$F%U%m!<$r5-=R!#(B%
+  \item $B%G!<%?$N6&M-!"?JD=>u67$N4IM}$NLL$+$i!"%G!<%?%Y!<%9$H$NO"7H$K(B%
+	$B$D$$$F$b5DO@$,9T$o$l$F$$$k!#(B
+  \item HyperScheme $B$H$$$&HFMQ%W%m%0%i%_%s%08@8l$G%U%m!<$r5-=R$9$k$?$a!"(B%
+	$B<+M3EY$,9b$$H?LL!"%o!<%/%U%m!<$H$7$F0UL#$r;}$?$J$$2DG=@-$,$"$k!#(B%
+	$B0UL#@)Ls$K4X$9$k7A<0E*5DO@$,$J$/!"0UL#@)Ls%A%'%C%/5!9=$,<e$$!#(B
+ \end{itemize}
+% Tarumi et at. proposed and developed a workflow management system based
+% on MEGUMI, rule based e-mail system.
+% In this system, workflows are realized by the
+% formed e-mail circulation with the rule-based control in MEGUMI\@.  Hence
+% this system does not assume a central workflow server.  The rules
+% realizing workflows are described as ECA rules by HyperScheme, a
+% programming language extending Scheme.  They also discussed about
+% databases for workflow management.
+%
+% Problem of the system is the capability of HyperScheme from the workflow
+% definition point of view.  As HyperScheme is a programming language for
+% general purpose, it can represent illegal workflows.  Though GUI based
+% workflow definition tool is provided in order to restrict the ranges of
+% workfloöööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööööö%
+  \item $B;q8;$K4X$9$k@)Ls5-=RG=NO$O(B Workflow Base $B$h$j9b$$!#$?$@$7!"(B%
+	$B$=$l$>$l$N%o!<%/%U%m!<$N4IM}$O5DO@$5$l$F$*$i$:!"(BWorkflow Base
+	$B$J$I$N%o!<%/%U%m!<%b%G%k$HN>N)$7F@$k!#(B
+ \end{itemize}
+% WorkWeb is much
+% different from other workflow management systems.  It deals with some
+% constraints about the common resources of the organizations --- objects,
+% persons, and money.  Agents are provided for each person, each resources,
+% each shared data, and each workflows, and they negotiates each other to
+% resolve conflicts of these constraints.  The negotiation is done over
+% a number of work processes running in parallel at one organization.
+%
+% WorkWeb can treat more wider constraints than our workflow model shown
+% in Chapter.  However, the way for managing each workflow
+% process is not discussed in WorkWeb.  This means the constraint
+% management in WorkWeb can be compatible with our workflow model.
+\end{slide}
+
+
+\begin{slide}
+ \heading{Activity Management System [Tueni $BB>(B91]}
+ \begin{itemize}
+  \item $B<jB3$-E*CN<1(B(Procedural Knowledge)$B$NI=8=$H<B9T$r;Y1g$9$k(B%
+	$BCN<1%Y!<%9%7%9%F%`!#<jB3$-E*CN<1$O!"%o!<%/%U%m!<$HF1MM!"(B%
+	$BDj7?E*9=B$$r;}$D%?%9%/$rI=8=$9$k!#(B%
+  \item send, request, acknowledge, answer $B$H$$$&A`:n(B(operator)$B$r(B%
+	$BMQ0U$7!"2qOC9TF0M}O@$H$[$\F1MM$K%*%U%#%9:n6H$r5-=R$G$-$k!#(B%
+	$BA`:n$O(B Petri net $B$r4p$K<BAu$5$l$F$$$k!#(B%
+  \item $B%o!<%/%U%m!<$,J#;($K$J$k!#(B
+ \end{itemize}
+% Activity Management System (AMS) is a
+% knowledge-based system which supports the representation and execution
+% of procedural knowledge, which is expressed like as workflows.
+% In this system, the architecture of AMS can be stratified into three
+% layers: a control structure to handle the interruption, resumption, and
+% cancelation of tasks; a mechanism to schedule tasks that are in
+% progress; a mechanism to handle missing information.  This system also
+% provides some office operators such as send, request, acknowledge, and
+% answer.  Concatenating these operators, it organizes procedural
+% knowledge which is similar with speech act model.
+% The operators are implemented based on Petri nets.
+%
+% Though AMS can express cooperative works flexibly, there is no
+% discussion about agents as executors of the units of work.  
+\end{slide}
+
+\begin{slide}
+ \heading{Statechart [Harel87]}
+ \begin{itemize}
+  \itemsep0mm\parskip0mm
+  \item $B3,AXE*M-8B%*!<%H%^%H%s!#JB9T<B9T$d%V%m!<%I%-%c%9%H$N5!9=$r;}$D!#(B%
+	$B$^$?!"<B9T$N0UL#$,87L)$KDj5A$5$l$F$$$k!#$3$l$i$NMxE@$K$h$j!"(B%
+	$B%=%U%H%&%'%"%W%m%;%9%b%G%j%s%0$K1~MQ$5$l$?8&5f$b$$$/$D$+$"$k!#(B
+  \item $B$3$l$K4p$E$$$?!"(Breactive system $B3+H/4D6-(B STATEMATE $B$,3+H/$5$l$F$$$k!#(B%
+	$B$3$N%7%9%F%`$G$O!"4X78%G!<%?%Y!<%9$N<ALd8@8l$H$[$\F1Ey$NG=NO$r(B%
+	$B;}$DHFMQE*<ALd8@8l$rMQ0U$7!"%G!<%?%Y!<%9$K$h$k;Y1g$r<B8=$7$F$$$k!#(B%
+  \item $BM-8B%*!<%H%^%H%s$N3HD%$H$7$F%W%m%;%9$rDj5A$9$k$3$H!"(B%
+	$B$=$N7A<0E*0UL#$rM?$($F$$$k$3$H!"%G!<%?%Y!<%9$N1~MQ!"HFMQE*(B%
+	$B<ALd8@8l$rDs6!$7$F$$$k$J$I$NE@$G(B Workflow Base $B$HN`;w$7$F$$$k!#(B%
+  \item $B%o!<%/%U%m!<4IM}$K1~MQ$9$k$K$O!"F0E*9=B$JQ99!"<BBN2=!"(B%
+	$B0l4S@-@)Ls!"%(!<%8%'%s%H$H$N4XO"$J$I$NLdBj$,$"$k!#(B
+ \end{itemize}
+
+% Statechart is a hierarchical finite automaton with
+% concurrent execution and broadcast mechanisms for communications between
+% them.  Its semantics is formerly defined like finite automaton using
+% transitions between sets of exclusive states, called configurations.
+% Based on statechart, a computerized environment for the development of
+% reactive systems, called STATEMATE, is proposed.
+% STATEMATE has a design database of statechart with general query
+% language, which have an expressive power almost same as that of the
+% conjunctive query in relational databases.  Though STATEMATE is proposed 
+% for modeling reactive systems, it is also suitable for process
+% modeling.  From this viewpoint, we can find some papers applying
+% statecharts into software process modeling.
+%
+% Many similarities can be found between our workflow model and
+% statechart/STATEMATE\@.  First, both are based on finite automaton with
+% some extensions like hierarchy, concurrent execution, synchronization,
+% etc.  Secondly, both give formal semantics of the models.  Thirdly, both 
+% systems use database for process data management.  And finally, both
+% systems provide general query languages based on relational algebra.
+% The query language of STATEMATE can express queries on a set of states
+% as well as on a set of statecharts, although few discussions about the
+% data model of statecharts are found in.
+%
+% In spite of the similarities with our model, statecharts lacks some
+% features which are important for workflow management.  Statechart
+% provides no function to change its own execution dynamically; there is no
+% discussion about agents as executors of work, instantiation like
+% WFT/WFI, integrity constraints of the model, etc.
+\end{slide}
+
+\begin{slide}
+ \heading{KyotoDB [$B>>K\B>(B90]}
+ \begin{itemize}
+  \item $B%*%V%8%'%/%H%b%G%k$K4p$E$/%=%U%H%&%'%"%W%m%8%'%/%H%G!<%?%Y!<%9!#(B%
+  \item $B%W%m%;%9%G!<%?$r%*%V%8%'%/%H$H$7$F%+%W%;%k2=$7!"%G!<%?%Y!<%9$K(B%
+	$B3JG<$9$k!#0UL#@)Ls$b%*%V%8%'%/%H$H$7$F%b%G%k2=$7!"%G!<%?%Y!<%9$K(B%
+	$B3JG<$9$k!#(B
+  \item $B%*%V%8%'%/%H$X$N%"%/%;%9$O%a%=%C%I$rDL$7$F$N$_9T$o$l$k!#=89gE*(B%
+	$BA`:n$N<B8=$O5DO@$5$l$F$*$i$:!"(BOODBMS $B$N<ALd8@8l5!G=$K0MB8$9$k!#(B
+ \end{itemize}
+
+% KyotoDB is a software project database based on
+% an object model.  In this system, both process programs and data are
+% encapsulated into objects, and stored into one database.  Work process,
+% called unit workload in KyotoDB, is modeled as a sequence of work slice,
+% a directed graph of work process nodes, validation nodes, and
+% communication nodes with other unit workloads.
+%
+% KyotoDB treats the units of work as an object in a strict sense; each
+% object permits to be accessed only via its own methods.  When the user
+% wants to access objects based on set operations, he has to use general
+% query languages on OODBMS such as OQL.
+\end{slide}
+
+\begin{slide}
+ \heading{C\&Co [Forst $BB>(B95]}
+ \begin{itemize}
+  \item C$B8@8l$K!"%W%m%;%9$NJB9T<B9T!"%W%m%;%9$N0MB8$N5-=R!":F<B9T!&(B%
+	$BJd=~A`:n$D$-$N%H%i%s%6%/%7%g%s!"F14|$J$I!"6(F1:n6H$N$?$a$N(B%
+	$B3HD%$r9T$C$?8@8l!#Nc$rMQ$$$F!"$3$N8@8l$K4p$E$/%o!<%/%U%m!<$N(B%
+	$B<BAu$K$D$$$F5DO@$7$F$$$k!#(B%
+  \item $B%o!<%/%U%m!<5-=R8@8l$H$7$F$O(B too primitive $B$G$"$k!#(B
+ \end{itemize}
+
+% C\&Co is a programming language with some
+% coordination extension features in C\@.  Concurrent execution of
+% processes, dependencies between processes, transactions with retrying or
+% compensating options, synchronization, etc. are newly introduced in C.
+%
+% In order to implement workflow management systems with database
+% technology, programming language should have these features newly
+% introduced in C\&Co.  However, in the workflow language point of view,
+% C\&Co does not provide sufficient capabilities for representing
+% workflows; that is, the functions C\&Co provide for workflow management
+% are too primitive to represent workflows.
+\end{slide}
+
+\begin{slide}
+ \heading{Event-Condition-Message Rules [Rusinkiewicz $BB>(B96]}
+ \begin{itemize}
+  \item $B%G!<%?%Y!<%95;=Q$H4XO"$N?<$$%k!<%k%Y!<%9$N%o!<%/%U%m!<%b%G%k!#(B%
+  \item $B%o!<%/%U%m!<$r(B ECM $B%k!<%k$K$h$C$F5-=R$7!"(BECM $B%k!<%k$N0UL#$K$h$C$F(B%
+	$B%o!<%/%U%m!<$N<B9T%b%G%k$rM?$($F$$$k!#(B
+  \item $B%o!<%/%U%m!<$rC_$($k$?$a$N%G!<%?%Y!<%9%9%-!<%^!"<ALd8@8l$K(B%
+	$B$D$$$F5DO@$7!"%W%m%H%?%$%W$r<BAu$7$F$$$k!#(B%
+  \item Workflow Base $B$HN`;wE@$rB?$/;}$D!#(B%
+  \item $B%o!<%/%U%m!<$r%0%i%U$H$7$F%G!<%?%Y!<%9$K3JG<$9$k$?$a!"(B%
+	$B<ALd8@8l$K$h$k%o!<%/%U%m!<A`:n$,Fq$7$/$J$k!#(B
+ \end{itemize}
+
+% M. Rusinkiewicz et al. propose a rule-based workflow model closely
+% related with database technologies.  In this model,
+% a workflow is represented as a set of Event-Condition-Message (ECM)
+% rules, whose semantics is ``When event $E$ occurs, evaluate condition
+% $C$.  If it evaluates to true, send message $M$''.  Tasks are implicitly
+% related to each other through ECM rules; that is, when a task is
+% finished, an event of ``finishing'' is sent to a workflow and the
+% corresponding ECM rules are fired and evaluated.  If a condition
+% evaluates to true, a message is sent to a set of tasks to be invoked.  A
+% workflow in this model is depicted as a hierarchical state transition
+% diagram.  They also discusses database schema to store workflow
+% definitions and workflow instances, query languages, and system
+% architecture of prototype.
+%
+% Their standpoints are quite similar as ours: they use database
+% management systems to store the static specification of workflows, as
+% well as their run-time information; they provide a method for querying
+% the database to get several information about workflows.  However,
+% workflows are stored as a directed graph in their model.  This makes
+% editing a workflow specification by database query languages to be
+% difficult, as they pointed out in.
+\end{slide}
+
+\begin{slide}
+ \heading{$B$^$H$a(B}
+
+ $B%G!<%?%Y!<%95;=Q$K$h$k!"$h$j=@Fp$+$D6/NO$J%o!<%/%U%m!<4IM}$rL\E*$H$7$F!"(B
+ $B%G!<%?%Y!<%95;=Q$r4pAC$H$9$k%o!<%/%U%m!<4IM}%7%9%F%`(B Workflow Base $B$N8&5f(B
+ $B$r8=:_7QB3Cf$G$"$k!#(B
+
+ $BK\8&5f$G$O!"(B%
+ \begin{itemize}
+  \itemsep 0mm \parskip 0mm
+  \item Workflow Base $B$N%o!<%/%U%m!<%b%G%k!"<B9T%b%G%k!"<BBN2=$N(B%
+	$B35G0$N7A<0E*Dj5A(B%
+  \item $B%U%#!<%I%P%C%/%k!<%W$N<B8=!";q8;$K4X$9$k@)Ls$H$=$N=t@-<A(B%
+  \item Workflow Base $B$N%o!<%/%U%m!<A`:n1i;;72(B%
+  \item $B6(D4BP>]$N%(!<%8%'%s%H$H(B Workflow Base $B$H$N4XO"(B%
+  \item Workflow Base $B$N%7%9%F%`9=@.(B
+ \end{itemize}
+ $B$K$D$$$F=R$Y$?!#(B
+\end{slide}
+
+\begin{slide}
+ \heading{$B:#8e$N8&5fJ}?K(B}%
+ \begin{itemize}
+  \item $B%o!<%/%U%m!<A`:n72$NBN7O2=!&M}O@E*GX7J$N3NN)(B%
+  \item $B%(!<%8%'%s%H$K4p$E$/@)LsL7=b$N2r>C7O(B%
+  \item $B%7%9%F%`$N<BAu(B
+ \end{itemize}
+\end{slide}
+
+\end{document}

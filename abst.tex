@@ -1,0 +1,60 @@
+%#!latex main
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+\markboth{Abstract}{Abstract}
+
+Workflow management system (WFMS), one of the groupware supporting
+asynchronous distributed interaction, becomes remarkable not only in
+practical business area but also in research area.  
+
+WFMSs mainly support well-structured collaborative works using
+explicitly defined flows of works (workflows).  They controls the
+invocation order in workflows automatically, and manages several
+resources of the work.
+
+As a number of workflows run concurrently using shared resources of
+organizations, transaction management with concurrency control is an
+important technology for WFMSs.  In this sense database technologies are
+indispensable for the infrastructure of WFMSs, and many researchers have
+studied about transaction management in WFMSs.
+
+Data management is another important role of database technologies in
+WFMSs.  As WFMSs must manage many data such as workflow descriptions,
+status of progress, activity environments, and activity products, WFMS
+products use DBMSs in their backends.  However, the role of DBMSs in WFMSs
+is no more than as repositories.  There is no standard data model for
+workflows even in the research level.
+
+In this thesis we propose a flexible framework of workflow management
+suitable for database technologies, {\em workflow base}.  In this model,
+\begin{itemize}
+ \item A workflow is defined as a set of objects (\emph{activity
+       objects}), each of which corresponds with the unit of work in
+       workflows.  Two kinds of flows, horizontal flows and vertical
+       flows, are defined.  Both flows are treated as constraints among
+       activity objects, hence they are created dynamically from the
+       definitions of activity objects.  This makes database management
+       of workflows to be easier than ordinary workflow models.
+ \item Integrity constraints over workflows are defined on a set of
+       activity objects in database.  They can be checked in a similar
+       way with ordinary integrity check on database management
+       systems.
+ \item The concept of workflow instantiation is also defined based on
+       generalization/specialization hierarchies of workflows.  This makes 
+       relationships among workflows clearer, and workflows more
+       reusable.
+ \item Execution model of workflow base is defined based on production
+       systems.  This model deals with dynamic dispatch of subworks as
+       well as ordinary static flows in the same manner.
+\end{itemize}
+
+Database features of workflow base are discussed from the various
+viewpoints.  Loopback flows are defined using ECA rules, a basic concept
+of active databases; extensions on workflow base dealing with time
+constraints and resource constraints are introduced; database operations
+over workflows based on relational algebra are also introduced, which
+realize general purpose view functions and query functions in workflow
+management systems; agents as an executer of the units of work are
+defined formally as a problem solver in a heterogeneous distributed
+environment.  Finally we give a system architecture of workflow base.

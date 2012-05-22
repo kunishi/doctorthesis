@@ -1,0 +1,49 @@
+%#! latex main
+
+\begin{picture}(220,300)(0,0)
+% Database
+\put(80,10){\begin{picture}(60,60)(0,0)
+	     \put(30,50){\ellipse{60}{20}}
+	     \put(0,10){\line(0,1){40}}
+	     \put(60,10){\line(0,1){40}}
+	     \put(0,10){\spline(0,0)(5,-6)(30,-10)(55,-6)(60,0)}
+	     \put(30,25){\makebox(0,0){DB}}
+	    \end{picture}}
+% WFT organizer
+\put(60,100){\framebox(100,20){WFT Organizer}}
+% WFT interpreter
+\put(0,160){\framebox(100,20){WFT Interpreter}}
+% Query Processor
+\put(120,160){\framebox(100,20){Query Processor}}
+% Workflow Base
+\put(-10,0){\Thicklines\framebox(240,200)[bl]{{\bf Workflow Base}}}
+% Client
+\put(110,260){\begin{picture}(120,40)(60,20)
+	       \put(60,20){\thicklines\oval(120,40)}
+	       \put(60,20){\makebox(0,0){{\bf Workflow Client}}}
+	      \end{picture}}
+%% Arcs
+% from Database to WFT organizer
+\put(105,100){\vector(0,-1){40}}
+\put(115,60){\vector(0,1){40}}
+\put(65,80){\makebox(0,0){WFT parts}}
+\put(155,80){\makebox(0,0){WFT parts}}
+% WFT organizer and WFT interpreter
+\put(90,120){\vector(-3,4){30}}
+\put(50,140){\makebox(0,0){WFT}}
+% WFT organizer and Query processor
+\put(130,120){\vector(3,4){30}}
+\put(170,160){\vector(-3,-4){30}}
+\put(125,145){\makebox(0,0){Results}}
+\put(175,135){\makebox(0,0){Query}}
+% WFT interpreter and WF Client
+\put(40,180){\vector(3,4){45}}
+\put(75,240){\vector(-3,-4){45}}
+\put(20,215){\makebox(0,0){WF access}}
+\put(95,210){\makebox(0,0){Messages}}
+% Query processor and WF Client
+\put(180,180){\vector(-3,4){45}}
+\put(145,240){\vector(3,-4){45}}
+\put(130,220){\makebox(0,0){Results}}
+\put(195,210){\makebox(0,0){Query}}
+\end{picture}

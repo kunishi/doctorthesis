@@ -1,0 +1,252 @@
+%#!latex main
+
+\chapter{Introduction}
+%\pagenumbering{arabic}
+%\setcounter{page}{1}
+
+\section{Background}
+\label{sec:background}
+
+During the recent two or three years, computer networks permeate into 
+several areas of our everyday life.
+
+The Internet started just as a computer wide area network among the 
+computer research sections of universities, companies, and some public 
+organizations.  At that time, the users of the Internet communicate 
+each other through the Internet by electronic mails, network news, or 
+character-based realtime applications such as electronic phones.  
+These are only the usages of the Internet.
+
+\begin{sloppypar}
+ However, this situation around the Internet has been drastically 
+ changing as several technologies are progressed in the areas of 
+ computer and digital networks.  Now the Internet is no longer an 
+ experimental object for computer researchers; it is an infrastructure 
+ of several business activities, including personal activities.  
+ Applications on the Internet has also changed from character based to 
+ multimedia based.  World Wide Web (WWW), a multimedia hypertext over 
+ the Internet, is an example of hot multimedia based applications 
+ among the Internet users.
+\end{sloppypar}
+
+Groupware is another hot application over the Internet.  It is a
+general term for the technologies supporting human communications or
+cooperative work over the computer networks, such as electric meetings,
+cooperative writing, etc.  Ellis \cite{ellis:cacm91} defined the term
+``groupware'' as:
+\begin{quote}
+ Computer-based systems that support groups of people engaged in a
+ common task (or goal) and that provide an interface to a shared
+ environment.
+\end{quote}
+Although the concept of groupware is proposed in 1978
+\cite{johnson-lentz82:groupware}, it had not been practical until the
+recent years because of the lack of its infrastructures, such as
+computer powers and the network bandwidth.  As this problem has been
+gradually solved, many researches and developments of groupware are
+carried out.
+
+Ellis categorizes groupware into four types from notions of time and space
+\cite{ellis:cacm91}.  They are:
+\begin{itemize}
+ \setlength{\itemsep}{0mm}
+ \setlength{\parskip}{0mm}
+ \item  \emph{Face-to face interaction}.  This type supports cooperation
+	in the same place and the same time.  Electric meeting room
+        system \cite{stefik:cacm87, stefik:toois87} can be shown as its
+	example.
+ \item  \emph{Asynchronous interaction}.  This type supports cooperation
+	in the same place but in the different times.
+ \item  \begin{sloppypar}
+	 \emph{Synchronous distributed interaction}.  This type supports
+	 cooperation in the same time but in the different places.
+	 Group editor \cite{foster:cscw86} and distributed
+	 electric meeting system \cite{crowley:cscw90} are some of the
+	 examples.
+	\end{sloppypar}
+ \item  \emph{Asynchronous distributed interaction}.  This type supports
+	cooperation in the different times and the different place.
+	These are the examples: task coordination systems
+        \cite{winograd:book86, flores:toois88}, information filtering systems
+	\cite{malone:toois87}, office procedure systems
+	\cite{ishii:jip91, suchman:toois83, croft:toois84}, and
+	hypertexts \cite{conklin:toois88}.
+\end{itemize}
+
+\begin{sloppypar}
+ Workflow management system (WFMS) \cite{georgakopoulos:jdps95} is one
+ of the remarkable groupware not only in practical business area but also
+ in research area.  WFMSs, belonging into the groupware supporting
+ asynchronous distributed interaction according to Ellis's
+ categorization, mainly support structured collaborative works using
+ explicitly defined flows of works (workflows).  They controls the
+ invocation order in the workflows and manages several resources of the
+ work automatically.
+\end{sloppypar}
+
+As a number of workflows run concurrently using shared resources of
+organizations, transaction management with concurrency control is an
+important technology for WFMSs.  In this sense database technologies are
+indispensable for the infrastructure of WFMSs, and many researchers have
+studied about transaction management in WFMSs
+\cite{georgakopoulos:ijicis94, rusinkiewicz:adbis94,%
+krishnakumar:jdps95, alonso:icde96}.
+
+Another contribution of database technologies for WFMSs is data
+management.  As WFMSs must manage many data such as workflow
+descriptions, status of progress, activity environments, and activity
+products, WFMS products use DBMSs in their backends.  However the role of
+DBMSs in WFMSs is no more than as repositories.  There is no standard
+data model for workflows even in the research level, though some
+researchers pointed out the importance of data sharing in computer
+supported cooperative work \cite{greif:toois87} and workflow data models
+\cite{alonso:nsf96}.
+
+If DBMSs support WFMSs more closely in their data management, WFMSs can
+provide more useful and powerful functions.  This is our
+standpoint\cite{kunishima:ipsjdbs95-07, kunishima:codas96,%
+yokota:upmail96, yokota:lnai97}.  DBMSs' supports bring the following
+advantages into WFMSs:
+\begin{itemize}
+ \setlength{\itemsep}{0mm}
+ \setlength{\parskip}{0mm}
+ \item By managing all workflow descriptions in one DBMS, it is easy to
+     resolve duplications or conflicts among the workflows.  This leads
+     to efficient workflow management.
+ \item Management of workflow hierarchies makes reuse of workflows 
+     possible.
+ \item Powerful view functions can be provided.  For example, private
+     schedule can be obtained as a view of workflows.
+ \item Workflows can be easily updated, changed, or reorganized even if 
+     they are in progress.
+ \item An integrated work environment can be provided by managing both
+     product data and process data.
+\end{itemize}
+As real offices are open \cite{hewitt:toois86}, groupware should support
+office works flexibly, even in the procedural works.  Hence these advantages
+are useful for flexible workflow management systems.
+
+In this thesis we propose a flexible framework of workflow management
+suitable for database technologies, {\em workflow base}.  The features
+of this model and the merits are as follows:
+\begin{enumerate}
+\setlength{\itemsep}{0mm}
+\setlength{\parskip}{0mm}
+ \item A workflow is defined as a set of objects (\emph{activity
+       objects}), each of which corresponds with the unit of work in
+       workflows.  This makes database management of workflows to be
+       easier than ordinary workflow models.
+ \item Two kinds of flows, horizontal flows and vertical flows, are
+       defined.  Ordinary workflows can be described by using these
+       flows.  Both flows are treated as constraints among activity
+       objects, hence they are derived dynamically from the definitions
+       of activity objects.
+ \item The concept of generalization/specialization workflow hierarchies is
+       introduced.  This makes relationships among workflows clearer,
+       and workflows more reusable.  The concept of workflow
+       instantiation is also defined based on these hierarchies.
+ \item A rule-based execution model of workflow is defined.  This model
+       deals with dynamic dispatch of subworks as well as ordinary
+       static flows in the same manner.
+ \item Integrity constraints over workflows are defined.  As they are
+       defined on a set of activity objects in database, they can be
+       checked in a similar way with ordinary integrity check on
+       database management systems.
+\end{enumerate}
+
+We also discuss several database features of workflow base from the various
+viewpoints.  Loopback flows are defined using ECA rules, a basic concept 
+of active databases; extensions on workflow base to deal with time constraints
+and resource constraints are defined; database operations over workflows
+based on relational algebra are introduced, which realize general purpose
+view functions and query functions in workflow management systems;
+agents as an executer of the units of work are defined formally as a
+problem solver in a heterogeneous distributed environment.  And finally, 
+we discuss about system architecture of workflow base.
+
+\section{Outline of the Thesis}
+\label{sec:outline}
+
+The remainder of this thesis is as follows.  In Chapter
+\ref{chap:preliminaries}, preliminaries for the discussions of the
+latter chapters are provided.  First we explain the basic concepts of
+workflow management systems and the requirements to workflow management
+systems are discussed.  Secondly, brief explanations about definite
+clauses, logic programming, production rules, and ECA
+(Event-Condition-Action) rules are shown.  We utilize these concepts in
+the definition of workflow base and its extensions.  Finally, we explain
+the concept of {\em agent} as a heterogeneous distributed cooperative
+problem solver.  The term ``agent'' is used in several contexts of
+distributed cooperative environment.  We use ``agent'' as an executer of 
+the units of work in workflows.  The concept of agent is defined from
+this context.  This definition is utilized in Chapter
+\ref{chap:agentReconsidered}.
+
+\emph{Workflow base}, a formal model of workflow database, is proposed
+in Chapter \ref{chap:wfbase}.  This is the core model of this thesis.
+Its basic idea is that a workflow is represented as a set of units of
+work and the constraints among the units.  This idea makes workflow
+management using database technologies to be easier than other workflow
+models.  Section \ref{sec:wfmodel} defines the structure of workflows in
+workflow base.  {\em Activity objects} representing the units of work in
+workflows, two kind of flows based on message passing between activity
+objects and on part-of hierarchy over activity objects, and several
+constraints on {\em workflow templates} are defined in this section.
+Section \ref{sec:execmodel} gives an execution model of workflow
+templates based on production system.  In Section
+\ref{sec:workflowinstance} instantiation concept of workflow templates
+is defined using specialization hierarchies of workflows.  Based on the
+preceding discussions, workflow base is defined in Section
+\ref{sec:workflowbase}.
+
+Some extensions on workflow base are discussed in Chapter
+\ref{chap:ext}.  Although workflow base defined in Chapter
+\ref{chap:wfbase} supports basic functions indispensable for workflows,
+some extended features such as loopbacks, time constraints, resources
+constraints, etc., are necessary for workflows.  We discuss these
+extensions: loopback flows based on ECA rules are defined in Section
+\ref{sec:loopback}; time constraints and some applications on them such
+as scheduling are shown in Section \ref{sec:timeConstraints}; the
+constraints of resources on workflows are discussed in Section
+\ref{sec:resourceConstraints}.  We also discuss a method for resource
+reallocation in the time of violations in resource constraints in this
+section.  And finally, we show that exclusive lock mechanism causes
+horizontal flows dynamically in Section \ref{sec:flowbylock}.
+
+Chapter \ref{chap:dbop} describes about database operations on workflow
+base.  If the operations on workflows are provided, workflow management
+will be more flexible and powerful: View functions on workflows,
+dynamic change on workflows with keeping integrity constraints, etc.
+As workflow base manages workflows in a style suitable for database
+management, the operations on workflows can be easily provided.  In this 
+chapter, an operation set based on relational algebra is proposed.
+
+Chapter \ref{chap:agentReconsidered} is devoted into reconsiderations about
+agents.  In the previous chapters, we consider agents as an executer of
+the units of work.  We give another definition of agents in workflow
+base, as a problem solver enclosed in a capsule.  As workflow base is
+organized in heterogeneous distributed environment, agents are
+essentially also heterogeneous.  Hence in workflow base, mechanisms that
+heterogeneous agents must coordinate each other.  We show such a
+mechanism by providing an {\em environment} for message-passing between
+agents.
+
+We discuss about how to implement workflow base, mainly from system
+architecture point of view in Chapter \ref{chap:arch}.  Though workflow
+base is closely related to database systems, it has various features not
+found in traditional database systems, such as an execution model based
+on production systems.  We first investigate system requirements to
+implement workflow base, and then show a system architecture of workflow
+base.
+
+Related researches are shown in Chapter \ref{chap:relatedworks}, with
+comparisons to workflow base.  There are many researches about workflow
+management systems.  Moreover, there are also similar concepts as
+workflows in various research areas, such as groupware, process
+modeling, database, and software process engineering.  In this chapter,
+we pick up several related researches from three research areas ---
+groupware, process modeling, and database --- and compare them with
+workflow base especially from the workflow model point of view.
+
+We conclude with discussions of future work in Chapter
+\ref{chap:conclusion}.
